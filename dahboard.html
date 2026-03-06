@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Kedai Aishwa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-orange-50 font-sans text-gray-800">
+
+    <div class="flex h-screen">
+        <aside class="w-64 bg-orange-700 text-white flex flex-col shadow-xl">
+            <div class="p-6 text-center border-b border-orange-600">
+                <div class="bg-white rounded-full w-20 h-20 mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-orange-700 font-bold text-xs text-center p-1">LOGO KEDAI</span>
+                </div>
+                <h1 class="text-xl font-bold uppercase tracking-wider">Kedai Aishwa</h1>
+                <p class="text-xs text-orange-200">Catering Management</p>
+            </div>
+
+            <nav class="flex-1 mt-6 px-4 space-y-2">
+                <a href="#" class="flex items-center p-3 rounded-lg bg-orange-800 hover:bg-orange-600 transition">
+                    <i class="fas fa-th-large mr-3"></i>
+                    <span>Manajemen Produk</span>
+                </a>
+                <a href="#" class="flex items-center p-3 rounded-lg hover:bg-orange-600 transition">
+                    <i class="fas fa-shopping-cart mr-3"></i>
+                    <span>Manajemen Pesanan</span>
+                </a>
+                <a href="#" class="flex items-center p-3 rounded-lg hover:bg-orange-600 transition">
+                    <i class="fas fa-chart-line mr-3"></i>
+                    <span>Laporan Pendapatan</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-orange-600">
+                <button class="w-full flex items-center justify-center p-2 rounded-md bg-red-500 hover:bg-red-600 transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Keluar
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+                <h2 class="text-2xl font-semibold text-gray-700">Manajemen Produk</h2>
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center shadow-md">
+                    <i class="fas fa-plus mr-2"></i> Tambah Produk
+                </button>
+            </header>
+
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                        <img src="https://via.placeholder.com/300x200" alt="Nasi Kotak" class="w-full h-48 object-cover">
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-gray-800">Nasi Kotak Ayam Geprek</h3>
+                            <p class="text-orange-600 font-semibold mb-2">Rp. 20.000</p>
+                            <p class="text-sm text-gray-500 mb-4">Nasi, ayam (dada/paha), sambel, aqua gelas.</p>
+                            <div class="flex gap-2">
+                                <button class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-white py-2 rounded-md text-sm font-medium transition">Edit</button>
+                                <button class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 py-2 rounded-md text-sm font-medium transition">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                        <img src="https://via.placeholder.com/300x200" alt="Nasi Kotak" class="w-full h-48 object-cover">
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-gray-800">Nasi Kotak Ayam Geprek</h3>
+                            <p class="text-orange-600 font-semibold mb-2">Rp. 20.000</p>
+                            <p class="text-sm text-gray-500 mb-4">Nasi, ayam (dada/paha), sambel, aqua gelas.</p>
+                            <div class="flex gap-2">
+                                <button class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-white py-2 rounded-md text-sm font-medium transition">Edit</button>
+                                <button class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 py-2 rounded-md text-sm font-medium transition">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                        <img src="https://via.placeholder.com/300x200" alt="Nasi Kotak" class="w-full h-48 object-cover">
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-gray-800">Nasi Kotak Ayam Geprek</h3>
+                            <p class="text-orange-600 font-semibold mb-2">Rp. 20.000</p>
+                            <p class="text-sm text-gray-500 mb-4">Nasi, ayam (dada/paha), sambel, aqua gelas.</p>
+                            <div class="flex gap-2">
+                                <button class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-white py-2 rounded-md text-sm font-medium transition">Edit</button>
+                                <button class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 py-2 rounded-md text-sm font-medium transition">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
