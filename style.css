@@ -1,0 +1,35 @@
+/* Pengaturan Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #fff7ed;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ea580c;
+    border-radius: 10px;
+}
+
+/* Kontainer Gambar Produk */
+.img-container {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #f3f4f6;
+}
+
+/* Efek Zoom Logo Sidebar */
+.logo-zoom {
+    transform: scale(1.5);
+    object-fit: cover;
+}
+
+/* Efek Hover Gambar Produk */
+.product-card-img {
+    transition: transform 0.5s ease;
+}
+
+.group:hover .product-card-img {
+    transform: scale(1.1);
+}
