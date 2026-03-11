@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Kedai Aishwa</title>
+    <link rel="stylesheet" href="laporanpendapatan.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <span>Kedai Aishwa</span>
+            </div>
+            <nav>
+                <a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="#"><i class="fas fa-utensils"></i> Kelola Menu</a>
+                <a href="#"><i class="fas fa-shopping-cart"></i> Kelola Pesanan</a>
+                <a href="#"><i class="fas fa-chart-line"></i> Laporan</a>
+                <a href="#"><i class="fas fa-cog"></i> Pengaturan</a>
+            </nav>
+            <div class="logout">
+                <a href="#"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Laporan Pendapatan</h1>
+                <div class="user-info">
+                    <span>Admin Aishwa</span>
+                    <img src="https://ui-avatars.com/api/?name=Admin+Aishwa&background=f39c12&color=fff" alt="Avatar">
+                </div>
+            </header>
+
+            <section class="stats-grid">
+                <div class="card stat-card">
+                    <div class="stat-info">
+                        <p>Total Pendapatan</p>
+                        <h3>Rp 18.000.000</h3>
+                        <span class="trend up"><i class="fas fa-arrow-up"></i> 12% vs bln lalu</span>
+                    </div>
+                    <i class="fas fa-wallet icon"></i>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-info">
+                        <p>Jumlah Pesanan</p>
+                        <h3>18.000</h3>
+                        <span class="trend up"><i class="fas fa-arrow-up"></i> 5% hari ini</span>
+                    </div>
+                    <i class="fas fa-box icon"></i>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-info">
+                        <p>Pelanggan Baru</p>
+                        <h3>2.000</h3>
+                        <span class="trend">Aktif</span>
+                    </div>
+                    <i class="fas fa-users icon"></i>
+                </div>
+            </section>
+
+            <section class="chart-section">
+                <div class="card chart-card">
+                    <div class="chart-header">
+                        <h3>Tren Pendapatan Mingguan</h3>
+                        <select id="monthFilter">
+                            <option>Maret 2026</option>
+                            <option>Februari 2026</option>
+                        </select>
+                    </div>
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+            </section>
+
+            <section class="table-section">
+                <div class="card table-card">
+                    <h3>Riwayat Pembayaran Terbaru</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Metode</th>
+                                <th>Harga</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>08 Apr 2026</td>
+                                <td>Bank Jago</td>
+                                <td>Rp 15.000.000</td>
+                                <td><span class="status success">Selesai</span></td>
+                            </tr>
+                            <tr>
+                                <td>08 Sep 2026</td>
+                                <td>Bank BRI</td>
+                                <td>Rp 15.000.000</td>
+                                <td><span class="status success">Selesai</span></td>
+                            </tr>
+                            <tr>
+                                <td>06 Apr 2026</td>
+                                <td>BCA Mobile</td>
+                                <td>Rp 15.000.000</td>
+                                <td><span class="status success">Selesai</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="laporanpendapatan.js"></script>
+</body>
+</html>
