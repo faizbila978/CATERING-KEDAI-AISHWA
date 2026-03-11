@@ -1,0 +1,72 @@
+/* (Gunakan reset & navbar dari menu.css atau buat file global.css) */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+body { background: #fdf2e9; }
+
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: white; }
+.logo { font-size: 1.5rem; font-weight: 800; }
+.logo span { color: #e67e22; }
+.nav-links { list-style: none; display: flex; gap: 30px; }
+.nav-links a { text-decoration: none; color: #636e72; font-weight: 600; }
+
+.testi-section { padding: 80px 8%; }
+
+.header-center {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.header-center .sub {
+    color: #e67e22;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.header-center h2 {
+    font-size: 2.2rem;
+    margin-top: 10px;
+}
+
+.testi-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+}
+
+.testi-box {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 15px 30px rgba(230, 126, 34, 0.1);
+}
+
+.stars { margin-bottom: 20px; font-size: 1.2rem; }
+
+.testi-box p {
+    font-style: italic;
+    color: #4b5563;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    background: #e67e22;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 800;
+}
+
+.user-info h4 { font-size: 1rem; color: #2d3436; }
+.user-info span { font-size: 0.8rem; color: #9ca3af; }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Kedai Aishwa</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="logo-container">
+            <div class="logo-circle">
+                <span style="color: #888; font-size: 12px; text-align: center;">Logo<br>Kedai<br>Aishwa</span>
+            </div>
+        </div>
+
+        <h1>LOGIN ADMIN</h1>
+        <p class="subtitle">Catering Kedai Aishwa</p>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label>Email</label>
+                <input type="text" id="userInput" placeholder="Masukkan email">
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="passInput" placeholder="Masukkan password">
+                    <i class="fa-regular fa-eye" id="toggleIcon"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="login-button">LOGIN SEKARANG</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
