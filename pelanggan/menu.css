@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    color: #2d3436;
+}
+
+/* Navbar Style (Konsisten dengan Index) */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.logo span { color: #e67e22; }
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #636e72;
+    font-weight: 600;
+}
+
+.nav-links a.active { color: #e67e22; }
+
+/* Menu Section */
+.menu-container {
+    padding: 60px 8%;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-header h1 {
+    font-size: 2.5rem;
+    color: #2d3436;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.menu-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.menu-card:hover {
+    transform: translateY(-10px);
+}
+
+.price-tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #e67e22;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 10;
+}
+
+.menu-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: crop;
+}
+
+.card-content {
+    padding: 25px;
+}
+
+.card-content h3 {
+    margin-bottom: 10px;
+    color: #2d3436;
+}
+
+.card-content p {
+    font-size: 0.95rem;
+    color: #636e72;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.btn-order {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #fdf2e9;
+    color: #e67e22;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-order:hover {
+    background: #e67e22;
+    color: white;
+}
