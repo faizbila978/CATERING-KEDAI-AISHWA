@@ -21,7 +21,7 @@
 
 /* Efek Zoom Logo Sidebar */
 .logo-zoom {
-    transform: scale(1.5);
+    transform: scale(1.2);
     object-fit: cover;
 }
 
