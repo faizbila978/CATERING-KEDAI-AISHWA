@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Pesanan - Kedai Aishwa</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Catering<span class="text-primary">Atelier</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#menu">Order Now</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="order-status-page container">
+        <div class="status-header">
+            <span class="badge-primary">ORDER STATUS</span>
+            <h1>Status pesanan</h1>
+            <div class="status-pill js-current-status" style="background:#fce8ef; color:var(--primary-color); padding:5px 15px; border-radius:20px; font-size:11px; display:inline-block;">• Pesanan sedang diproses</div>
+        </div>
+        
+        <div class="status-grid">
+            <div class="status-left">
+                <div class="status-hero-card">
+                    <div>
+                        <h3>GOURMET INDONESIA</h3>
+                        <h2>TASTE WORK <br> - SAVE -</h2>
+                        <div style="font-size:11px; margin-top:15px; opacity:0.7;">ESTIMATED ARRIVAL</div>
+                        <div class="eta-time">12:45 PM</div>
+                    </div>
+                    <img src="https://via.placeholder.com/200/eee/333?text=Nasi+Box" alt="Nasi Box" class="food-img">
+                </div>
+                
+                <div class="tracking-timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Order Confirmed</h4>
+                            <p>We've received your request at 10:30 AM</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item active">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>In Preparation</h4>
+                            <p>Chef is assembling your artisan nasi boxes</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>On the Way</h4>
+                            <p>Estimated delivery in 45 minutes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="status-summary-side">
+                <div class="summary-card">
+                    <div class="summary-title"><i class="fas fa-file-invoice"></i> Order Summary</div>
+                    
+                    <div class="order-item">
+                        <img src="https://via.placeholder.com/50/eee/a62b55?text=Ayam" alt="Ayam Bakar">
+                        <div class="order-item-info">
+                            <div class="order-item-title">Nasi Box Ayam Bakar Madu</div>
+                            <div class="order-item-qty">Qty: 12x</div>
+                        </div>
+                        <div class="order-item-price">Rp 420.000</div>
+                    </div>
+                    
+                    <table class="totals-table">
+                        <tr>
+                            <td>Subtotal</td>
+                            <td style="text-align:right;">Rp 420.000</td>
+                        </tr>
+                        <tr>
+                            <td>Service & Handling</td>
+                            <td style="text-align:right;">Rp 25.000</td>
+                        </tr>
+                        <tr>
+                            <td>Delivery Fee</td>
+                            <td style="text-align:right; color:#4caf50; font-weight:700;">FREE</td>
+                        </tr>
+                        <tr>
+                            <td class="total-label">Total</td>
+                            <td class="total-value">Rp 445.000</td>
+                        </tr>
+                    </table>
+                    
+                    <button class="btn btn-secondary btn-sm" style="width:100%; justify-content:center; margin-top:20px; background:#f0f0f0;">
+                        <i class="fas fa-comment-alt"></i> Contact Concierge
+                    </button>
+                </div>
+                
+                <div class="map-card">
+                    <button class="btn-live-map"><i class="fas fa-map-marker-alt"></i> View Live Map</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
