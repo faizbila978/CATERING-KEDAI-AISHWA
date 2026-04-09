@@ -3,60 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Menu | Kedai Aishwa</title>
-    <link rel="stylesheet" href="menu.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Katalog Menu - Kedai Aishwa</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
     <nav class="navbar">
-        <div class="logo">KEDAI <span>AISHWA</span></div>
-        <ul class="nav-links">
-            <li><a href="index.html">Beranda</a></li>
-            <li><a href="menu.html" class="active">Menu</a></li>
-            <li><a href="testimoni.html">Testimoni</a></li>
-            <li><a href="login.html" class="btn-login">Login</a></li>
-        </ul>
+        <div class="container">
+            <a href="index.html" class="logo">Catering<span class="text-primary">Atelier</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html" class="active">Order Now</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="rincian-pesanan.html" class="btn btn-secondary btn-sm btn-pill"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </div>
     </nav>
 
-    <section class="menu-container">
-        <div class="section-header">
-            <h1>Eksplorasi Rasa Kami</h1>
-            <p>Pilih kategori menu terbaik untuk setiap momen spesial Anda.</p>
-        </div>
-
-        <div class="menu-grid">
-            <div class="menu-card">
-                <div class="price-tag">Rp 25.000</div>
-                <img src="https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=400" alt="Nasi Box">
-                <div class="card-content">
-                    <h3>Paket Nasi Box Hemat</h3>
-                    <p>Nasi putih, lauk utama (ayam/ikan), sayur, sambal, dan kerupuk.</p>
-                    <button class="btn-order">Tambah ke Keranjang</button>
-                </div>
+    <section class="menu-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge-primary">KATALOG KULINER</span>
+                <h2>Our <span class="text-primary">Signature</span> Menu</h2>
+                <p>Silahkan pilih menu favorit Anda untuk acara istimewa.</p>
             </div>
 
-            <div class="menu-card highlight">
-                <div class="price-tag">Custom</div>
-                <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&q=80&w=400" alt="Kue Ultah">
-                <div class="card-content">
-                    <h3>Premium Birthday Cake</h3>
-                    <p>Kue custom dengan bahan premium dan desain sesuai keinginan Anda.</p>
-                    <button class="btn-order">Konsultasi Desain</button>
-                </div>
+            <div class="menu-filters">
+                <button class="btn btn-pill btn-primary btn-sm">All Menus</button>
+                <button class="btn btn-pill btn-secondary btn-sm">Nasi Kotak</button>
+                <button class="btn btn-pill btn-secondary btn-sm">Rice Bowls</button>
+                <button class="btn btn-pill btn-secondary btn-sm">Desserts</button>
             </div>
 
-            <div class="menu-card">
-                <div class="price-tag">Rp 35.000</div>
-                <img src="https://images.unsplash.com/photo-1626074353765-517a681e40be?auto=format&fit=crop&q=80&w=400" alt="Tumpeng">
-                <div class="card-content">
-                    <h3>Tumpeng Mini Special</h3>
-                    <p>Sajian tumpeng porsi personal dengan 7 macam lauk pelengkap.</p>
-                    <button class="btn-order">Pesan Sekarang</button>
+            <div class="menu-grid">
+                
+                <div class="product-card" data-id="1" data-title="Nasi Kotak Ayam Goreng" data-price="35000">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/300x200/eee/a62b55?text=Ayam+Goreng" alt="Ayam Goreng">
+                        <span class="badge-primary tag">BEST SELLER</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Nasi Kotak Ayam Goreng</h3>
+                        <p class="product-desc">Ayam goreng rempah, nasi putih, sambal bajak, dan lalapan segar.</p>
+                        <div class="product-price-row">
+                            <span class="product-price">Rp 35.000</span>
+                            <button class="btn btn-primary btn-sm js-add-to-cart">Pesan</button>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="product-card" data-id="2" data-title="Rice Bowl Sambal Matah" data-price="28000">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/300x200/eee/a62b55?text=Sambal+Matah" alt="Rice Bowl">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Rice Bowl Sambal Matah</h3>
+                        <p class="product-desc">Potongan ayam fillet crispy dengan siraman sambal matah khas Bali.</p>
+                        <div class="product-price-row">
+                            <span class="product-price">Rp 28.000</span>
+                            <button class="btn btn-primary btn-sm js-add-to-cart">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-id="3" data-title="Bolu Jadul Keju" data-price="125000">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/300x200/eee/a62b55?text=Bolu+Keju" alt="Bolu Jadul">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Bolu Jadul Keju (Large)</h3>
+                        <p class="product-desc">Tekstur lembut dengan taburan keju cheddar melimpah.</p>
+                        <div class="product-price-row">
+                            <span class="product-price">Rp 125.000</span>
+                            <button class="btn btn-primary btn-sm js-add-to-cart">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-id="4" data-title="Tumpeng Mini Premium" data-price="45000">
+                    <div class="product-image">
+                        <img src="https://via.placeholder.com/300x200/eee/a62b55?text=Tumpeng" alt="Tumpeng">
+                        <span class="badge-primary tag" style="background:#ffc107; color:#333;">NEW</span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Tumpeng Mini Premium</h3>
+                        <p class="product-desc">Nasi kuning gurih dengan 6 macam lauk pauk lengkap.</p>
+                        <div class="product-price-row">
+                            <span class="product-price">Rp 45.000</span>
+                            <button class="btn btn-primary btn-sm js-add-to-cart">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
+    <div class="cart-floater" id="cartFloater">
+        <div class="cart-info">
+            <div class="cart-icon-bg"><i class="fas fa-shopping-basket"></i></div>
+            <div class="cart-details">
+                <div style="font-size:11px; color:#666;">PESANAN ANDA</div>
+                <span id="cartCount">0 Items in Basket</span>
+            </div>
+        </div>
+        <a href="rincian-pesanan.html" class="btn btn-primary btn-pill btn-sm">Lihat Keranjang</a>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <p>© 2026 Kedai Aishwa Catering. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Instagram</a>
+                <a href="#">WhatsApp</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
