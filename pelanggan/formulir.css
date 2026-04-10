@@ -1,0 +1,18 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.text-maroon { color: #ad2d5e; }
+.btn-maroon { background-color: #ad2d5e; color: white; border: none; }
+.btn-maroon:hover { background-color: #8a244b; color: white; }
+
+.form-control:focus {
+    box-shadow: none;
+    background-color: #f1f1f1 !important;
+    border: 1px solid #ad2d5e;
+}
+
+.card {
+    border: none;
+}

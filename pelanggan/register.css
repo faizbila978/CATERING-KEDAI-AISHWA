@@ -1,0 +1,90 @@
+:root {
+    --maroon: #ad2d5e;
+    --soft-pink: #fdf2f6;
+    --dark-overlay: #210a13;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.text-maroon { color: var(--maroon); }
+
+.btn-maroon {
+    background-color: var(--maroon);
+    color: white;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-maroon:hover {
+    background-color: #8a244b;
+    color: white;
+}
+
+.btn-outline-maroon {
+    border: 1.5px solid var(--maroon);
+    color: var(--maroon);
+    background: transparent;
+    font-weight: 600;
+}
+
+.btn-outline-maroon:hover {
+    background-color: var(--maroon);
+    color: white;
+}
+
+.register-container {
+    padding: 60px 0;
+}
+
+.register-card {
+    max-width: 1050px;
+    border-radius: 28px;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(33, 10, 19, 0.95) 0%, rgba(173, 45, 94, 0.7) 100%);
+}
+
+.italic-font {
+    font-family: 'serif'; /* Atau gunakan Google Font 'Playfair Display' untuk hasil mirip gambar */
+    font-style: italic;
+}
+
+.tracking-widest {
+    letter-spacing: 5px;
+    font-size: 10px;
+}
+
+.input-group-text {
+    border-top-left-radius: 12px !important;
+    border-bottom-left-radius: 12px !important;
+}
+
+.form-control {
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    background-color: #f1f1f1 !important;
+    border: 1px solid var(--maroon);
+}
+
+.form-check-input:checked {
+    background-color: var(--maroon);
+    border-color: var(--maroon);
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}

@@ -3,126 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katalog Menu - Kedai Aishwa</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Menu Kedai Aishwa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="menu.css">
 </head>
 <body>
 
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top py-3 shadow-sm">
         <div class="container">
-            <a href="index.html" class="logo">Catering<span class="text-primary">Atelier</span></a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="menu.html" class="active">Order Now</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
-            <div class="nav-actions">
-                <a href="rincian-pesanan.html" class="btn btn-secondary btn-sm btn-pill"><i class="fas fa-shopping-cart"></i></a>
+            <a class="navbar-brand fw-bold text-maroon" href="index.html">CateringAtelier</a>
+            <div class="ms-auto">
+                <a href="index.html" class="btn btn-outline-secondary btn-sm rounded-pill">Kembali</a>
             </div>
         </div>
     </nav>
 
-    <section class="menu-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="badge-primary">KATALOG KULINER</span>
-                <h2>Our <span class="text-primary">Signature</span> Menu</h2>
-                <p>Silahkan pilih menu favorit Anda untuk acara istimewa.</p>
+    <main class="container py-5">
+        <header class="mb-5">
+            <h1 class="fw-bold">Pilih <span class="text-maroon">Menu</span> Favoritmu</h1>
+            <p class="text-muted">Sajian spesial dari Kedai Aishwa untuk setiap momen berhargamu.</p>
+        </header>
+
+        <ul class="nav nav-pills mb-5 gap-2" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active rounded-pill px-4" id="all-tab" data-bs-toggle="pill" data-bs-target="#all">All Menus</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link rounded-pill px-4" id="nasi-tab" data-bs-toggle="pill" data-bs-target="#nasi">Nasi Kotak</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link rounded-pill px-4" id="ricebowl-tab" data-bs-toggle="pill" data-bs-target="#ricebowl">Rice Bowls</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link rounded-pill px-4" id="snack-tab" data-bs-toggle="pill" data-bs-target="#snack">Snack & Drink</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="all">
+                <div class="row g-4">
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card h-100 border-0 shadow-sm rounded-4">
+                            <img src="img/nasi-ayam.jpg" class="card-img-top" alt="Menu">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Nasi Kotak Ayam Bakar</h6>
+                                <p class="text-muted small">Nasi, Ayam Bakar, Lalapan, Sambal.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="fw-bold text-maroon">Rp 35rb</span>
+                                    <a href="formulir.html" class="btn btn-maroon-outline btn-sm px-3">Pesan</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card h-100 border-0 shadow-sm rounded-4">
+                            <img src="img/beef-bowl.jpg" class="card-img-top" alt="Menu">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Beef Teriyaki Bowl</h6>
+                                <p class="text-muted small">Daging sapi slice dengan saus premium.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="fw-bold text-maroon">Rp 45rb</span>
+                                    <a href="formulir.html" class="btn btn-maroon-outline btn-sm px-3">Pesan</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="menu-filters">
-                <button class="btn btn-pill btn-primary btn-sm">All Menus</button>
-                <button class="btn btn-pill btn-secondary btn-sm">Nasi Kotak</button>
-                <button class="btn btn-pill btn-secondary btn-sm">Rice Bowls</button>
-                <button class="btn btn-pill btn-secondary btn-sm">Desserts</button>
+            <div class="tab-pane fade" id="nasi">
+                <div class="row g-4">
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card h-100 border-0 shadow-sm rounded-4">
+                            <img src="img/nasi-rendang.jpg" class="card-img-top" alt="Menu">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Nasi Kotak Rendang</h6>
+                                <p class="text-muted small">Rendang daging sapi khas Minang.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="fw-bold text-maroon">Rp 40rb</span>
+                                    <a href="formulir.html" class="btn btn-maroon-outline btn-sm px-3">Pesan</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="menu-grid">
-                
-                <div class="product-card" data-id="1" data-title="Nasi Kotak Ayam Goreng" data-price="35000">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/300x200/eee/a62b55?text=Ayam+Goreng" alt="Ayam Goreng">
-                        <span class="badge-primary tag">BEST SELLER</span>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Nasi Kotak Ayam Goreng</h3>
-                        <p class="product-desc">Ayam goreng rempah, nasi putih, sambal bajak, dan lalapan segar.</p>
-                        <div class="product-price-row">
-                            <span class="product-price">Rp 35.000</span>
-                            <button class="btn btn-primary btn-sm js-add-to-cart">Pesan</button>
+            <div class="tab-pane fade" id="ricebowl">
+                <div class="row g-4">
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card h-100 border-0 shadow-sm rounded-4">
+                            <img src="img/chicken-bowl.jpg" class="card-img-top" alt="Menu">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Chicken Katsu Bowl</h6>
+                                <p class="text-muted small">Ayam katsu renyah dengan salad segar.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="fw-bold text-maroon">Rp 30rb</span>
+                                    <a href="formulir.html" class="btn btn-maroon-outline btn-sm px-3">Pesan</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="product-card" data-id="2" data-title="Rice Bowl Sambal Matah" data-price="28000">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/300x200/eee/a62b55?text=Sambal+Matah" alt="Rice Bowl">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Rice Bowl Sambal Matah</h3>
-                        <p class="product-desc">Potongan ayam fillet crispy dengan siraman sambal matah khas Bali.</p>
-                        <div class="product-price-row">
-                            <span class="product-price">Rp 28.000</span>
-                            <button class="btn btn-primary btn-sm js-add-to-cart">Pesan</button>
+            <div class="tab-pane fade" id="snack">
+                <div class="row g-4">
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card h-100 border-0 shadow-sm rounded-4">
+                            <img src="img/snack.jpg" class="card-img-top" alt="Menu">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Box Jajanan Pasar</h6>
+                                <p class="text-muted small">Isi 3 macam kue tradisional pilihan.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="fw-bold text-maroon">Rp 15rb</span>
+                                    <a href="formulir.html" class="btn btn-maroon-outline btn-sm px-3">Pesan</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="product-card" data-id="3" data-title="Bolu Jadul Keju" data-price="125000">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/300x200/eee/a62b55?text=Bolu+Keju" alt="Bolu Jadul">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Bolu Jadul Keju (Large)</h3>
-                        <p class="product-desc">Tekstur lembut dengan taburan keju cheddar melimpah.</p>
-                        <div class="product-price-row">
-                            <span class="product-price">Rp 125.000</span>
-                            <button class="btn btn-primary btn-sm js-add-to-cart">Pesan</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" data-id="4" data-title="Tumpeng Mini Premium" data-price="45000">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/300x200/eee/a62b55?text=Tumpeng" alt="Tumpeng">
-                        <span class="badge-primary tag" style="background:#ffc107; color:#333;">NEW</span>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Tumpeng Mini Premium</h3>
-                        <p class="product-desc">Nasi kuning gurih dengan 6 macam lauk pauk lengkap.</p>
-                        <div class="product-price-row">
-                            <span class="product-price">Rp 45.000</span>
-                            <button class="btn btn-primary btn-sm js-add-to-cart">Pesan</button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
-    </section>
+    </main>
 
-    <div class="cart-floater" id="cartFloater">
-        <div class="cart-info">
-            <div class="cart-icon-bg"><i class="fas fa-shopping-basket"></i></div>
-            <div class="cart-details">
-                <div style="font-size:11px; color:#666;">PESANAN ANDA</div>
-                <span id="cartCount">0 Items in Basket</span>
-            </div>
-        </div>
-        <a href="rincian-pesanan.html" class="btn btn-primary btn-pill btn-sm">Lihat Keranjang</a>
-    </div>
-
-    <footer class="main-footer">
-        <div class="container footer-content">
-            <p>© 2026 Kedai Aishwa Catering. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#">Instagram</a>
-                <a href="#">WhatsApp</a>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,50 @@
+:root {
+    --maroon: #ad2d5e;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.text-maroon { color: var(--maroon); }
+
+/* Tombol Kategori */
+.nav-pills .nav-link {
+    color: #666;
+    background-color: white;
+    border: 1px solid #eee;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.nav-pills .nav-link.active {
+    background-color: var(--maroon) !important;
+    color: white !important;
+}
+
+/* Card Makanan */
+.card {
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+
+.btn-maroon-outline {
+    border: 1.5px solid var(--maroon);
+    color: var(--maroon);
+    font-weight: 700;
+    border-radius: 8px;
+}
+
+.btn-maroon-outline:hover {
+    background-color: var(--maroon);
+    color: white;
+}

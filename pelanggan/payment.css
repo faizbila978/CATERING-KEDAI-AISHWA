@@ -1,0 +1,169 @@
+:root {
+    --maroon: #ad2d5e;
+    --soft-pink: #fdf2f6;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #fafafa;
+}
+
+.text-maroon { color: var(--maroon); }
+.bg-soft-pink { background-color: var(--soft-pink); }
+.bg-maroon { background-color: var(--maroon); }
+
+.nav-link { font-weight: 500; font-size: 15px; }
+
+.payment-option {
+    cursor: pointer;
+    transition: 0.3s;
+    background: white;
+}
+
+.payment-option:hover {
+    border-color: var(--maroon) !important;
+}
+
+.custom-radio {
+    width: 22px;
+    height: 22px;
+    border-color: #ddd;
+}
+
+.custom-radio:checked {
+    background-color: var(--maroon);
+    border-color: var(--maroon);
+}
+
+.payment-box {
+    cursor: pointer;
+    background: white;
+    transition: 0.3s;
+}
+
+.payment-box.selected {
+    border: 2px solid var(--maroon) !important;
+    background-color: #fff9fb;
+}
+
+.small-badge {
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+.border-dashed {
+    border-style: dashed !important;
+    border-width: 2px !important;
+}
+
+.sticky-summary {
+    position: sticky;
+    top: 100px;
+}
+
+.border-maroon-top {
+    height: 4px;
+    background-color: var(--maroon);
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 4px 4px 0 0;
+}
+
+.alert-soft-pink {
+    background-color: #fff0f5;
+}
+
+.x-small {
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.experience-card {
+    height: 150px;
+}
+
+.overlay-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+}
+
+.btn-maroon {
+    background-color: var(--maroon);
+    color: white;
+    border: none;
+    box-shadow: 0 10px 20px rgba(173, 45, 94, 0.2);
+}
+
+.btn-maroon:hover {
+    background-color: #8a244b;
+    color: white;
+    transform: translateY(-2px);
+}
+/* Style dasar untuk kotak yang bisa di-klik */
+.clickable-method {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: white;
+    border: 1px solid #eee !important;
+}
+
+.clickable-method:hover {
+    border-color: var(--maroon) !important;
+    background-color: #fff9fb;
+}
+
+/* Style saat kotak dipilih (active state) */
+.clickable-method.selected {
+    border: 2px solid var(--maroon) !important;
+    background-color: #fff4f8; /* Pink sangat muda */
+    transform: scale(1.02); /* Efek membesar sedikit */
+}
+
+.clickable-method.selected i, 
+.clickable-method.selected h6 {
+    color: var(--maroon) !important;
+}
+
+/* Sembunyikan radio button asli di bagian Bank agar lebih rapi */
+.d-none {
+    display: none;
+}
+/* Pastikan di layar lebar mereka tidak 'wrap' atau turun */
+@media (min-width: 992px) {
+    .row.d-flex {
+        flex-wrap: nowrap !important;
+    }
+    .sticky-summary {
+        position: sticky;
+        top: 20px;
+    }
+}
+
+/* Efek saat diklik */
+.clickable-method {
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid #eee !important;
+}
+
+.clickable-method:hover {
+    border-color: var(--maroon) !important;
+}
+
+.clickable-method.selected {
+    border: 2px solid var(--maroon) !important;
+    background-color: #fff9fb !important;
+}
+
+.clickable-method.selected i, 
+.clickable-method.selected h6 {
+    color: var(--maroon);
+}
+
+/* Sembunyikan radio bawaan di Bank agar rapi */
+.d-none { display: none; }
