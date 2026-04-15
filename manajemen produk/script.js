@@ -53,12 +53,15 @@ function createCard(item, themeColor) {
                 <div class="${textClass} font-bold text-xl mb-2">Rp ${item.p}</div>
                 ${desc}
                 <div class="grid grid-cols-2 gap-2 mt-auto">
-                    <button class="bg-yellow-400 hover:bg-yellow-500 text-white py-2 rounded-xl text-xs font-bold transition flex items-center justify-center">
-                        <i class="fas fa-edit mr-1"></i> Edit
-                    </button>
-                    <button class="${btnClass} py-2 rounded-xl text-xs font-bold transition flex items-center justify-center border">
-                        <i class="fas fa-trash-alt mr-1"></i> Hapus
-                    </button>
+                <button onclick="editProduk('${item.id}')" 
+                class="bg-yellow-400 hover:bg-yellow-500 text-white py-2 rounded-xl text-xs font-bold">
+                <i class="fas fa-edit mr-1"></i> Edit
+                </button>
+
+                <button onclick="hapusProduk('${item.id}')" 
+                class="bg-red-100 text-red-600 py-2 rounded-xl text-xs font-bold border">
+                <i class="fas fa-trash-alt mr-1"></i> Hapus
+                </button>
                 </div>
             </div>
         </div>
