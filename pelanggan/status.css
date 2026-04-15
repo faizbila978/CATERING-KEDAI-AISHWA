@@ -1,0 +1,80 @@
+:root {
+    --maroon: #ad2d5e;
+    --soft-pink: #fdf2f6;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #fcfcfc;
+}
+
+.text-maroon { color: var(--maroon); }
+.bg-soft-pink { background-color: var(--soft-pink); }
+
+.order-track {
+    margin-top: 20px;
+}
+
+.order-track-step {
+    display: flex;
+    height: 90px;
+}
+
+.order-track-status {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.order-track-status-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    z-index: 2;
+}
+
+.order-track-status-line {
+    width: 2px;
+    height: 100%;
+    background: #e0e0e0;
+}
+
+/* Logic Warna Status */
+.completed .order-track-status-dot {
+    background: var(--maroon);
+}
+.completed .order-track-status-line {
+    background: var(--maroon);
+}
+
+.active .order-track-status-dot {
+    background: var(--maroon);
+    box-shadow: 0 0 0 5px var(--soft-pink);
+}
+
+.order-track-text-stat {
+    font-size: 16px;
+}
+
+.btn-soft-maroon {
+    background-color: var(--soft-pink);
+    border: none;
+    font-size: 13px;
+}
+
+.btn-outline-maroon {
+    border: 2px solid var(--maroon);
+    color: var(--maroon);
+}
+
+.btn-outline-maroon:hover {
+    background-color: var(--maroon);
+    color: white;
+}

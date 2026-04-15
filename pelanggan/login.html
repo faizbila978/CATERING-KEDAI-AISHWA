@@ -3,57 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Kedai Aishwa</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Welcome Back - Catering Kedai Aishwa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="login.css">
 </head>
-<body class="auth-body">
+<body>
 
-    <div class="auth-container">
-        <div class="auth-image-side" style="background-image: url('https://via.placeholder.com/600x800/222/a62b55?text=Fine+Dining');">
-            <div class="auth-overlay-content">
-                <h2>Crafting Memories Through Fine Dining</h2>
-                <p>Join our exclusive culinary circle and manage your bespoke catering events with ease.</p>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-maroon" href="index.html">CateringAtelier</a>
+            <div class="ms-auto d-none d-lg-block">
+                <a href="index.html" class="nav-link d-inline me-4">Home</a>
+                <a href="menu.html" class="nav-link d-inline me-4">Order Now</a>
+                <a href="#" class="btn btn-maroon px-4 rounded-pill">Request Quote</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container login-container d-flex align-items-center justify-content-center">
+        <div class="card login-card shadow-lg border-0 overflow-hidden">
+            <div class="row g-0">
+                <div class="col-lg-6 d-none d-lg-block position-relative">
+                    <img src="img/login-bg.jpg" class="h-100 w-100 object-fit-cover" alt="Fine Dining">
+                    <div class="image-overlay p-5 d-flex flex-column justify-content-end">
+                        <h2 class="text-white fw-bold">Crafting Memories Through Fine Dining</h2>
+                        <p class="text-white-50">Join our exclusive culinary circle and manage your bespoke catering events with ease.</p>
+                    </div>
+                </div>
+
+               <div class="col-lg-6 p-lg-5 p-4 bg-white d-flex align-items-center">
+
+                <div class="w-100"> <div class="mb-4">
+                    <h3 class="fw-bold mb-1">Welcome Back</h3>
+                    <p class="text-muted">Sign in to Catering Kedai Aishwa</p>
+                </div>
+
+                <form>
+                    <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Email</label>
+                <input type="email" class="form-control bg-light border-0 py-3 px-4" placeholder="Email anda">
+            </div>
+
+            <div class="mb-4">
+                <div class="d-flex justify-content-between">
+                    <label class="form-label small fw-bold text-muted">Password</label>
+                    <a href="#" class="text-maroon small text-decoration-none">Lupa Password?</a>
+                </div>
+                <input type="password" class="form-control bg-light border-0 py-3 px-4" placeholder="••••••••">
+            </div>
+                <a href="landing page.html" class="btn btn-maroon w-100 py-3 rounded-3 fw-bold shadow-sm">
+    Masuk Sekarang
+</a>
+                </form>
+
+            <p class="text-center mt-4 small text-muted">
+            Belum punya akun? <a href="register.html" class="text-maroon fw-bold text-decoration-none">Daftar di sini</a>
+        </p>
             </div>
         </div>
 
-        <div class="auth-form-side">
-            <div class="auth-header">
-                <h1>Welcome Back</h1>
-                <p>Sign in to Catering Kedai Aishwa</p>
-            </div>
-            
-            <form action="index.html">
-                <div class="form-group">
-                    <label>Email</label>
-                    <i class="fas fa-envelope input-icon"></i>
-                    <input type="email" class="form-input" placeholder="chef@atelier.com" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Password</label>
-                    <i class="fas fa-lock input-icon"></i>
-                    <input type="password" class="form-input" placeholder="••••••••" required>
-                    <a href="#" class="forgot-link">Forgot Password?</a>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-auth-submit">Login <i class="fas fa-arrow-right"></i></button>
-            </form>
-            
-            <div class="auth-footer">
-                <p>Don't have an account? <a href="register.html">Request Access</a></p>
-                
-                <div class="auth-divider">
-                    <span>OR CONTINUE WITH</span>
-                </div>
-                
-                <div class="social-auth-btns">
-                    <button class="btn btn-secondary btn-social btn-sm">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google__G__Logo.svg" alt="Google"> Google
-                    </button>
-                    <button class="btn btn-secondary btn-social btn-sm">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple"> Apple
-                    </button>
+                        <button type="submit" class="btn btn-maroon w-100 py-3 mt-4 rounded-3 fw-bold shadow-sm">
+                            Login <i class="bi bi-arrow-right ms-2"></i>
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="small text-muted">Don't have an account? <a href="register.html" class="text-maroon fw-bold text-decoration-none">Request Access</a></p>
+                    </div>
+
+                    <div class="divider my-4 text-center position-relative">
+                        <span class="bg-white px-3 text-muted small">OR CONTINUE WITH</span>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <button class="btn btn-outline-light text-dark w-100 border py-2 d-flex align-items-center justify-content-center gap-2">
+                                <img src="https://www.google.com/favicon.ico" width="16" alt="google"> Google
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-outline-light text-dark w-100 border py-2 d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-apple"></i> Apple
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

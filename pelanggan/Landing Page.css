@@ -1,0 +1,86 @@
+:root {
+    --maroon: #ad2d5e;
+    --soft-pink: #fdf2f6;
+    --text-dark: #2d2d2d;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-dark);
+    background-color: #fafafa;
+}
+
+.text-maroon { color: var(--maroon); }
+
+.btn-maroon {
+    background-color: var(--maroon);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s;
+}
+
+.btn-maroon:hover {
+    background-color: #8a244b;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(173, 45, 94, 0.3);
+}
+
+.navbar-brand {
+    font-size: 24px;
+    letter-spacing: -0.5px;
+}
+
+.nav-link.active {
+    color: var(--maroon) !important;
+    font-weight: 600;
+    border-bottom: 2px solid var(--maroon);
+}
+
+.hero-section {
+    padding: 80px 0;
+    background: radial-gradient(circle at 90% 10%, #fff0f5 0%, #fafafa 40%);
+}
+
+.badge-established {
+    display: inline-block;
+    background-color: var(--soft-pink);
+    color: var(--maroon);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.main-img-card {
+    position: relative;
+    padding-right: 40px;
+}
+
+.floating-badge {
+    position: absolute;
+    bottom: 20px;
+    left: -20px;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+.ms-n2 { margin-left: -15px !important; }
+
+.avatar-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--maroon);
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    border: 2px solid white;
+    margin-left: -15px;
+}
