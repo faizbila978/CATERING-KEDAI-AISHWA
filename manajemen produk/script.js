@@ -1,26 +1,26 @@
 // DATA MENU UTAMA
 const menuUtama = [
-    { id: "MNU-101", n: "Paket Ayam Goreng", p: "20.000,00", d: "Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.", img: "WhatsApp Image 2026-02-21 at 21.48.58.jpeg" },
-    { id: "MNU-102", n: "Paket Ayam Bakar", p: "20.000,00", d: "Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.", img: "WhatsApp Image 2026-02-21 at 22.03.08.jpeg" },
-    { id: "MNU-103", n: "Paket Ayam Geprek", p: "20.000,00", d: "Nasi, ayam (dada/paha), mie goreng jawa, sambel, lalapan, aqua gelas.", img: "WhatsApp Image 2026-02-21 at 22.07.53.jpeg" },
-    { id: "MNU-104", n: "Rice Bowl", p: "10.000,00", d: "Nasi, ayam krispi, sayur/kentang, sambal (geprek, matah, tomat).", img: "WhatsApp Image 2026-02-16 at 22.03.25.jpeg" },
-    { id: "MNU-105", n: "Tumpeng Nusantara", p: "200.000,00", d: "Nasi kuning, telor balado, mie goreng jawa, orek, urap, sambal.", img: "Gemini_Generated_Image_sfm989sfm989sfm9.png" },
-    { id: "MNU-106", n: "Tumpeng Nusantara Spesial", p: "250.000,00", d: "Nasi kuning, ayam bakar/goreng, orek, mie goreng jawa, urap, sambal.", img: "Gemini_Generated_Image_erm4mderm4mderm4.png" },
-    { id: "MNU-107", n: "Tumpeng Nusantara Premium", p: "300.000,00", d: "Nasi kuning, ayam bakar/goreng, telor balado, mie goreng jawa, orek, urap, sambal.", img: "Gemini_Generated_Image_vgy9v9vgy9v9vgy9.png" }
+    { id: "MNU-101", n: "Paket Ayam Goreng", p: "20.000", d: "Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.", img: "WhatsApp Image 2026-02-21 at 21.48.58.jpeg" },
+    { id: "MNU-102", n: "Paket Ayam Bakar", p: "20.000", d: "Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.", img: "WhatsApp Image 2026-02-21 at 22.03.08.jpeg" },
+    { id: "MNU-103", n: "Paket Ayam Geprek", p: "20.000", d: "Nasi, ayam (dada/paha), mie goreng jawa, sambel, lalapan, aqua gelas.", img: "WhatsApp Image 2026-02-21 at 22.07.53.jpeg" },
+    { id: "MNU-104", n: "Rice Bowl", p: "10.000", d: "Nasi, ayam krispi, sayur/kentang, sambal (geprek, matah, tomat).", img: "WhatsApp Image 2026-02-16 at 22.03.25.jpeg" },
+    { id: "MNU-105", n: "Tumpeng Nusantara", p: "200.000", d: "Nasi kuning, telor balado, mie goreng jawa, orek, urap, sambal.", img: "WhatsApp_Image_2026-02-11_at_08.53.28-removebg-preview.png" },
+    { id: "MNU-106", n: "Tumpeng Nusantara Spesial", p: "250.000", d: "Nasi kuning, ayam bakar/goreng, orek, mie goreng jawa, urap, sambal.", img: "tumpeng.png" },
+    { id: "MNU-107", n: "Tumpeng Nusantara Premium", p: "300.000", d: "Nasi kuning, ayam bakar/goreng, telor balado, mie goreng jawa, orek, urap, sambal.", img: "Gemini_Generated_Image_vgy9v9vgy9v9vgy9.png" }
 ];
 
 // DATA MENU TAMBAHAN
 const tambahan = [
-    { id: "TMB-201", n: "Tempe Tahu", p: "2.000,00", img: "Tempe tahu goreng.jpeg" }, 
-    { id: "TMB-202", n: "Puding", p: "2.000,00", img: "puding.jpeg" },
-    { id: "TMB-203", n: "Putu Ayu", p: "2.000,00", img: "Resep Putu Ayu Enak Dan Lembut Ala Ncc oleh BunnaBintang.jpeg" }, 
-    { id: "TMB-204", n: "Bolu Kukus", p: "2.000,00", img: "WhatsApp Image 2026-03-06 at 13.55.39.jpeg" },
-    { id: "TMB-205", n: "Pisang", p: "2.000,00", img: "Banana Bread Muffin Tops – Oh She Glows.jpeg" }, 
-    { id: "TMB-206", n: "Jeruk", p: "2.000,00", img: "Buah buahan.jpeg" },
-    { id: "TMB-207", n: "Rengginang", p: "1.000,00", img: "download (8).jpeg" }, 
-    { id: "TMB-208", n: "Bolu Jadul", p: "40.000,00", img: "WhatsApp Image 2026-02-21 at 21.47.17.jpeg" },
-    { id: "TMB-209", n: "Bolu Meses Keju", p: "50.000,00", img: "WhatsApp Image 2026-02-21 at 21.45.35.jpeg" }, 
-    { id: "TMB-210", n: "Brownies Keju", p: "35.000,00", img: "WhatsApp Image 2026-02-21 at 21.43.57.jpeg" }
+    { id: "TMB-201", n: "Tempe Tahu", p: "2.000", img: "Tempe tahu goreng.jpeg" }, 
+    { id: "TMB-202", n: "Puding", p: "2.000", img: "puding.jpeg" },
+    { id: "TMB-203", n: "Putu Ayu", p: "2.000", img: "Resep Putu Ayu Enak Dan Lembut Ala Ncc oleh BunnaBintang.jpeg" }, 
+    { id: "TMB-204", n: "Bolu Kukus", p: "2.000", img: "WhatsApp Image 2026-03-06 at 13.55.39.jpeg" },
+    { id: "TMB-205", n: "Pisang", p: "2.000", img: "Banana Bread Muffin Tops – Oh She Glows.jpeg" }, 
+    { id: "TMB-206", n: "Jeruk", p: "2.000", img: "Buah buahan.jpeg" },
+    { id: "TMB-207", n: "Rengginang", p: "1.000", img: "download (8).jpeg" }, 
+    { id: "TMB-208", n: "Bolu Jadul", p: "40.000", img: "WhatsApp Image 2026-02-21 at 21.47.17.jpeg" },
+    { id: "TMB-209", n: "Bolu Meses Keju", p: "50.000", img: "WhatsApp Image 2026-02-21 at 21.45.35.jpeg" }, 
+    { id: "TMB-210", n: "Brownies Keju", p: "35.000", img: "WhatsApp Image 2026-02-21 at 21.43.57.jpeg" }
 ];
 
 // FUNGSI UNTUK MERENDER KARTU PRODUK
