@@ -1,21 +1,45 @@
 <?php
 session_start();
 
-if (isset($_POST['login'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+$conn = mysqli_connect("localhost", "root", "", "catering_kedai_aishwa");
 
-    // Sederhananya kita anggap login berhasil jika form terisi
-    if (!empty($email) && !empty($password)) {
-        $_SESSION['user_email'] = $email;
-        $_SESSION['user_name'] = "Pelanggan Aishwa"; // Contoh nama statis
-        
-        // Flow: Setelah login sukses, arahkan ke menu
-        header("Location: menu.php");
-        exit();
+// cek koneksi
+if (!$conn) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
+
+// ambil data dari form
+$email = $_POST['email'] ?? '';
+$password = $_POST['password'] ?? '';
+
+// ambil data user berdasarkan email
+$query = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
+$data = mysqli_fetch_assoc($query);
+
+// cek user
+if ($data) {
+
+    // cek password (karena pakai hash)
+    if (password_verify($password, $data['password'])) {
+
+        // simpan session
+        $_SESSION['user_id'] = $data['user_id'];
+        $_SESSION['nama'] = $data['nama_lengkap'];
+        $_SESSION['role'] = $data['role'];
+
+        // 🔥 BEDAIN DI SINI
+        if ($data['role'] == 'admin') {
+            header("Location: dashboard.php");
+        } else {
+            header("Location: pelanggan.php");
+        }
+        exit;
+
     } else {
-        header("Location: login.php?error=empty");
-        exit();
+        echo "<script>alert('Password salah!'); window.location='login.php';</script>";
     }
+
+} else {
+    echo "<script>alert('Email tidak ditemukan!'); window.location='login.php';</script>";
 }
 ?>
