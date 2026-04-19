@@ -1,86 +1,93 @@
 :root {
-    --maroon: #ad2d5e;
-    --soft-pink: #fdf2f6;
-    --text-dark: #2d2d2d;
-}
+            --maroon: #800000;
+            --soft-gold: #c5a059;
+            --dark-text: #2d2d2d;
+        }
 
-body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    color: var(--text-dark);
-    background-color: #fafafa;
-}
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--dark-text);
+            overflow-x: hidden;
+        }
 
-.text-maroon { color: var(--maroon); }
+        h1, h2, .navbar-brand {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
 
-.btn-maroon {
-    background-color: var(--maroon);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    transition: all 0.3s;
-}
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8) !important;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
 
-.btn-maroon:hover {
-    background-color: #8a244b;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(173, 45, 94, 0.3);
-}
+        .hero-section {
+            padding: 160px 0 100px;
+            background: linear-gradient(135deg, #fff 0%, #fdf8f8 100%);
+        }
 
-.navbar-brand {
-    font-size: 24px;
-    letter-spacing: -0.5px;
-}
+        .text-maroon { color: var(--maroon); }
+        
+        .btn-maroon {
+            background-color: var(--maroon);
+            color: white;
+            padding: 12px 35px;
+            border-radius: 100px;
+            transition: all 0.3s;
+            border: none;
+            font-weight: 600;
+        }
 
-.nav-link.active {
-    color: var(--maroon) !important;
-    font-weight: 600;
-    border-bottom: 2px solid var(--maroon);
-}
+        .btn-maroon:hover {
+            background-color: #5a0000;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(128, 0, 0, 0.2);
+            color: white;
+        }
 
-.hero-section {
-    padding: 80px 0;
-    background: radial-gradient(circle at 90% 10%, #fff0f5 0%, #fafafa 40%);
-}
+        .hero-tagline {
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: var(--soft-gold);
+            font-size: 0.9rem;
+        }
 
-.badge-established {
-    display: inline-block;
-    background-color: var(--soft-pink);
-    color: var(--maroon);
-    padding: 6px 16px;
-    border-radius: 50px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
+        /* Image Styling ala Dapur Pangeran */
+        .image-wrapper {
+            position: relative;
+            z-index: 1;
+        }
 
-.main-img-card {
-    position: relative;
-    padding-right: 40px;
-}
+        .image-wrapper::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--soft-gold);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            z-index: -1;
+            top: 20px;
+            left: 20px;
+            opacity: 0.1;
+        }
 
-.floating-badge {
-    position: absolute;
-    bottom: 20px;
-    left: -20px;
-    background: white;
-    padding: 15px 20px;
-    border-radius: 15px;
-    font-size: 14px;
-}
+        .main-img {
+            border-radius: 50px 5px 50px 5px;
+            transition: transform 0.5s ease;
+        }
 
-.ms-n2 { margin-left: -15px !important; }
+        .main-img:hover {
+            transform: scale(1.02);
+        }
 
-.avatar-count {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: var(--maroon);
-    color: white;
-    border-radius: 50%;
-    font-size: 12px;
-    border: 2px solid white;
-    margin-left: -15px;
-}
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: inline-flex;o
+            align-items: center;
+            gap: 15px;
+            position: absolute;
+            bottom: -30px;
+            left: 10%;
+        }

@@ -8,8 +8,7 @@ CREATE TABLE users (
   password VARCHAR(255) NOT NULL,
   role ENUM('admin','pelanggan') DEFAULT 'pelanggan'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-INSERT INTO users (nama_lengkap, email, password, role)
-VALUES ('Admin', 'admin@gmail.com', 'admin123', 'admin');
+
 
 -- ======================
 -- 2. TABEL MENU

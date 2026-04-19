@@ -1,5 +1,5 @@
 :root {
-    --maroon: #ad2d5e;
+    --pink: #ad2d5e;
     --soft-pink: #fdf2f6;
 }
 
@@ -9,10 +9,10 @@ body {
     min-height: 100vh;
 }
 
-.text-maroon { color: var(--maroon); }
+.text-maroon { color: var(--pink); }
 
 .btn-maroon {
-    background-color: var(--maroon);
+    background-color: var(--pink);
     color: white;
     border: none;
     transition: 0.3s;
