@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Produk - Kedai Aishwa</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="tambah produk menu.css">
+</head>
+<body class="font-sans">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <aside class="sidebar flex flex-col shadow-2xl">
+            <div class="p-8 text-center border-b border-orange-600/50">
+                <div class="logo-container">
+                    <img src="logo catering.jpeg" alt="Logo">
+                </div>
+                <h1 class="text-xl font-bold uppercase leading-tight text-white mt-4">
+                    Catering Kedai<br>Aishwa
+                </h1>
+                <p class="text-[10px] text-orange-200 tracking-widest mt-1 font-bold">KARANGAMPEL</p>
+            </div>
+
+            <nav class="flex-1 mt-6 space-y-2">
+                <a href="#" class="menu-item active">
+                    <i class="fas fa-th-large w-8 text-xl"></i>
+                    <span>Manajemen Produk</span>
+                </a>
+                <a href="#" class="menu-item opacity-80">
+                    <i class="fas fa-shopping-cart w-8 text-xl"></i>
+                    <span>Manajemen Pesanan</span>
+                </a>
+                <a href="#" class="menu-item opacity-80">
+                    <i class="fas fa-chart-line w-8 text-xl"></i>
+                    <span>Laporan Pendapatan</span>
+                </a>
+            </nav>
+
+            <button class="btn-keluar">
+                <i class="fas fa-sign-out-alt rotate-180"></i> Keluar
+            </button>
+        </aside>
+
+        <main class="flex-1 p-12 overflow-y-auto bg-[#fdf2e9]">
+            
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold text-[#1e293b] flex items-center">
+                    <span class="bg-orange-600 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-lg">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    Tambah Produk Menu
+                </h2>
+                
+                <button class="btn-kembali" onclick="history.back()">
+                    kembali
+                </button>
+            </div>
+
+            <div class="form-container">
+                <div class="flex flex-col lg:flex-row gap-12">
+                    <div class="w-full lg:w-1/2">
+                        <div class="upload-box" id="drop-area">
+                            <i class="fas fa-camera text-7xl text-gray-500 mb-4"></i>
+                            <p class="text-gray-700 font-bold text-lg">Masukan Photo Produk</p>
+                            <input type="file" id="file-input" hidden accept="image/*">
+                        </div>
+                    </div>
+
+                    <div class="w-full lg:w-1/2 flex flex-col gap-6 justify-center">
+                        <input type="text" placeholder="Masukan Nama Produk" class="input-dashed">
+                        <input type="number" placeholder="Masukan Harga Produk" class="input-dashed">
+                        <textarea placeholder="Masukan Deskripsi Produk" class="input-dashed h-32 resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-8 mt-12">
+                <button class="btn-action btn-tambah">Tambah</button>
+                <button class="btn-action btn-hapus">Hapus</button>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

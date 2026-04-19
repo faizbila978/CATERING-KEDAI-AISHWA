@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rincian Pesanan - Kedai Aishwa</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Catering<span class="text-primary">Atelier</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#menu" class="active">Order Now</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="checkout-page container">
+        <div class="status-header">
+            <h1>RINCIAN Pesanan</h1>
+            <p style="color:#666; font-size:14px;">Selesaikan pilihan menu spesial untuk momen berharga Anda.</p>
+        </div>
+        
+        <div class="checkout-grid">
+            <div class="cart-items-left js-cart-container">
+                
+                <div class="cart-item-card" data-id="menu-1" data-price="35000">
+                    <img src="https://via.placeholder.com/80/eee/a62b55?text=Ayam" alt="Ayam Goreng">
+                    <div class="cart-item-main">
+                        <div class="cart-item-title">Nasi Kotak Ayam Goreng</div>
+                        <div class="cart-item-spec">Paket Signature: Nasi Wangi, Lalapan, Sambal Bajak</div>
+                        <div class="qty-controls">
+                            <button class="btn-qty js-qty-minus"><i class="fas fa-minus"></i></button>
+                            <span class="qty-num">12</span>
+                            <button class="btn-qty js-qty-plus"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="cart-item-price">Rp 420.000</div>
+                    <button class="btn-remove-item"><i class="fas fa-trash-alt"></i></button>
+                </div>
+                
+                <div class="cart-item-card" data-id="menu-2" data-price="15000">
+                    <img src="https://via.placeholder.com/80/ccc/333?text=Brownies" alt="Brownies">
+                    <div class="cart-item-main">
+                        <div class="cart-item-title">Mini Brownies Bites</div>
+                        <div class="cart-item-spec">Dark Chocolate 70%, Roasted Almonds, Sea Salt</div>
+                        <div class="qty-controls">
+                            <button class="btn-qty js-qty-minus"><i class="fas fa-minus"></i></button>
+                            <span class="qty-num">10</span>
+                            <button class="btn-qty js-qty-plus"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="cart-item-price">Rp 150.000</div>
+                    <button class="btn-remove-item"><i class="fas fa-trash-alt"></i></button>
+                </div>
+
+            </div>
+            
+            <div class="ringkasan-side">
+                <div class="summary-card">
+                    <div class="summary-title">Ringkasan Pesanan</div>
+                    
+                    <table class="totals-table">
+                        <tr>
+                            <td>Subtotal</td>
+                            <td style="text-align:right;" id="checkoutSubtotal">Rp 570.000</td>
+                        </tr>
+                        <tr>
+                            <td>Biaya Pengantaran</td>
+                            <td style="text-align:right;">Rp 25.000</td>
+                        </tr>
+                        <tr>
+                            <td>PPN (11%)</td>
+                            <td style="text-align:right;">Rp 62.700</td>
+                        </tr>
+                        <tr style="border-top: 1px solid #eee;">
+                            <td class="total-label">TOTAL BAYAR</td>
+                            <td class="total-value" id="checkoutTotal">Rp 657.700</td>
+                        </tr>
+                    </table>
+                    
+                    <div class="order-form">
+                        <a href="status-pesanan.html" class="btn btn-primary" style="justify-content:center; width:100%;">Lanjut ke Pembayaran <i class="fas fa-arrow-right"></i></a>
+                        <a href="index.html#menu" class="btn btn-secondary" style="justify-content:center; width:100%;">Kembali Pilih Menu</a>
+                    </div>
+                    
+                    <div class="checkout-verify">
+                        <i class="fas fa-shield-alt icon"></i>
+                        <span>Pemesanan diproses dengan protokol higienis tinggi dan bahan baku segar pilihan terbaik.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
