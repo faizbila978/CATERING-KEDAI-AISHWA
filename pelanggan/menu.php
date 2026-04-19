@@ -1,5 +1,12 @@
 <?php 
-// Memanggil data dari file eksternal
+session_start();
+
+// Proteksi: Jika tidak ada session email, tendang ke login
+if (!isset($_SESSION['user_email'])) {
+    header("Location: login.php");
+    exit();
+}
+
 require_once 'data-menu.php'; 
 ?>
 
@@ -14,9 +21,9 @@ require_once 'data-menu.php';
     family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="menu.css">
     <style>
-        .text-maroon { color: #800000; }
-        .btn-maroon-outline { border: 1px solid #800000; color: #800000; }
-        .btn-maroon-outline:hover { background: #800000; color: #fff; }
+        .text-pink { color: #800000; }
+        .btn-pink-outline { border: 1px solid #800000; color: #800000; }
+        .btn-pink-outline:hover { background: #800000; color: #fff; }
     </style>
 </head>
 <body>

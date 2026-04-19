@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 // 1. DATA (Menggunakan 'let' agar bisa diedit dan dihapus)
 let menuUtama = [
+=======
+// DATA MENU UTAMA
+const menuUtama = [
+>>>>>>> 3a1efd830ba3fb9abca181edf61f95eb35d888c8
     { id: "MNU-101", n: "Paket Ayam Goreng", p: "20.000", d: "Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.", img: "WhatsApp Image 2026-02-21 at 21.48.58.jpeg" },
     { id: "MNU-102", n: "Paket Ayam Bakar", p: "20.000", d: "Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.", img: "WhatsApp Image 2026-02-21 at 22.03.08.jpeg" },
     { id: "MNU-103", n: "Paket Ayam Geprek", p: "20.000", d: "Nasi, ayam (dada/paha), mie goreng jawa, sambel, lalapan, aqua gelas.", img: "WhatsApp Image 2026-02-21 at 22.07.53.jpeg" },
@@ -9,7 +14,12 @@ let menuUtama = [
     { id: "MNU-107", n: "Tumpeng Nusantara Premium", p: "300.000", d: "Nasi kuning, ayam bakar/goreng, telor balado, mie goreng jawa, orek, urap, sambal.", img: "Gemini_Generated_Image_vgy9v9vgy9v9vgy9.png" }
 ];
 
+<<<<<<< HEAD
 let tambahan = [
+=======
+// DATA MENU TAMBAHAN
+const tambahan = [
+>>>>>>> 3a1efd830ba3fb9abca181edf61f95eb35d888c8
     { id: "TMB-201", n: "Tempe Tahu", p: "2.000", img: "Tempe tahu goreng.jpeg" }, 
     { id: "TMB-202", n: "Puding", p: "2.000", img: "puding.jpeg" },
     { id: "TMB-203", n: "Putu Ayu", p: "2.000", img: "Resep Putu Ayu Enak Dan Lembut Ala Ncc oleh BunnaBintang.jpeg" }, 
