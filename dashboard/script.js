@@ -1,23 +1,3 @@
-const PASSWORD_BENAR = "admin123";
-
-function checkLogin() {
-    const email = document.getElementById('adminEmail').value;
-    const password = document.getElementById('adminPassword').value;
-
-    if (email === "") {
-        alert("Silakan masukkan email admin!");
-        return;
-    }
-
-    if (password === PASSWORD_BENAR) {
-        document.getElementById('loginSection').classList.add('hidden');
-        document.getElementById('dashboardSection').classList.remove('hidden');
-    } else {
-        alert("Password Salah!");
-        document.getElementById('adminPassword').value = "";
-    }
-}
-
 function showWelcome() {
     const mainArea = document.getElementById('mainContentArea');
     const content = document.getElementById('dynamicContent');
@@ -78,6 +58,7 @@ function changeContent(page) {
 
 function logout() {
     if (confirm("Apakah Anda yakin ingin keluar?")) {
+        // Karena tidak ada login, logout akan me-refresh halaman ke kondisi awal
         location.reload(); 
     }
 }
