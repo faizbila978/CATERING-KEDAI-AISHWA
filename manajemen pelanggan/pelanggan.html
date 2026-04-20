@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="font-sans text-sm bg-stone-100">
-
     <div id="dashboardSection" class="flex h-screen fade-in">
         <aside class="w-64 bg-[#c2410c] text-white flex flex-col shadow-2xl">
             <div class="p-6 text-center border-b border-white/10">
@@ -19,26 +18,23 @@
                 <h1 class="text-sm font-bold uppercase leading-tight">CATERING<br>KEDAI AISHWA</h1>
                 <p class="text-[10px] opacity-60 tracking-widest uppercase mt-1">Karangampel</p>
             </div>
-
             <nav class="flex-1 mt-4 px-3 space-y-1">
                 <button onclick="changeContent('Produk')" class="nav-link w-full" id="btn-produk">
                     <i class="fas fa-th-large mr-3"></i> Manajemen Produk
                 </button>
-                <button onclick="changeContent('Pesanan')" class="nav-link w-full active" id="btn-pesanan">
+                <button onclick="changeContent('Pesanan')" class="nav-link w-full" id="btn-pesanan">
                     <i class="fas fa-shopping-cart mr-3"></i> Manajemen Pesanan
                 </button>
                 <button onclick="changeContent('Pendapatan')" class="nav-link w-full" id="btn-pendapatan">
                     <i class="fas fa-chart-line mr-3"></i> Laporan Pendapatan
                 </button>
             </nav>
-
             <div class="p-4 border-t border-white/10">
                 <button onclick="location.reload()" class="logout-btn">
-                    <i class="fas fa-sync-alt mr-2"></i> Refresh Halaman
+                    <i class="fas fa-sign-out-alt mr-2"></i> Keluar
                 </button>
             </div>
         </aside>
-
         <main class="flex-1 overflow-hidden flex flex-col">
             <header class="bg-white p-5 shadow-sm flex justify-between items-center border-b border-gray-200">
                 <h2 id="pageTitle" class="text-base font-bold text-gray-800">Manajemen Pesanan</h2>
@@ -46,12 +42,10 @@
                     PESANAN BARU MASUK!
                 </div>
             </header>
-            
             <div id="dynamicContent" class="p-4 overflow-auto bg-[#fffbf5] h-full">
                 </div>
         </main>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
