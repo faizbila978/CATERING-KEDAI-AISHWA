@@ -1,140 +1,106 @@
 :root {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-    --maroon: #ad2d5e;
+    --primary-pink: #ad2d5e;
+    --primary-hover: #8a244b;
     --soft-pink: #fdf2f6;
     --text-dark: #2d2d2d;
-=======
->>>>>>> 47e0988
-    --pink: #ff4d8d;       /* pink utama */
-    --pink-dark: #cc3a73;  /* pink hover */
-    --pink-soft: #ffe4ec;  /* background lembut */
-    --soft-gold: #c5a059;
-    --dark-text: #2d2d2d;
-<<<<<<< HEAD
-=======
->>>>>>> 1a02f5e (menghapus dasbord)
->>>>>>> 47e0988
+    --text-muted: #6c757d;
+    --white: #ffffff;
+    --soft-gold: #e2b04a; /* Aksen untuk kesan mewah */
 }
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-<<<<<<< HEAD
-    color: var(--dark-text);
-    overflow-x: hidden;
-=======
-<<<<<<< HEAD
     color: var(--text-dark);
-    background-color: #fafafa;
->>>>>>> 47e0988
-}
-
-h1, h2, .navbar-brand {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-.navbar {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.8) !important;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-/* HERO FULL PINK NUANSA */
-.hero-section {
-    padding: 160px 0 100px;
-    background: linear-gradient(135deg, #fff 0%, var(--pink-soft) 100%);
-}
-
-/* TEXT */
-.text-pink { 
-    color: var(--pink); 
-}
-
-/* BUTTON */
-.btn-pink {
-    background-color: var(--pink);
-    color: white;
-<<<<<<< HEAD
-=======
-    border-radius: 50%;
-    font-size: 12px;
-    border: 2px solid white;
-    margin-left: -15px;
-=======
-    color: var(--dark-text);
+    background-color: #ffffff;
     overflow-x: hidden;
 }
 
-h1, h2, .navbar-brand {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-}
+/* --- Utilities --- */
+.text-pink { color: var(--primary-pink) !important; }
+.bg-pink { background-color: var(--primary-pink) !important; }
 
-.navbar {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.8) !important;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-/* HERO FULL PINK NUANSA */
-.hero-section {
-    padding: 160px 0 100px;
-    background: linear-gradient(135deg, #fff 0%, var(--pink-soft) 100%);
-}
-
-/* TEXT */
-.text-pink { 
-    color: var(--pink); 
-}
-
-/* BUTTON */
 .btn-pink {
-    background-color: var(--pink);
-    color: white;
->>>>>>> 47e0988
-    padding: 12px 35px;
-    border-radius: 100px;
-    transition: all 0.3s;
+    background-color: var(--primary-pink);
+    color: var(--white);
     border: none;
-    font-weight: 600;
+    border-radius: 50px; /* Lebih rounded agar modern */
+    padding: 12px 32px;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .btn-pink:hover {
-    background-color: var(--pink-dark);
+    background-color: var(--primary-hover);
+    color: var(--white);
     transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(255, 77, 141, 0.3);
-    color: white;
+    box-shadow: 0 10px 20px rgba(173, 45, 94, 0.3);
 }
 
-/* TAGLINE */
-.hero-tagline {
-    letter-spacing: 2px;
+/* --- Navbar --- */
+.navbar {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+}
+
+.nav-link {
     font-weight: 600;
-    color: var(--soft-gold);
-    font-size: 0.9rem;
+    color: var(--text-dark) !important;
+    position: relative;
 }
 
-/* IMAGE STYLE */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--primary-pink);
+    transition: 0.3s;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    padding: 180px 0 100px;
+    background: linear-gradient(135deg, #fff 0%, var(--soft-pink) 100%);
+    position: relative;
+}
+
+.hero-tagline {
+    letter-spacing: 3px;
+    color: var(--primary-pink);
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
 .image-wrapper {
     position: relative;
     z-index: 1;
 }
 
 .image-wrapper::before {
-    content: "";
+    content: '';
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: var(--pink);
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    top: 50%;
+    left: 50%;
+    width: 110%;
+    height: 110%;
+    background: var(--primary-pink);
+    opacity: 0.05;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
     z-index: -1;
-    top: 20px;
-    left: 20px;
-    opacity: 0.1;
 }
 
 .main-img {
-    border-radius: 50px 5px 50px 5px;
+    border-radius: 30px;
     transition: transform 0.5s ease;
 }
 
@@ -142,20 +108,46 @@ h1, h2, .navbar-brand {
     transform: scale(1.02);
 }
 
-/* CARD */
 .stat-card {
+    position: absolute;
+    bottom: 10px;
+    left: -20px;
     background: white;
-    padding: 20px;
+    padding: 15px 25px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    display: inline-flex; /* FIX TYPO */
+    display: flex;
     align-items: center;
     gap: 15px;
-    position: absolute;
-    bottom: -30px;
-    left: 10%;
-<<<<<<< HEAD
-=======
->>>>>>> 1a02f5e (menghapus dasbord)
->>>>>>> 47e0988
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* --- Menu Cards --- */
+.menu-card {
+    background: #fff;
+    border-radius: 24px !important;
+    transition: all 0.4s ease;
+}
+
+.menu-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+}
+
+.card-img-top {
+    transition: transform 0.6s ease;
+}
+
+.menu-card:hover .card-img-top {
+    transform: scale(1.1);
+}
+
+.badge-pink {
+    background: var(--primary-pink);
+    font-weight: 600;
 }
