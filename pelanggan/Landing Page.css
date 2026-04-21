@@ -1,11 +1,20 @@
 :root {
+<<<<<<< HEAD
     --maroon: #ad2d5e;
     --soft-pink: #fdf2f6;
     --text-dark: #2d2d2d;
+=======
+    --pink: #ff4d8d;       /* pink utama */
+    --pink-dark: #cc3a73;  /* pink hover */
+    --pink-soft: #ffe4ec;  /* background lembut */
+    --soft-gold: #c5a059;
+    --dark-text: #2d2d2d;
+>>>>>>> 1a02f5e (menghapus dasbord)
 }
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
+<<<<<<< HEAD
     color: var(--text-dark);
     background-color: #fafafa;
 }
@@ -83,4 +92,97 @@ body {
     font-size: 12px;
     border: 2px solid white;
     margin-left: -15px;
+=======
+    color: var(--dark-text);
+    overflow-x: hidden;
+}
+
+h1, h2, .navbar-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.navbar {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+/* HERO FULL PINK NUANSA */
+.hero-section {
+    padding: 160px 0 100px;
+    background: linear-gradient(135deg, #fff 0%, var(--pink-soft) 100%);
+}
+
+/* TEXT */
+.text-pink { 
+    color: var(--pink); 
+}
+
+/* BUTTON */
+.btn-pink {
+    background-color: var(--pink);
+    color: white;
+    padding: 12px 35px;
+    border-radius: 100px;
+    transition: all 0.3s;
+    border: none;
+    font-weight: 600;
+}
+
+.btn-pink:hover {
+    background-color: var(--pink-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 77, 141, 0.3);
+    color: white;
+}
+
+/* TAGLINE */
+.hero-tagline {
+    letter-spacing: 2px;
+    font-weight: 600;
+    color: var(--soft-gold);
+    font-size: 0.9rem;
+}
+
+/* IMAGE STYLE */
+.image-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.image-wrapper::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--pink);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    z-index: -1;
+    top: 20px;
+    left: 20px;
+    opacity: 0.1;
+}
+
+.main-img {
+    border-radius: 50px 5px 50px 5px;
+    transition: transform 0.5s ease;
+}
+
+.main-img:hover {
+    transform: scale(1.02);
+}
+
+/* CARD */
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    display: inline-flex; /* FIX TYPO */
+    align-items: center;
+    gap: 15px;
+    position: absolute;
+    bottom: -30px;
+    left: 10%;
+>>>>>>> 1a02f5e (menghapus dasbord)
 }
