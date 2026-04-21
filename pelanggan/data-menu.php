@@ -5,7 +5,7 @@ $menus = [
         "id" => 1,
         "nama" => "Nasi Kotak Ayam Bakar",
         "deskripsi" => "Nasi, Ayam Bakar, Lalapan, Sambal.",
-        "harga" => 35000,
+        "harga" => 20000,
         "gambar" => "ayambakar.png",
         "kategori" => "nasi"
     ],
@@ -27,9 +27,9 @@ $menus = [
     ],
     [
         "id" => 4,
-        "nama" => "Nasi Tumpeng Mini",
-        "deskripsi" => "Nasi kuning, Orek Tempe, Ayam, Serundeng.",
-        "harga" => 35000,
+        "nama" => "nasi tumpeng nusantara",
+        "deskripsi" => "Nasi kuning, Orek Tempe, Ayam, urap, smabal.",
+        "harga" => 30000,
         "gambar" => "tumpeng.png",
         "kategori" => "nasi"
     ],
