@@ -18,9 +18,21 @@ $total = $subtotal + $delivery_fee + $tax;
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="formulir.css">
     <style>
+<<<<<<< HEAD
         .text-pink { color: #800000; }
         .btn-pink { background-color: #800000; color: white; border: none; }
         .btn-pink:hover { background-color: #600000; color: white; }
+=======
+<<<<<<< HEAD
+        .text-pink { color: #800000; }
+        .btn-pink { background-color: #800000; color: white; border: none; }
+        .btn-pink:hover { background-color: #600000; color: white; }
+=======
+        .text-maroon { color: #800000; }
+        .btn-maroon { background-color: #800000; color: white; border: none; }
+        .btn-maroon:hover { background-color: #600000; color: white; }
+>>>>>>> 9c32336805fc3f254a23636c348bef075027d3ba
+>>>>>>> 47e0988
     </style>
 </head>
 <body>
@@ -36,6 +48,10 @@ $total = $subtotal + $delivery_fee + $tax;
                     <form action="payment.php" method="POST">
                         <div class="row g-3">
                             <div class="col-md-6 mb-3">
+<<<<<<< HEAD
+                                <label class="form-label small fw-bold text-muted">NAMA LENGKAP</label>
+=======
+<<<<<<< HEAD
                                 <label class="form-label small fw-bold text-muted">NAMA LENGKAP</label>
                                 <input type="text" name="customer_name" class="form-control bg-light border-0 py-2" placeholder="e.g. Julian Vercetti" required>
                             </div>
@@ -57,6 +73,34 @@ $total = $subtotal + $delivery_fee + $tax;
                             </div>
                             <div class="col-12 mb-3">
                                 <label class="form-label small fw-bold text-muted">CATATAN TAMBAHAN</label>
+=======
+                                <label class="form-label small fw-bold text-muted">FULL NAME</label>
+>>>>>>> 47e0988
+                                <input type="text" name="customer_name" class="form-control bg-light border-0 py-2" placeholder="e.g. Julian Vercetti" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold text-muted">Nomer WHATSAPP</label>
+                                <input type="tel" name="whatsapp" class="form-control bg-light border-0 py-2" placeholder="+62 812-3456-7890" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label small fw-bold text-muted">ALAMAT PENGIRIMAN</label>
+                                <input type="text" name="address" class="form-control bg-light border-0 py-2" placeholder="Enter street name, building, or unit number" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold text-muted">TANGGAL ACARA</label>
+                                <input type="date" name="event_date" class="form-control bg-light border-0 py-2" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold text-muted">WAKTU ACARA</label>
+                                <input type="time" name="event_time" class="form-control bg-light border-0 py-2" required>
+                            </div>
+                            <div class="col-12 mb-3">
+<<<<<<< HEAD
+                                <label class="form-label small fw-bold text-muted">CATATAN TAMBAHAN</label>
+=======
+                                <label class="form-label small fw-bold text-muted">ADDITIONAL NOTES</label>
+>>>>>>> 9c32336805fc3f254a23636c348bef075027d3ba
+>>>>>>> 47e0988
                                 <textarea name="notes" class="form-control bg-light border-0" rows="4" placeholder="Mention any allergies or specific themes..."></textarea>
                             </div>
                             
@@ -69,7 +113,15 @@ $total = $subtotal + $delivery_fee + $tax;
 
             <div class="col-lg-5 ps-lg-5 mt-4 mt-lg-0">
                 <div class="card border-0 shadow-sm p-4 rounded-4 sticky-top" style="top: 20px;">
+<<<<<<< HEAD
                     <h5 class="fw-bold mb-4">Ringkasan Seleksi</h5>
+=======
+<<<<<<< HEAD
+                    <h5 class="fw-bold mb-4">Ringkasan Seleksi</h5>
+=======
+                    <h5 class="fw-bold mb-4">Selection Summary</h5>
+>>>>>>> 9c32336805fc3f254a23636c348bef075027d3ba
+>>>>>>> 47e0988
                     <div class="d-flex justify-content-between mb-3 border-bottom pb-3">
                         <div class="d-flex gap-3">
                             <img src="img/food-1.jpg" width="60" height="60" class="rounded-3 object-fit-cover" alt="item">

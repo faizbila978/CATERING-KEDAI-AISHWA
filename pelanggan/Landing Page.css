@@ -1,13 +1,67 @@
 :root {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    --maroon: #ad2d5e;
+    --soft-pink: #fdf2f6;
+    --text-dark: #2d2d2d;
+=======
+>>>>>>> 47e0988
     --pink: #ff4d8d;       /* pink utama */
     --pink-dark: #cc3a73;  /* pink hover */
     --pink-soft: #ffe4ec;  /* background lembut */
     --soft-gold: #c5a059;
     --dark-text: #2d2d2d;
+<<<<<<< HEAD
+=======
+>>>>>>> 1a02f5e (menghapus dasbord)
+>>>>>>> 47e0988
 }
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
+<<<<<<< HEAD
+    color: var(--dark-text);
+    overflow-x: hidden;
+=======
+<<<<<<< HEAD
+    color: var(--text-dark);
+    background-color: #fafafa;
+>>>>>>> 47e0988
+}
+
+h1, h2, .navbar-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.navbar {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+/* HERO FULL PINK NUANSA */
+.hero-section {
+    padding: 160px 0 100px;
+    background: linear-gradient(135deg, #fff 0%, var(--pink-soft) 100%);
+}
+
+/* TEXT */
+.text-pink { 
+    color: var(--pink); 
+}
+
+/* BUTTON */
+.btn-pink {
+    background-color: var(--pink);
+    color: white;
+<<<<<<< HEAD
+=======
+    border-radius: 50%;
+    font-size: 12px;
+    border: 2px solid white;
+    margin-left: -15px;
+=======
     color: var(--dark-text);
     overflow-x: hidden;
 }
@@ -37,6 +91,7 @@ h1, h2, .navbar-brand {
 .btn-pink {
     background-color: var(--pink);
     color: white;
+>>>>>>> 47e0988
     padding: 12px 35px;
     border-radius: 100px;
     transition: all 0.3s;
@@ -99,4 +154,8 @@ h1, h2, .navbar-brand {
     position: absolute;
     bottom: -30px;
     left: 10%;
+<<<<<<< HEAD
+=======
+>>>>>>> 1a02f5e (menghapus dasbord)
+>>>>>>> 47e0988
 }

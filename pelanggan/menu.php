@@ -35,22 +35,18 @@ $keyword = isset($_GET['search']) ? $_GET['search'] : '';
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top py-3 shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold text-maroon" href="index.php">Kedai Catering Aishwa</a>
-        
-        <div class="ms-auto d-flex align-items-center gap-2">
-            <span class="text-muted small d-none d-md-block me-2">
-                Hi, <strong><?php echo isset($_SESSION['nama']) ? explode(' ', $_SESSION['nama'])[0] : 'Tamu'; ?></strong>
-            </span>
+        <div class="container">
+            <a class="navbar-brand fw-bold text-maroon" href="index.php">Kedai Catering Aishwa</a>
             
-            <a href="index.php" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Home</a>
-            
-            <a href="logout.php" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm" onclick="return confirm('Yakin ingin keluar?')">
-    <i class="bi bi-box-arrow-right"></i> Logout
-</a>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <span class="text-muted small d-none d-md-block me-2">Hi, <strong><?php echo explode(' ', $_SESSION['nama'])[0]; ?></strong></span>
+                <a href="index.php" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Home</a>
+                <a href="logout.php" class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm" onclick="return confirm('Yakin ingin keluar?')">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <main class="container py-5">
         <header class="row align-items-center mb-5">

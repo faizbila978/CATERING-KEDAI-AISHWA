@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Kedai Aishwa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="font-sans text-gray-800">
+
+    <div id="dashboardSection" class="flex h-screen bg-orange-50 fade-in">
+        <aside class="w-64 bg-orange-700 text-white flex flex-col shadow-xl">
+            <div class="p-6 text-center border-b border-orange-600 cursor-pointer" onclick="showWelcome()">
+                <div class="bg-white rounded-full w-20 h-20 mx-auto mb-3 flex items-center justify-center overflow-hidden border-2 border-orange-400 shadow-inner">
+                    <img src="logo catering.jpeg" alt="Logo Kedai Aishwa" class="w-full h-full object-cover">
+                </div>
+                <h1 class="text-lg font-bold uppercase tracking-wider leading-tight">Catering<br>Kedai Aishwa</h1>
+                <p class="text-[10px] text-orange-200 mt-1 uppercase">Karangampel</p>
+            </div>
+
+            <nav class="flex-1 mt-6 px-4 space-y-2">
+                <a href="#" onclick="changeContent('Produk')" class="flex items-center p-3 rounded-lg hover:bg-orange-600 transition group">
+                    <i class="fas fa-th-large mr-3 text-orange-300 group-hover:text-white"></i>
+                    <span class="font-medium text-sm">Manajemen Produk</span>
+                </a>
+                <a href="#" onclick="changeContent('Pesanan')" class="flex items-center p-3 rounded-lg hover:bg-orange-600 transition group">
+                    <i class="fas fa-shopping-cart mr-3 text-orange-300 group-hover:text-white"></i>
+                    <span class="font-medium text-sm">Manajemen Pesanan</span>
+                </a>
+                <a href="#" onclick="changeContent('Pendapatan')" class="flex items-center p-3 rounded-lg hover:bg-orange-600 transition group">
+                    <i class="fas fa-chart-line mr-3 text-orange-300 group-hover:text-white"></i>
+                    <span class="font-medium text-sm">Laporan Pendapatan</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-orange-600">
+                <button onclick="logout()" class="w-full flex items-center justify-center p-2 rounded-md bg-red-500 hover:bg-red-600 transition font-bold shadow-md text-sm">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Keluar
+                </button>
+            </div>
+        </aside>
+
+        <main id="mainContentArea" class="flex-1 overflow-y-auto welcome-background">
+            <header class="bg-white/90 backdrop-blur-sm shadow-sm p-4 px-8 flex justify-between items-center sticky top-0 z-10 border-b border-gray-200">
+                <div>
+                    <h2 id="pageTitle" class="text-2xl font-bold text-gray-700">Beranda Admin</h2>
+                </div>
+            </header>
+
+            <div id="dynamicContent" class="p-8 h-full flex items-center justify-center">
+                <div class="text-center py-20 fade-in glass-card p-12 rounded-3xl shadow-xl border border-white/20">
+                    <h2 class="text-4xl font-extrabold text-gray-800 drop-shadow-md">Halo, Admin!</h2>
+                    <p class="text-gray-700 mt-4 text-lg font-medium">Silakan pilih menu di samping kiri untuk mengelola data katering.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
