@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <<<<<<< HEAD
     <title><?php echo $pageTitle; ?> - Kedai Aishwa</title>
+=======
+<<<<<<< HEAD
+    <title><?php echo $pageTitle; ?> - Kedai Aishwa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -13,10 +16,15 @@
 <body>
 =======
     <title>Catering Atelier - Kedai Aishwa</title>
+>>>>>>> 9c32336805fc3f254a23636c348bef075027d3ba
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="landing page.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="<?php echo $cssFile; ?>">
 </head>
+<<<<<<< HEAD
+<body>
+=======
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top py-3">
@@ -38,3 +46,4 @@
         </div>
     </nav>
 >>>>>>> 03d4804a8812b11222a6d2b61be3c650be54d6a0
+>>>>>>> 9c32336805fc3f254a23636c348bef075027d3ba

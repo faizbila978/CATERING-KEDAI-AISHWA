@@ -10,11 +10,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="payment.css">
     <style>
+
         .text-pink { color: #800000; }
         .bg-soft-pink { background-color: #fff0f0; }
         .border-pink-top { border-top: 5px solid #800000; margin-top: -24px; margin-left: -24px; margin-right: -24px; border-radius: 4px 4px 0 0; }
         .btn-pink { background-color: #800000; color: white; }
         .btn-pink:hover { background-color: #600000; color: white; }
+
+        .text-pink { color: #800000; }
+        .bg-soft-pink { background-color: #fff0f0; }
+        .border-pink-top { border-top: 5px solid #800000; margin-top: -24px; margin-left: -24px; margin-right: -24px; border-radius: 4px 4px 0 0; }
+        .btn-pink { background-color: #800000; color: white; }
+        .btn-pink:hover { background-color: #600000; color: white; }
+
+        .text-maroon { color: #800000; }
+        .bg-soft-pink { background-color: #fff0f0; }
+        .border-maroon-top { border-top: 5px solid #800000; margin-top: -24px; margin-left: -24px; margin-right: -24px; border-radius: 4px 4px 0 0; }
+        .btn-maroon { background-color: #800000; color: white; }
+        .btn-maroon:hover { background-color: #600000; color: white; }
+
         .clickable-method { cursor: pointer; transition: 0.3s; }
         .clickable-method:hover { border-color: #800000 !important; }
         .clickable-method.selected { border-color: #800000 !important; background-color: #fffafa; }
@@ -35,8 +49,23 @@
                     <li class="nav-item"><a href="login.php" class="btn btn-maroon ms-lg-3">Order Now</a></li>
                 </ul>
             </div>
+
         </div>
     </nav>
+
+        </div>
+    </nav>
+
+<nav class="navbar navbar-light bg-white border-bottom py-3">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-maroon" href="index.php">Culinary Atelier</a>
+        <div class="ms-auto d-flex gap-4">
+            <a href="index.php" class="nav-link">Home</a>
+            <a href="menu.php" class="nav-link text-maroon border-bottom border-maroon border-2">Order Now</a>
+            <a href="login.php" class="nav-link">Login</a>
+        </div>
+    </div>
+</nav>
 
 
 <div class="container py-5">

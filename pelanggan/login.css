@@ -1,99 +1,62 @@
 :root {
-    --pink: #ad2d5e;
-    --soft-pink: #fdf2f6;
+    --primary-pink: #ad2d5e;
+    --primary-hover: #8a244b;
+    --bg-light: #fdf2f6;
 }
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #f8f9fa;
-    min-height: 100vh;
-}
-
-.text-maroon { color: var(--pink); }
-
-.btn-maroon {
-    background-color: var(--pink);
-    color: white;
-    border: none;
-    transition: 0.3s;
-}
-
-.btn-maroon:hover {
-    background-color: #8a244b;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.login-container {
-    padding-top: 50px;
-    padding-bottom: 50px;
+    background-color: var(--bg-light);
+    color: #2d2d2d;
 }
 
 .login-card {
-    max-width: 1000px;
+    max-width: 900px;
+    width: 100%;
     border-radius: 24px;
 }
 
-.image-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to top, rgba(173, 45, 94, 0.8), rgba(0,0,0,0.1));
+.bg-pink-gradient {
+    background: linear-gradient(135deg, var(--primary-pink) 0%, #d84b7e 100%);
 }
 
-.input-group-text {
-    border-top-left-radius: 10px !important;
-    border-bottom-left-radius: 10px !important;
+.text-pink {
+    color: var(--primary-pink);
 }
 
-.form-control {
-    border-top-right-radius: 10px !important;
-    border-bottom-right-radius: 10px !important;
+.custom-input {
+    border-radius: 12px;
+    padding: 12px 15px;
+    border: 1px solid #eee;
+    background-color: #fcfcfc;
+    transition: all 0.3s ease;
 }
 
-.form-control:focus {
-    box-shadow: none;
-    background-color: #eeeeee !important;
+.custom-input:focus {
+    box-shadow: 0 0 0 4px rgba(173, 45, 94, 0.1);
+    border-color: var(--primary-pink);
+    background-color: #fff;
 }
 
-.divider::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background-color: #e0e0e0;
-    z-index: 1;
+.btn-pink-action {
+    background-color: var(--primary-pink);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
 }
 
-.divider span {
-    position: relative;
-    z-index: 2;
+.btn-pink-action:hover {
+    background-color: var(--primary-hover);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(173, 45, 94, 0.2);
 }
 
-.object-fit-cover {
-    object-fit: cover;
-}
-/* Pastikan row punya tinggi minimal agar tidak gepeng */
-.row.g-0 {
-    min-height: 600px;
-}
-
-/* Beri jarak antar input agar tidak nempel */
-.form-control {
-    border-radius: 12px !important;
-    font-size: 14px;
-}
-
-/* Perbaikan untuk tampilan mobile agar gambar tidak makan tempat */
+/* Responsivitas untuk Mobile */
 @media (max-width: 991px) {
     .login-card {
+        max-width: 450px;
         margin: 20px;
-    }
-    .col-lg-6.p-lg-5 {
-        padding: 30px !important;
     }
 }

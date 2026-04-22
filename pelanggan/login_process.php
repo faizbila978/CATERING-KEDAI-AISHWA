@@ -26,12 +26,13 @@ if ($data) {
         $_SESSION['user_id'] = $data['user_id'];
         $_SESSION['nama'] = $data['nama_lengkap'];
         $_SESSION['role'] = $data['role'];
+        $_SESSION['user_email'] = $data['email'];
 
         // 🔥 BEDAIN DI SINI
         if ($data['role'] == 'admin') {
             header("Location: dashboard.php");
         } else {
-            header("Location: pelanggan.php");
+            header("Location: menu.php");
         }
         exit;
 
