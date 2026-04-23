@@ -1,50 +1,111 @@
 :root {
-    --maroon: #ad2d5e;
+    --primary-pink: #ad2d5e;
+    --primary-hover: #8a244b;
+    --soft-pink: #fdf2f6;
+    --text-dark: #2d2d2d;
+    --text-muted: #6c757d;
+    --soft-gold: #e2b04a;
 }
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #f8f9fa;
+    color: var(--text-dark);
+    background-color: #fcfcfc;
 }
 
-.text-maroon { color: var(--maroon); }
+/* --- Navbar --- */
+.navbar {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
 
-/* Tombol Kategori */
-.nav-pills .nav-link {
-    color: #666;
-    background-color: white;
-    border: 1px solid #eee;
+.text-pink { color: var(--primary-pink) !important; }
+
+/* --- Buttons --- */
+.btn-pink {
+    background-color: var(--primary-pink);
+    color: white;
+    border: none;
+    border-radius: 50px;
     font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-pink:hover {
+    background-color: var(--primary-hover);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(173, 45, 94, 0.3);
+}
+
+.btn-outline-pink {
+    border: 2px solid var(--primary-pink);
+    color: var(--primary-pink);
+    font-weight: 700;
+    border-radius: 50px;
     transition: 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-outline-pink:hover {
+    background-color: var(--primary-pink);
+    color: white;
+}
+
+/* --- Pills/Tabs --- */
+.nav-pills .nav-link {
+    color: var(--text-muted);
+    font-weight: 600;
+    border: 1px solid #eee;
+    background: white;
+    margin-right: 8px;
+    padding: 10px 25px;
+    transition: 0.3s;
+    border-radius: 50px !important;
 }
 
 .nav-pills .nav-link.active {
-    background-color: var(--maroon) !important;
+    background-color: var(--primary-pink) !important;
+    border-color: var(--primary-pink);
     color: white !important;
+    box-shadow: 0 4px 12px rgba(173, 45, 94, 0.2);
 }
 
-/* Card Makanan */
-.card {
-    transition: 0.3s;
+/* --- Cards --- */
+.menu-card {
+    border: none;
+    border-radius: 20px !important;
+    transition: all 0.4s ease;
+    background: white;
+    overflow: hidden;
 }
 
-.card:hover {
-    transform: translateY(-5px);
+.menu-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
 }
 
 .card-img-top {
-    height: 180px;
     object-fit: cover;
+    transition: 0.5s;
 }
 
-.btn-maroon-outline {
-    border: 1.5px solid var(--maroon);
-    color: var(--maroon);
+.menu-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.price-tag {
+    font-size: 1.1rem;
     font-weight: 700;
-    border-radius: 8px;
+    color: var(--primary-pink);
 }
 
-.btn-maroon-outline:hover {
-    background-color: var(--maroon);
-    color: white;
+.accent-line {
+    width: 60px;
+    height: 4px;
+    background-color: var(--soft-gold);
+    border-radius: 10px;
+    margin-bottom: 20px;
 }

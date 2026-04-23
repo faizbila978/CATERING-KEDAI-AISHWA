@@ -12,25 +12,22 @@ if (!$conn) {
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
 
-// ambil data user berdasarkan email
+// ambil data user
 $query = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
 $data = mysqli_fetch_assoc($query);
 
-// cek user
 if ($data) {
 
-    // cek password (karena pakai hash)
-    if (password_verify($password, $data['password'])) {
+    // 🔥 LANGSUNG CEK TANPA HASH
+    if ($password == $data['password']) {
 
-        // simpan session
         $_SESSION['user_id'] = $data['user_id'];
         $_SESSION['nama'] = $data['nama_lengkap'];
         $_SESSION['role'] = $data['role'];
         $_SESSION['user_email'] = $data['email'];
 
-        // 🔥 BEDAIN DI SINI
         if ($data['role'] == 'admin') {
-            header("Location: dashboard.php");
+            header("Location: manajemen produk/manajemen produk.html");
         } else {
             header("Location: menu.php");
         }

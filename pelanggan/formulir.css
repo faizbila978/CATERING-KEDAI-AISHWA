@@ -1,18 +1,50 @@
+:root {
+    --primary-pink: #ad2d5e;
+    --primary-hover: #8a244b;
+    --soft-pink: #fdf2f6;
+}
+
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #f8f9fa;
+    background-color: var(--soft-pink);
 }
 
-.text-maroon { color: #ad2d5e; }
-.btn-maroon { background-color: #ad2d5e; color: white; border: none; }
-.btn-maroon:hover { background-color: #8a244b; color: white; }
-
-.form-control:focus {
-    box-shadow: none;
-    background-color: #f1f1f1 !important;
-    border: 1px solid #ad2d5e;
+/* TEXT */
+.text-maroon {
+    color: var(--primary-pink);
 }
 
-.card {
+/* BUTTON */
+.btn-maroon {
+    background-color: var(--primary-pink);
+    color: white;
     border: none;
+    border-radius: 50px;
+    transition: 0.3s;
+}
+
+.btn-maroon:hover {
+    background-color: var(--primary-hover);
+}
+
+/* 🔥 CARD CUSTOM */
+.card-custom {
+    border: 2px solid #f3c2d3;
+    border-radius: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 20px rgba(173, 45, 94, 0.15);
+    transition: all 0.3s ease;
+}
+
+.card-custom:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 45px rgba(173, 45, 94, 0.3);
+}
+
+/* QTY CONTROL */
+.qty-control {
+    background: #fde8ef;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
 }

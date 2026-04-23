@@ -1,7 +1,7 @@
 <?php
 $conn = mysqli_connect("localhost", "root", "", "catering_kedai_aishwa");
 
-// ❗ cek koneksi
+// cek koneksi
 if (!$conn) {
     die("Koneksi gagal: " . mysqli_connect_error());
 }
@@ -11,10 +11,10 @@ $nama = $_POST['nama_lengkap'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
 
-// hash password
-$password_hash = password_hash($password, PASSWORD_DEFAULT);
+// 🔥 TANPA HASH
+$password_plain = $password;
 
-// ❗ cek email sudah ada atau belum
+// cek email
 $cek = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
 
 if (!$cek) {
@@ -29,9 +29,9 @@ if (mysqli_num_rows($cek) > 0) {
     exit;
 }
 
-// ❗ insert ke database
+// insert plaintext password
 $insert = mysqli_query($conn, "INSERT INTO users (nama_lengkap, email, password) 
-VALUES ('$nama', '$email', '$password_hash')");
+VALUES ('$nama', '$email', '$password_plain')");
 
 if (!$insert) {
     die("Insert error: " . mysqli_error($conn));

@@ -1,11 +1,12 @@
 <?php
-// 1. Simulasi Data dari Halaman Sebelumnya (Bisa diganti dengan $_SESSION nanti)
-$order_item = "Nasi Box Ayam";
-$qty = 20;
-$subtotal = 900000;
-$delivery_fee = 0; // 0 berarti FREE
-$tax = 45000; // Contoh pajak/biaya tambahan agar total match Rp 945.000
-$total = $subtotal + $delivery_fee + $tax;
+session_start();
+include 'koneksi.php';
+
+if (!isset($_SESSION['keranjang']) || empty($_SESSION['keranjang'])) {
+    echo "<script>alert('Pilih menu dulu ya!'); window.location='menu.php';</script>";
+    exit();
+}
+$total_bayar = 0;
 ?>
 
 <!DOCTYPE html>
@@ -13,148 +14,178 @@ $total = $subtotal + $delivery_fee + $tax;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Isi Formulir - Kedai Aishwa</title>
+    <title>Konfirmasi Pesanan - Kedai Aishwa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="formulir.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-<<<<<<< HEAD
-        .text-pink { color: #800000; }
-        .btn-pink { background-color: #800000; color: white; border: none; }
-        .btn-pink:hover { background-color: #600000; color: white; }
-=======
-<<<<<<< HEAD
-        .text-pink { color: #800000; }
-        .btn-pink { background-color: #800000; color: white; border: none; }
-        .btn-pink:hover { background-color: #600000; color: white; }
-=======
-        .text-maroon { color: #800000; }
-        .btn-maroon { background-color: #800000; color: white; border: none; }
-        .btn-maroon:hover { background-color: #600000; color: white; }
->>>>>>> 9c32336805fc3f254a23636c348bef075027d3ba
->>>>>>> 47e0988
+        :root {
+            --primary-pink: #ad2d5e;
+            --primary-hover: #8a244b;
+            --soft-pink: #fdf2f6;
+            --text-dark: #2d2d2d;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fcfcfc;
+            color: var(--text-dark);
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 20px;
+            background: #ffffff;
+        }
+
+        .text-pink {
+            color: var(--primary-pink) !important;
+        }
+
+        .btn-pink {
+            background-color: var(--primary-pink);
+            color: white;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-pink:hover {
+            background-color: var(--primary-hover);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-pink {
+            border: 2px solid var(--primary-pink);
+            color: var(--primary-pink);
+            transition: 0.3s;
+        }
+
+        .btn-outline-pink:hover {
+            background-color: var(--primary-pink);
+            color: white;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 0 0.25 row rgba(173, 45, 94, 0.1);
+        }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
     </style>
 </head>
 <body>
 
-    <div class="container py-5">
-        <a href="menu.php" class="text-decoration-none text-muted mb-4 d-inline-block">&larr; Back to Selection</a>
-        
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="card border-0 shadow-sm p-4 rounded-4">
-                    <h2 class="fw-bold mb-4">Isi Formulir</h2>
-                    
-                    <form action="payment.php" method="POST">
-                        <div class="row g-3">
-                            <div class="col-md-6 mb-3">
-<<<<<<< HEAD
-                                <label class="form-label small fw-bold text-muted">NAMA LENGKAP</label>
-=======
-<<<<<<< HEAD
-                                <label class="form-label small fw-bold text-muted">NAMA LENGKAP</label>
-                                <input type="text" name="customer_name" class="form-control bg-light border-0 py-2" placeholder="e.g. Julian Vercetti" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label small fw-bold text-muted">Nomer WHATSAPP</label>
-                                <input type="tel" name="whatsapp" class="form-control bg-light border-0 py-2" placeholder="+62 812-3456-7890" required>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label class="form-label small fw-bold text-muted">ALAMAT PENGIRIMAN</label>
-                                <input type="text" name="address" class="form-control bg-light border-0 py-2" placeholder="Enter street name, building, or unit number" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label small fw-bold text-muted">TANGGAL ACARA</label>
-                                <input type="date" name="event_date" class="form-control bg-light border-0 py-2" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label small fw-bold text-muted">WAKTU ACARA</label>
-                                <input type="time" name="event_time" class="form-control bg-light border-0 py-2" required>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label class="form-label small fw-bold text-muted">CATATAN TAMBAHAN</label>
-=======
-                                <label class="form-label small fw-bold text-muted">FULL NAME</label>
->>>>>>> 47e0988
-                                <input type="text" name="customer_name" class="form-control bg-light border-0 py-2" placeholder="e.g. Julian Vercetti" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label small fw-bold text-muted">Nomer WHATSAPP</label>
-                                <input type="tel" name="whatsapp" class="form-control bg-light border-0 py-2" placeholder="+62 812-3456-7890" required>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label class="form-label small fw-bold text-muted">ALAMAT PENGIRIMAN</label>
-                                <input type="text" name="address" class="form-control bg-light border-0 py-2" placeholder="Enter street name, building, or unit number" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label small fw-bold text-muted">TANGGAL ACARA</label>
-                                <input type="date" name="event_date" class="form-control bg-light border-0 py-2" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label small fw-bold text-muted">WAKTU ACARA</label>
-                                <input type="time" name="event_time" class="form-control bg-light border-0 py-2" required>
-                            </div>
-                            <div class="col-12 mb-3">
-<<<<<<< HEAD
-                                <label class="form-label small fw-bold text-muted">CATATAN TAMBAHAN</label>
-=======
-                                <label class="form-label small fw-bold text-muted">ADDITIONAL NOTES</label>
->>>>>>> 9c32336805fc3f254a23636c348bef075027d3ba
->>>>>>> 47e0988
-                                <textarea name="notes" class="form-control bg-light border-0" rows="4" placeholder="Mention any allergies or specific themes..."></textarea>
-                            </div>
-                            
-                            <div class="col-12 d-lg-none">
-                                <button type="submit" class="btn btn-maroon w-100 py-3 rounded-3 fw-bold shadow">Confirm Request</button>
-                            </div>
-                        </div>
-                </div>
-            </div>
+<div class="container py-5">
 
-            <div class="col-lg-5 ps-lg-5 mt-4 mt-lg-0">
-                <div class="card border-0 shadow-sm p-4 rounded-4 sticky-top" style="top: 20px;">
-<<<<<<< HEAD
-                    <h5 class="fw-bold mb-4">Ringkasan Seleksi</h5>
-=======
-<<<<<<< HEAD
-                    <h5 class="fw-bold mb-4">Ringkasan Seleksi</h5>
-=======
-                    <h5 class="fw-bold mb-4">Selection Summary</h5>
->>>>>>> 9c32336805fc3f254a23636c348bef075027d3ba
->>>>>>> 47e0988
-                    <div class="d-flex justify-content-between mb-3 border-bottom pb-3">
-                        <div class="d-flex gap-3">
-                            <img src="img/food-1.jpg" width="60" height="60" class="rounded-3 object-fit-cover" alt="item">
-                            <div>
-                                <h6 class="mb-0 fw-bold"><?php echo $order_item; ?></h6>
-                                <small class="text-muted">x <?php echo $qty; ?> Persons</small>
-                            </div>
-                        </div>
-                        <span class="fw-bold text-maroon">Rp <?php echo number_format($subtotal/1000, 0); ?>k</span>
-                    </div>
-
-                    <div class="d-flex justify-content-between mb-2 mt-4">
-                        <span>Subtotal</span>
-                        <span class="fw-bold">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Delivery Fee</span>
-                        <span class="<?php echo ($delivery_fee == 0) ? 'text-success' : ''; ?> fw-bold">
-                            <?php echo ($delivery_fee == 0) ? 'FREE' : 'Rp ' . number_format($delivery_fee, 0, ',', '.'); ?>
-                        </span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="fw-bold">Total</h4>
-                        <h3 class="fw-bold text-maroon">Rp <?php echo number_format($total, 0, ',', '.'); ?></h3>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-maroon w-100 py-3 rounded-3 fw-bold shadow">Confirm Request</button>
-                    </form> </div>
-            </div>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="menu.php" class="btn btn-outline-dark rounded-pill px-4">
+            <i class="bi bi-arrow-left me-2"></i>Kembali
+        </a>
+        <a href="menu.php" class="btn btn-pink rounded-pill px-4 shadow">
+            <i class="bi bi-plus-lg me-2"></i>Tambah Menu
+        </a>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="row g-4">
+
+        <div class="col-lg-7">
+            <div class="card card-custom shadow-sm p-4">
+                <h5 class="fw-bold mb-4 border-bottom pb-2">Detail Pesanan</h5>
+
+                <?php 
+                foreach ($_SESSION['keranjang'] as $id => $jumlah): 
+                    $query = mysqli_query($conn, "SELECT * FROM menu WHERE menu_id = '$id'");
+                    $menu = mysqli_fetch_assoc($query);
+
+                    if ($menu):
+                        $subtotal = $menu['harga_satuan'] * $jumlah;
+                        $total_bayar += $subtotal;
+                ?>
+                <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                    
+                    <img src="img/<?php echo $menu['gambar']; ?>" 
+                         class="rounded-3 shadow-sm me-3" 
+                         style="width: 80px; height: 80px; object-fit: cover;">
+
+                    <div class="flex-grow-1">
+                        <h6 class="fw-bold mb-1"><?php echo $menu['nama_menu']; ?></h6>
+                        <p class="text-pink fw-bold mb-0">
+                            Rp <?php echo number_format($menu['harga_satuan'], 0, ',', '.'); ?>
+                        </p>
+                    </div>
+
+                    <form action="keranjang_update.php" method="POST" class="d-flex align-items-center bg-light rounded-pill px-2">
+                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+
+                        <button type="button" class="btn btn-sm fw-bold text-pink" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.onchange()">-</button>
+
+                        <input type="number" 
+                               name="jumlah" 
+                               value="<?php echo $jumlah; ?>" 
+                               min="1"
+                               class="form-control form-control-sm border-0 bg-transparent text-center mx-1" 
+                               style="width: 40px; font-weight: bold;"
+                               onchange="this.form.submit()">
+
+                        <button type="button" class="btn btn-sm fw-bold text-pink" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange()">+</button>
+                    </form>
+                </div>
+                <?php endif; endforeach; ?>
+
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card card-custom shadow-sm p-4">
+                <h5 class="fw-bold mb-4 border-bottom pb-2">Informasi Pengiriman</h5>
+
+                <form action="proses_pesan.php" method="POST">
+                    <input type="hidden" name="total_harga" value="<?php echo $total_bayar; ?>">
+
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">NAMA PENERIMA</label>
+                        <input type="text" name="nama" class="form-control rounded-3" value="<?php echo $_SESSION['nama']; ?>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">NOMOR HANDPHONE</label>
+                        <input type="text" name="no_hp" class="form-control rounded-3" placeholder="Contoh: 08123456789" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">ALAMAT LENGKAP</label>
+                        <textarea name="alamat" class="form-control rounded-3" rows="3" placeholder="Jl. Nama Jalan No. Rumah, Kecamatan" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">CATATAN PESANAN (OPSIONAL)</label>
+                        <textarea name="catatan" class="form-control rounded-3" rows="2" placeholder="Contoh: Sambal dipisah ya"></textarea>
+                    </div>
+
+                    <div class="bg-light p-3 rounded-4 mb-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-muted">Total Pembayaran</span>
+                            <h4 class="fw-bold text-pink mb-0">
+                                Rp <?php echo number_format($total_bayar, 0, ',', '.'); ?>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-pink w-100 py-3 rounded-pill fw-bold shadow-sm">
+                        KONFIRMASI SEKARANG
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

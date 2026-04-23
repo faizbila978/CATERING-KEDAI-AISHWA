@@ -43,19 +43,20 @@ $established_year = 2018;
                         Menghadirkan hidangan Nusantara dengan standar kualitas bintang lima. Sempurna untuk acara kantor, syukuran, hingga momen spesial keluarga Anda.
                     </p>
                     
-                    <div class="d-flex gap-3 align-items-center">
-                        <a href="login.php" class="btn btn-pink shadow-lg">Lihat Katalog Menu</a>
-                    </div>
+<div class="d-flex gap-3 align-items-center">
+    <a href="login.php" class="btn btn-pink shadow-lg">Lihat Katalog Menu</a>
+    
+    <a href="status.php" class="btn btn-outline-dark shadow-sm">
+        Lihat Pesanan
+    </a>
+</div>
                 </div>
 
                 <div class="col-lg-6 mt-5 mt-lg-0">
                     <div class="image-wrapper p-4 text-center">
-                        <img src="ayambakar.png" alt="Featured Dish" class="img-fluid main-img shadow-lg">
+                        <img src="img/ayambakar.png" alt="Featured Dish" class="img-fluid main-img shadow-lg">
                         
                         <div class="stat-card">
-                            <div class="bg-pink p-3 rounded-circle text-white">
-                                🍽️
-                            </div>
                             <div>
                                 <h6 class="mb-0 fw-bold">1.200+ Pesanan</h6>
                                 <small class="text-muted">Terjual Bulan Ini</small>
@@ -79,7 +80,7 @@ $established_year = 2018;
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden menu-card">
                         <div class="position-relative">
-                            <img src="ayambakar.png" class="card-img-top" alt="Ayam Bakar Madu" style="height: 250px; object-fit: cover;">
+                            <img src="img/ayambakar.png" class="card-img-top" alt="Ayam Bakar Madu" style="height: 250px; object-fit: cover;">
                             <span class="position-absolute top-0 end-0 m-3 badge bg-pink px-3 py-2 rounded-pill">Best Seller</span>
                         </div>
                         <div class="card-body p-4">
@@ -95,10 +96,10 @@ $established_year = 2018;
 
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden menu-card">
-                        <img src="nasikotak.png" class="card-img-top" alt="Nasi Kotak Premium" style="height: 250px; object-fit: cover;">
+                        <img src="img/kentang.png" class="card-img-top" alt="Nasi Kotak Premium" style="height: 250px; object-fit: cover;">
                         <div class="card-body p-4">
-                            <h5 class="card-title fw-bold">Nasi Kotak Premium B</h5>
-                            <p class="card-text text-muted small">Nasi putih, Daging Rendang, Sambal Goreng Ati, Perkedel, dan Kerupuk Udang. Lengkap & Higienis.</p>
+                            <h5 class="card-title fw-bold">Beef Teriyaki Bowl</h5>
+                            <p class="card-text text-muted small">Daging sapi slice dengan saus premium.</p>
                             <div class="d-flex justify-content-between align-items-center mt-4">
                                 <span class="fw-bold text-pink fs-5">Rp 45.000</span>
                                 <a href="login.php" class="btn btn-outline-dark btn-sm rounded-pill px-3">Pesan</a>
@@ -109,10 +110,10 @@ $established_year = 2018;
 
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden menu-card">
-                        <img src="tumpeng.png" class="card-img-top" alt="Tumpeng Mini" style="height: 250px; object-fit: cover;">
+                        <img src="img/tumpeng.png" class="card-img-top" alt="Tumpeng Mini" style="height: 250px; object-fit: cover;">
                         <div class="card-body p-4">
-                            <h5 class="card-title fw-bold">Tumpeng Mini Syukuran</h5>
-                            <p class="card-text text-muted small">Sajian tumpeng porsi personal untuk acara syukuran. Estetik dan rasa yang tak terlupakan.</p>
+                            <h5 class="card-title fw-bold">Tumpeng nusantara spesial</h5>
+                            <p class="card-text text-muted small">nasi kuning, mie jawa, telur, ayam suwir.</p>
                             <div class="d-flex justify-content-between align-items-center mt-4">
                                 <span class="fw-bold text-pink fs-5">Rp 50.000</span>
                                 <a href="login.php" class="btn btn-outline-dark btn-sm rounded-pill px-3">Pesan</a>
