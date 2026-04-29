@@ -34,7 +34,7 @@
                                 <i class="fas fa-camera text-7xl text-gray-400 group-hover:text-orange-500 mb-4 transition"></i>
                                 <p class="text-gray-500 font-bold text-lg">Masukan Photo Produk</p>
                             </div>
-                            <input type="file" name="foto_produk" id="file-input" hidden accept="image/*">
+                            <input type="file" name="foto_produk" id="file-input" hidden accept="image/*" required>
                         </div>
                     </div>
 
@@ -44,7 +44,8 @@
                             <input type="text" name="nama_produk" id="inputNama" placeholder="Masukan Nama Produk" class="w-full border-b-2 border-gray-300 p-3 text-lg focus:border-orange-600 outline-none transition bg-transparent" required>
                         </div>
                         <div class="relative">
-                            <input type="number" name="harga_produk" id="inputHarga" placeholder="Masukan Harga Produk" class="w-full border-b-2 border-gray-300 p-3 text-lg focus:border-orange-600 outline-none transition bg-transparent" required>
+                            <input type="text" name="harga_produk" id="inputHarga" placeholder="Masukan Harga Produk"
+class="w-full border-b-2 border-gray-300 p-3 text-lg focus:border-orange-600 outline-none transition bg-transparent" required>
                         </div>
                         <div class="relative">
                             <textarea name="deskripsi_produk" id="inputDeskripsi" placeholder="Masukan Deskripsi Produk" class="w-full border-b-2 border-gray-300 p-3 h-32 resize-none focus:border-orange-600 outline-none transition bg-transparent"></textarea>
@@ -101,6 +102,23 @@
                 `;
             }
         });
+
+        const inputHarga = document.getElementById("inputHarga");
+
+inputHarga.addEventListener("input", function(e) {
+    let value = this.value.replace(/[^,\d]/g, "").toString();
+    let split = value.split(",");
+    let sisa = split[0].length % 3;
+    let rupiah = split[0].substr(0, sisa);
+    let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+        let separator = sisa ? "." : "";
+        rupiah += separator + ribuan.join(".");
+    }
+
+    this.value = rupiah;
+});
     </script>
 </body>
 </html>

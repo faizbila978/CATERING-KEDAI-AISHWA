@@ -24,10 +24,8 @@
     </nav>
 
     <div class="p-4 border-t border-orange-600">
-        <form action="logout.php" method="POST">
-            <button type="submit" class="w-full flex items-center justify-center p-2 rounded-md bg-red-500 hover:bg-red-600 transition shadow-lg text-sm font-bold text-white">
-                <i class="fas fa-sign-out-alt mr-2"></i> Keluar
-            </button>
-        </form>
+        <a href="../logout.php" class="w-full flex items-center justify-center p-2 rounded-md bg-red-500 hover:bg-red-600 transition shadow-lg text-sm font-bold text-white">
+    <i class="fas fa-sign-out-alt mr-2"></i> Keluar
+</a>
     </div>
 </aside>
