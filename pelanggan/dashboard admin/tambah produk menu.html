@@ -47,12 +47,13 @@
         <main class="flex-1 p-12 overflow-y-auto bg-[#fdf2e9]">
             
             <div class="flex justify-between items-center mb-10">
-                <h2 class="text-3xl font-bold text-[#1e293b] flex items-center">
-                    <span class="bg-orange-600 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-lg">
-                        <i class="fas fa-plus"></i>
-                    </span>
-                    Tambah Produk Menu
-                </h2>
+                <form action="tambah_menu.php" method="POST">
+    <input type="text" name="nama" placeholder="Masukan Nama Produk">
+    <input type="number" name="harga" placeholder="Masukan Harga Produk">
+    <textarea name="deskripsi"></textarea>
+
+    <button type="submit">Tambah</button>
+</form>
                 
                 <button class="btn-kembali" onclick="history.back()">
                     kembali

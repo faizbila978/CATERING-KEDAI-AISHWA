@@ -27,7 +27,7 @@ if ($data) {
         $_SESSION['user_email'] = $data['email'];
 
         if ($data['role'] == 'admin') {
-            header("Location: dashboard admin/dashboard.html");
+            header("Location: dashboard admin/index.php");
         } else {
             header("Location: menu.php");
         }
