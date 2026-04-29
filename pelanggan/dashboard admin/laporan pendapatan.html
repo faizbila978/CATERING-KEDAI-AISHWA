@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Kedai Aishwa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="laporan pendapatan.css">
+</head>
+<body class="bg-slate-50 font-sans flex">
+
+    <aside class="w-72 bg-[#c2410c] h-screen sticky top-0 text-white p-6 flex flex-col items-center">
+        <div class="mb-10 text-center">
+            <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-2 border-orange-300">
+                <img src="logo catering.jpeg" alt="" class="w-full h-full object-cover">
+            </div>
+            <h2 class="font-bold text-lg leading-tight uppercase">Catering<br>Kedai Aishwa</h2>
+            <p class="text-[10px] tracking-widest opacity-80 mt-1 uppercase">Karangampel</p>
+        </div>
+
+        <nav class="flex-1 mt-4 px-3 space-y-1">
+            <a href="manajemen produk.html" class="nav-link w-full" id="btn-produk">
+                <i class="fas fa-th-large mr-3"></i> Manajemen Produk
+            </a>
+            <a href="manajemen pesanan.html" class="nav-link w-full" id="btn-pesanan">
+                <i class="fas fa-shopping-cart mr-3"></i> Manajemen Pesanan
+            </a>
+            <button onclick="changeMenu('Laporan')" class="nav-link w-full" id="btn-pendapatan">
+                <i class="fas fa-chart-line mr-3"></i> Laporan Pendapatan
+            </button>
+        </nav>
+
+        <button onclick="handleLogout()" class="logout-btn w-full">
+            <i class="fas fa-sign-out-alt mr-2"></i> Keluar
+        </button>
+    </aside>
+
+    <main class="flex-1 p-10">
+        <header class="mb-10">
+            <h1 id="pageHeader" class="text-3xl font-bold text-[#1e293b]">Beranda Admin</h1>
+        </header>
+
+        <div id="dynamicContent" class="fade-in">
+            <div class="flex items-center justify-center h-[60vh]">
+                <div class="bg-white p-12 rounded-[2rem] shadow-xl shadow-slate-200 text-center max-w-2xl border border-slate-50">
+                    <h2 class="text-4xl font-black text-[#1e293b] mb-4">Halo, Admin!</h2>
+                    <p class="text-lg text-slate-500 font-medium">Silakan pilih menu di samping kiri untuk mengelola data katering.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="laporan pendapatan.js"></script>
+</body>
+</html>

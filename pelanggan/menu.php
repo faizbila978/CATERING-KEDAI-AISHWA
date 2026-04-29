@@ -1,7 +1,5 @@
 <?php 
 session_start();
-
-// Proteksi: Jika tidak ada session email, tendang ke login
 if (!isset($_SESSION['user_email'])) {
     header("Location: login.php");
     exit();
@@ -172,11 +170,11 @@ $keyword = isset($_GET['search']) ? $_GET['search'] : '';
         <div class="tab-content" id="pills-tabContent">
         <?php 
         $categories = [
-            'all' => 'Semua', 
-            'nasi kotak' => 'nasi-kotak', 
-            'tumpeng' => 'tumpeng', 
-            'kue' => 'kue'
-        ];
+    'all' => 'all', 
+    'nasi kotak' => 'nasi-kotak', 
+    'tumpeng' => 'tumpeng', 
+    'kue' => 'kue'
+];
         
         foreach ($categories as $db_cat => $tab_id): 
             $active_class = ($db_cat == 'all') ? 'show active' : '';
@@ -184,11 +182,13 @@ $keyword = isset($_GET['search']) ? $_GET['search'] : '';
             <div class="tab-pane fade <?php echo $active_class; ?>" id="<?php echo $tab_id; ?>">
                 <div class="row g-4">
                     <?php 
-                    if ($db_cat == 'all') {
-                        $sql = "SELECT * FROM menu WHERE nama_menu LIKE '%$keyword%'";
-                    } else {
-                        $sql = "SELECT * FROM menu WHERE kategori = '$db_cat' AND nama_menu LIKE '%$keyword%'";
-                    }
+                   if ($db_cat == 'all') {
+    $sql = "SELECT * FROM menu WHERE nama_menu LIKE '%$keyword%'";
+} else {
+    $sql = "SELECT * FROM menu 
+            WHERE LOWER(kategori) = LOWER('$db_cat') 
+            AND nama_menu LIKE '%$keyword%'";
+}
 
                     $result = mysqli_query($conn, $sql);
                     if(mysqli_num_rows($result) > 0):

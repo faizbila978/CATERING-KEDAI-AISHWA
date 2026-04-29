@@ -18,65 +18,7 @@ $total_bayar = 0;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --primary-pink: #ad2d5e;
-            --primary-hover: #8a244b;
-            --soft-pink: #fdf2f6;
-            --text-dark: #2d2d2d;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #fcfcfc;
-            color: var(--text-dark);
-        }
-
-        .card-custom {
-            border: none;
-            border-radius: 20px;
-            background: #ffffff;
-        }
-
-        .text-pink {
-            color: var(--primary-pink) !important;
-        }
-
-        .btn-pink {
-            background-color: var(--primary-pink);
-            color: white;
-            border: none;
-            transition: 0.3s;
-        }
-
-        .btn-pink:hover {
-            background-color: var(--primary-hover);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .btn-outline-pink {
-            border: 2px solid var(--primary-pink);
-            color: var(--primary-pink);
-            transition: 0.3s;
-        }
-
-        .btn-outline-pink:hover {
-            background-color: var(--primary-pink);
-            color: white;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-pink);
-            box-shadow: 0 0 0 0.25 row rgba(173, 45, 94, 0.1);
-        }
-
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="formulir.css">
 </head>
 <body>
 
@@ -86,7 +28,7 @@ $total_bayar = 0;
         <a href="menu.php" class="btn btn-outline-dark rounded-pill px-4">
             <i class="bi bi-arrow-left me-2"></i>Kembali
         </a>
-        <a href="menu.php" class="btn btn-pink rounded-pill px-4 shadow">
+        <a href="menu_tambahan.php" class="btn btn-pink rounded-pill px-4 shadow">
             <i class="bi bi-plus-lg me-2"></i>Tambah Menu
         </a>
     </div>
@@ -122,14 +64,17 @@ $total_bayar = 0;
                     <form action="keranjang_update.php" method="POST" class="d-flex align-items-center bg-light rounded-pill px-2">
                         <input type="hidden" name="id" value="<?php echo $id; ?>">
 
-                        <button type="button" class="btn btn-sm fw-bold text-pink" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.onchange()">-</button>
+                        <!-- FIX MINUS -->
+                        <button type="button" class="btn btn-sm fw-bold text-pink" onclick="kurangiItem(this)">-</button>
 
+                        <!-- FIX INPUT -->
                         <input type="number" 
                                name="jumlah" 
                                value="<?php echo $jumlah; ?>" 
-                               min="1"
+                               min="0"
                                class="form-control form-control-sm border-0 bg-transparent text-center mx-1" 
                                style="width: 40px; font-weight: bold;"
+                               title="Isi 0 untuk hapus item"
                                onchange="this.form.submit()">
 
                         <button type="button" class="btn btn-sm fw-bold text-pink" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange()">+</button>
@@ -158,8 +103,8 @@ $total_bayar = 0;
                     </div>
 
                     <div class="mb-3">
-                        <label class="small fw-bold text-muted mb-1">ALAMAT LENGKAP</label>
-                        <textarea name="alamat" class="form-control rounded-3" rows="3" placeholder="Jl. Nama Jalan No. Rumah, Kecamatan" required></textarea>
+                        <label>Detail Alamat</label>
+                        <textarea name="alamat" class="form-control" placeholder="Contoh: Jl Mawar No 10, dekat masjid" required></textarea>
                     </div>
 
                     <div class="mb-3">
@@ -187,5 +132,24 @@ $total_bayar = 0;
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- SCRIPT TAMBAHAN -->
+<script>
+function kurangiItem(btn) {
+    let input = btn.nextElementSibling;
+    let jumlah = parseInt(input.value);
+
+    if (jumlah <= 1) {
+        if (confirm("Item akan dihapus dari keranjang. Lanjutkan?")) {
+            input.value = 0;
+            input.form.submit();
+        }
+    } else {
+        input.stepDown();
+        input.form.submit();
+    }
+}
+</script>
+
 </body>
 </html>

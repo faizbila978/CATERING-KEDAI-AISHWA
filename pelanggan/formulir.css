@@ -1,50 +1,57 @@
 :root {
-    --primary-pink: #ad2d5e;
-    --primary-hover: #8a244b;
-    --soft-pink: #fdf2f6;
-}
+            --primary-pink: #ad2d5e;
+            --primary-hover: #8a244b;
+            --soft-pink: #fdf2f6;
+            --text-dark: #2d2d2d;
+        }
 
-body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: var(--soft-pink);
-}
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fcfcfc;
+            color: var(--text-dark);
+        }
 
-/* TEXT */
-.text-maroon {
-    color: var(--primary-pink);
-}
+        .card-custom {
+            border: none;
+            border-radius: 20px;
+            background: #ffffff;
+        }
 
-/* BUTTON */
-.btn-maroon {
-    background-color: var(--primary-pink);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    transition: 0.3s;
-}
+        .text-pink {
+            color: var(--primary-pink) !important;
+        }
 
-.btn-maroon:hover {
-    background-color: var(--primary-hover);
-}
+        .btn-pink {
+            background-color: var(--primary-pink);
+            color: white;
+            border: none;
+            transition: 0.3s;
+        }
 
-/* 🔥 CARD CUSTOM */
-.card-custom {
-    border: 2px solid #f3c2d3;
-    border-radius: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 8px 20px rgba(173, 45, 94, 0.15);
-    transition: all 0.3s ease;
-}
+        .btn-pink:hover {
+            background-color: var(--primary-hover);
+            color: white;
+            transform: translateY(-2px);
+        }
 
-.card-custom:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 45px rgba(173, 45, 94, 0.3);
-}
+        .btn-outline-pink {
+            border: 2px solid var(--primary-pink);
+            color: var(--primary-pink);
+            transition: 0.3s;
+        }
 
-/* QTY CONTROL */
-.qty-control {
-    background: #fde8ef;
-    border-radius: 50px;
-    display: inline-flex;
-    align-items: center;
-}
+        .btn-outline-pink:hover {
+            background-color: var(--primary-pink);
+            color: white;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 0 0.25 row rgba(173, 45, 94, 0.1);
+        }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }

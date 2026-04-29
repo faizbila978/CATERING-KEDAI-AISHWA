@@ -1,0 +1,177 @@
+/* --- LAYOUT UTAMA & NAVIGASI --- */
+.nav-link { 
+    display: flex; 
+    align-items: center; 
+    padding: 10px 14px; 
+    border-radius: 0.5rem; 
+    font-size: 0.85rem; 
+    color: rgba(255,255,255,0.7); 
+    transition: 0.3s; 
+    cursor: pointer; 
+    border: none; 
+    background: transparent; 
+}
+
+.nav-link.active { 
+    background: #ea580c; 
+    color: white; 
+    font-weight: 600; 
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); 
+}
+
+/* Sidebar Profile (Sesuai Gambar) */
+.profile-circle {
+    width: 96px;
+    height: 96px;
+    background: white;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    border: 2px solid #fdba74;
+    overflow: hidden;
+}
+
+/* Tombol Keluar (Sesuai Gambar) */
+.logout-btn {
+    background: #f87171;
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    transition: 0.3s;
+    margin-top: auto;
+}
+
+.logout-btn:hover {
+    background: #ef4444;
+    transform: translateY(-2px);
+}
+
+/* --- FILTER CONTAINER --- */
+.filter-container {
+    display: flex; 
+    gap: 10px; 
+    margin-bottom: 20px; 
+    background: white;
+    padding: 12px; 
+    border-radius: 12px; 
+    border: 1px solid #f1f5f9; 
+    align-items: center;
+}
+
+.filter-select {
+    padding: 6px 12px; 
+    border-radius: 8px; 
+    border: 1px solid #e2e8f0;
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    color: #475569; 
+    outline: none; 
+    cursor: pointer;
+}
+
+/* --- METRIC CARDS --- */
+.metric-card {
+    background: white; 
+    padding: 20px; 
+    border-radius: 20px; 
+    border-left: 5px solid;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+/* --- GRAFIK BATANG (TREN VISUAL) --- */
+.chart-container { 
+    display: flex; 
+    align-items: flex-end; 
+    justify-content: space-around; 
+    height: 180px; 
+    padding-top: 30px; 
+    padding-bottom: 25px; 
+    border-bottom: 2px solid #f1f5f9; 
+}
+
+.chart-column { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    flex: 1; 
+    position: relative; 
+    max-width: 45px; 
+}
+
+.chart-bar { 
+    width: 75%; 
+    border-radius: 6px 6px 0 0; 
+    transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+    background: linear-gradient(to top, #ea580c, #fb923c);
+}
+
+.chart-value { 
+    position: absolute; 
+    top: -20px; 
+    font-size: 8px; 
+    font-weight: 800; 
+    color: #475569; 
+    white-space: nowrap; 
+}
+
+.chart-label { 
+    margin-top: 10px; 
+    font-size: 9px; 
+    font-weight: 700; 
+    color: #64748b; 
+    text-transform: uppercase; 
+}
+
+/* --- TABEL TRANSAKSI --- */
+.transaction-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 0.75rem; 
+}
+
+.transaction-table th { 
+    background: #f8fafc; 
+    padding: 12px 10px; 
+    text-align: left; 
+    border-bottom: 2px solid #e2e8f0; 
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.transaction-table td { 
+    padding: 12px 10px; 
+    border-bottom: 1px solid #f1f5f9; 
+}
+
+/* --- STATUS BADGES --- */
+.status-badge { 
+    padding: 4px 12px; 
+    border-radius: 20px; 
+    font-size: 0.7rem; 
+    font-weight: 800; 
+    border: 1px solid; 
+    cursor: pointer; 
+    transition: 0.2s;
+}
+
+.status-badge:hover { transform: scale(1.05); }
+
+.badge-menunggu { background: #fee2e2; color: #dc2626; border-color: #fecaca; }
+.badge-dp { background: #e0f2fe; color: #0284c7; border-color: #bae6fd; }
+.badge-lunas { background: #dcfce7; color: #16a34a; border-color: #bbf7d0; }
+
+.text-menunggu { color: #dc2626 !important; }
+.text-dp { color: #0284c7 !important; }
+.text-lunas { color: #16a34a !important; }
+
+/* --- ANIMATIONS --- */
+.fade-in { 
+    animation: fadeIn 0.4s ease-out forwards; 
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
