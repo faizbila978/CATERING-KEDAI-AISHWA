@@ -22,6 +22,7 @@ if ($data) {
     if ($password == $data['password']) {
 
         $_SESSION['user_id'] = $data['user_id'];
+        $_SESSION['user_id'] = $data['user_id'];
         $_SESSION['nama'] = $data['nama_lengkap'];
         $_SESSION['role'] = $data['role'];
         $_SESSION['user_email'] = $data['email'];

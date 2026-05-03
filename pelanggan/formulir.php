@@ -19,6 +19,48 @@ $total_bayar = 0;
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="formulir.css">
+    <style>
+        .alert-info-custom {
+            background-color: #E0F2FE;
+            border-color: #0284C7;
+            color: #0C4A6E;
+            border-left: 4px solid #0284C7;
+        }
+        .processing-indicator {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ad2d5e;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .text-pink {
+            color: #ad2d5e;
+        }
+        .btn-pink {
+            background-color: #ad2d5e;
+            color: white;
+            border: none;
+        }
+        .btn-pink:hover {
+            background-color: #8a244b;
+            color: white;
+        }
+        .card-custom {
+            border: 1px solid #e0e0e0;
+            border-radius: 16px;
+        }
+    </style>
 </head>
 <body>
 
@@ -64,10 +106,8 @@ $total_bayar = 0;
                     <form action="keranjang_update.php" method="POST" class="d-flex align-items-center bg-light rounded-pill px-2">
                         <input type="hidden" name="id" value="<?php echo $id; ?>">
 
-                        <!-- FIX MINUS -->
                         <button type="button" class="btn btn-sm fw-bold text-pink" onclick="kurangiItem(this)">-</button>
 
-                        <!-- FIX INPUT -->
                         <input type="number" 
                                name="jumlah" 
                                value="<?php echo $jumlah; ?>" 
@@ -89,12 +129,17 @@ $total_bayar = 0;
             <div class="card card-custom shadow-sm p-4">
                 <h5 class="fw-bold mb-4 border-bottom pb-2">Informasi Pengiriman</h5>
 
-                <form action="proses_pesan.php" method="POST">
+                <div class="alert alert-info-custom mb-4 rounded-3" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Petunjuk:</strong> Setelah konfirmasi, pesanan Anda akan muncul di admin untuk verifikasi pembayaran.
+                </div>
+
+                <form id="pesananForm" action="proses_pesan.php" method="POST">
                     <input type="hidden" name="total_harga" value="<?php echo $total_bayar; ?>">
 
                     <div class="mb-3">
                         <label class="small fw-bold text-muted mb-1">NAMA PENERIMA</label>
-                        <input type="text" name="nama" class="form-control rounded-3" value="<?php echo $_SESSION['nama']; ?>" required>
+                        <input type="text" name="nama" class="form-control rounded-3" value="<?php echo isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : ''; ?>" required>
                     </div>
 
                     <div class="mb-3">
@@ -103,8 +148,18 @@ $total_bayar = 0;
                     </div>
 
                     <div class="mb-3">
-                        <label>Detail Alamat</label>
-                        <textarea name="alamat" class="form-control" placeholder="Contoh: Jl Mawar No 10, dekat masjid" required></textarea>
+                        <label class="small fw-bold text-muted mb-1">TANGGAL ACARA</label>
+                        <input type="date" name="tanggal_acara" class="form-control rounded-3" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">WAKTU ACARA</label>
+                        <input type="time" name="waktu_acara" class="form-control rounded-3" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">DETAIL ALAMAT</label>
+                        <textarea name="alamat" class="form-control rounded-3" placeholder="Contoh: Jl Mawar No 10, dekat masjid" required rows="2"></textarea>
                     </div>
 
                     <div class="mb-3">
@@ -121,9 +176,19 @@ $total_bayar = 0;
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-pink w-100 py-3 rounded-pill fw-bold shadow-sm">
-                        KONFIRMASI SEKARANG
+                    <div class="processing-indicator" id="processingIndicator">
+                        <div class="spinner"></div>
+                        <p class="text-muted small">Memproses pesanan Anda...</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-pink w-100 py-3 rounded-pill fw-bold shadow-sm" id="submitBtn">
+                        <i class="bi bi-check-circle me-2"></i> KONFIRMASI SEKARANG
                     </button>
+
+                    <p class="text-center text-muted small mt-3" style="font-size: 0.8rem;">
+                        <i class="bi bi-shield-check me-1"></i> 
+                        Pesanan akan ditampilkan kepada admin untuk verifikasi pembayaran
+                    </p>
                 </form>
             </div>
         </div>
@@ -133,7 +198,6 @@ $total_bayar = 0;
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- SCRIPT TAMBAHAN -->
 <script>
 function kurangiItem(btn) {
     let input = btn.nextElementSibling;
@@ -149,6 +213,13 @@ function kurangiItem(btn) {
         input.form.submit();
     }
 }
+
+// Handle form submission
+document.getElementById('pesananForm').addEventListener('submit', function(e) {
+    // Tampilkan processing indicator
+    document.getElementById('processingIndicator').style.display = 'block';
+    document.getElementById('submitBtn').disabled = true;
+});
 </script>
 
 </body>

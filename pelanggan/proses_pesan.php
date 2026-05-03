@@ -4,26 +4,44 @@ session_start();
 
 // Validasi keranjang
 if (!isset($_SESSION['keranjang']) || empty($_SESSION['keranjang'])) {
-    die("Keranjang kosong!");
+    echo "<script>alert('Keranjang kosong!'); window.location='menu.php';</script>";
+    exit();
 }
 
 // Ambil data
 $user_id     = $_SESSION['user_id'];
+$nama        = $_POST['nama'] ?? null;
 $tgl_acara   = $_POST['tanggal_acara'] ?? null;
 $waktu_acara = $_POST['waktu_acara'] ?? null;
-$alamat      = $_POST['alamat'];
-$no_hp       = $_POST['no_hp'];
-$total_bayar = $_POST['total_harga'];
+$alamat      = $_POST['alamat'] ?? null;
+$no_hp       = $_POST['no_hp'] ?? null;
+$catatan     = $_POST['catatan'] ?? null;
+$total_bayar = $_POST['total_harga'] ?? 0;
+
+// Validasi input
+if (!$nama || !$tgl_acara || !$waktu_acara || !$alamat || !$no_hp) {
+    echo "<script>alert('Semua field harus diisi!'); window.history.back();</script>";
+    exit();
+}
+
+// Escape input untuk keamanan
+$nama = mysqli_real_escape_string($conn, $nama);
+$alamat = mysqli_real_escape_string($conn, $alamat);
+$no_hp = mysqli_real_escape_string($conn, $no_hp);
+$catatan = mysqli_real_escape_string($conn, $catatan);
 
 // 1. INSERT PESANAN
 $query_pesan = "INSERT INTO pesanan 
-(user_id, tanggal_pesan, tanggal_acara, waktu_acara, alamat, no_handphone, total_pesan, status_pesanan) 
+(user_id, tanggal_pesan, tanggal_acara, waktu_acara, alamat, no_handphone, catatan, total_pesan, status_pesanan) 
 VALUES 
-('$user_id', CURDATE(), '$tgl_acara', '$waktu_acara', '$alamat', '$no_hp', '$total_bayar', 'Menunggu Pembayaran')";
+('$user_id', CURDATE(), '$tgl_acara', '$waktu_acara', '$alamat', '$no_hp', '$catatan', '$total_bayar', 'Belum Konfirmasi')";
 
 if (mysqli_query($conn, $query_pesan)) {
 
     $id_pesanan_baru = mysqli_insert_id($conn);
+
+    // SET SESSION PESANAN ID - PENTING!
+    $_SESSION['pesanan_id'] = $id_pesanan_baru;
 
     // 2. INSERT DETAIL PESANAN (loop keranjang)
     foreach ($_SESSION['keranjang'] as $menu_id => $qty) {
@@ -51,9 +69,10 @@ if (mysqli_query($conn, $query_pesan)) {
     // 4. Kosongkan keranjang
     unset($_SESSION['keranjang']);
 
-    echo "<script>alert('Pesanan berhasil!'); window.location='payment.php';</script>";
+    // 5. REDIRECT KE PAYMENT PAGE
+    echo "<script>alert('Pesanan berhasil dibuat!'); window.location='payment.php';</script>";
 
 } else {
-    echo "Gagal: " . mysqli_error($conn);
+    echo "<script>alert('Gagal: " . mysqli_error($conn) . "'); window.history.back();</script>";
 }
 ?>

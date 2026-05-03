@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="laporan pendapatan.css">
 </head>
-<body class="bg-slate-50 font-sans flex">
-
+<body class="bg-[#D1D5DB] font-sans flex">
     <!-- Memanggil Sidebar Modular -->
     <?php include('sidebar.php'); ?>
 
@@ -21,7 +20,7 @@
                     <i class="fas fa-calendar-alt mr-2"></i> Filter Tanggal
                 </button>
                 <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 shadow-md">
-                    <i class="fas fa-file-excel mr-2"></i> Ekspor Excel
+                    <i class="fas fa-file-excel mr-2"></i> Ekspor pdf
                 </button>
             </div>
         </header>

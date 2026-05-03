@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2026 at 05:18 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Waktu pembuatan: 02 Bulan Mei 2026 pada 11.58
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `detail_pesanan`
+-- Struktur dari tabel `detail_pesanan`
 --
 
 CREATE TABLE `detail_pesanan` (
@@ -42,24 +42,71 @@ CREATE TABLE `detail_pesanan` (
   `status_detail_pesanan` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `detail_pesanan`
+--
+
+INSERT INTO `detail_pesanan` (`detail_id`, `pesanan_id`, `menu_id`, `harga_satuan`, `jumlah_menu`, `tambahan_id`, `harga_satuan_tambahan`, `jumlah_tambahan`, `tanggal_acara`, `waktu_acara`, `total_detail_pesanan`, `status_detail_pesanan`) VALUES
+(39, 40, 24, 29999999.00, 1, NULL, NULL, NULL, NULL, NULL, 29999999.00, 'Diproses'),
+(40, 41, 24, 29999999.00, 1, NULL, NULL, NULL, NULL, NULL, 29999999.00, 'Diproses'),
+(41, 42, 28, 999999.00, 1, NULL, NULL, NULL, NULL, NULL, 999999.00, 'Diproses'),
+(42, 43, 28, 999999.00, 1, NULL, NULL, NULL, NULL, NULL, 999999.00, 'Diproses');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `menu`
+-- Struktur dari tabel `kategori`
+--
+
+CREATE TABLE `kategori` (
+  `kategori_id` int(11) NOT NULL,
+  `nama_kategori` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `kategori`
+--
+
+INSERT INTO `kategori` (`kategori_id`, `nama_kategori`) VALUES
+(1, 'Nasi Kotak'),
+(2, 'Kue'),
+(3, 'Tumpeng');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `menu`
 --
 
 CREATE TABLE `menu` (
   `menu_id` int(11) NOT NULL,
   `nama_menu` varchar(100) DEFAULT NULL,
   `deskripsi` text DEFAULT NULL,
-  `harga_satuan` decimal(15,2) DEFAULT NULL,
-  `gambar` varchar(255) DEFAULT NULL
+  `harga_satuan` int(11) DEFAULT NULL,
+  `gambar` varchar(255) DEFAULT NULL,
+  `kategori_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `menu`
+--
+
+INSERT INTO `menu` (`menu_id`, `nama_menu`, `deskripsi`, `harga_satuan`, `gambar`, `kategori_id`) VALUES
+(23, 'jeruk', '', 1999999, '1777477952_Buah buahan.jpeg', 1),
+(24, 'ayam', '', 29999999, '1777477992_1777473284_ayambakar.png', 1),
+(25, 'rice', '', 59999999, '1777478026_kentang.png', 1),
+(26, 'ayam bakar nasi dua', '', 9999999, '1777478440_1777473284_ayambakar.png', 1),
+(27, 'tumpeng ', '', 1000000, '1777478475_tumpeng.png', 1),
+(28, 'ayam setengah mateng', '', 999999, '1777511620_1777473284_ayambakar.png', 1),
+(29, 'ayam ayam', 'kurang enak ayam nya\r\n', 10, '1777700418_1777473284_ayambakar.png', 1),
+(31, '', '', 0, '1777701911_1777473284_ayambakar.png', 1),
+(32, '', '', 0, '1777702347_', 1),
+(33, 'o', 'jbs\r\n', 12, '1777702387_1777477952_Buah buahan.jpeg', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pembayaran`
+-- Struktur dari tabel `pembayaran`
 --
 
 CREATE TABLE `pembayaran` (
@@ -69,13 +116,27 @@ CREATE TABLE `pembayaran` (
   `tanggal_pembayaran` date DEFAULT NULL,
   `waktu_pembayaran` time DEFAULT NULL,
   `total_pembayaran` decimal(15,2) DEFAULT NULL,
-  `status_pembayaran` varchar(50) DEFAULT NULL
+  `status_pembayaran` varchar(50) DEFAULT 'Belum Bayar',
+  `jumlah_dp` decimal(15,2) DEFAULT 0.00,
+  `status_dp` varchar(50) DEFAULT 'Belum Bayar',
+  `tanggal_dp` date DEFAULT NULL,
+  `waktu_dp` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `pembayaran`
+--
+
+INSERT INTO `pembayaran` (`pembayaran_id`, `pesanan_id`, `metode_pembayaran`, `tanggal_pembayaran`, `waktu_pembayaran`, `total_pembayaran`, `status_pembayaran`, `jumlah_dp`, `status_dp`, `tanggal_dp`, `waktu_dp`) VALUES
+(37, 40, NULL, NULL, NULL, 29999999.00, 'Belum Bayar', 0.00, 'Belum Bayar', NULL, NULL),
+(38, 41, 'gopay', '2026-05-02', NULL, 29999999.00, 'Selesai', 0.00, 'Belum Bayar', NULL, NULL),
+(39, 42, 'bca-dp', '2026-05-02', NULL, 999999.00, 'Selesai', 499999.50, 'Selesai', NULL, NULL),
+(40, 43, 'mandiri', '2026-05-02', NULL, 999999.00, 'Selesai', 0.00, 'Belum Bayar', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pesanan`
+-- Struktur dari tabel `pesanan`
 --
 
 CREATE TABLE `pesanan` (
@@ -87,13 +148,24 @@ CREATE TABLE `pesanan` (
   `alamat` text DEFAULT NULL,
   `no_handphone` varchar(15) DEFAULT NULL,
   `total_pesan` decimal(15,2) DEFAULT NULL,
-  `status_pesanan` varchar(50) DEFAULT NULL
+  `status_pesanan` varchar(50) DEFAULT NULL,
+  `catatan` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `pesanan`
+--
+
+INSERT INTO `pesanan` (`pesanan_id`, `user_id`, `tanggal_pesan`, `tanggal_acara`, `waktu_acara`, `alamat`, `no_handphone`, `total_pesan`, `status_pesanan`, `catatan`) VALUES
+(40, 3, '2026-05-02', '2026-05-02', '09:35:00', 'desa kiajaran kulon blok pelabuhan', '085795244257', 29999999.00, 'Belum Konfirmasi', ''),
+(41, 2, '2026-05-02', '2026-05-16', '23:16:00', 'desa kiajaran kulon blok pelabuhan', '085795244257', 29999999.00, 'Dikonfirmasi', ''),
+(42, 3, '2026-05-02', '2026-05-15', '11:23:00', 'desa kiajaran kulon blok pelabuhan', '085795244257', 999999.00, 'Dikonfirmasi', ''),
+(43, 2, '2026-05-02', '2026-07-17', '04:40:00', 'desa kiajaran kulon blok pelabuhan', '085795244257', 999999.00, 'Dikonfirmasi', 'ayam nya sampe gosong\r\n');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tambahan`
+-- Struktur dari tabel `tambahan`
 --
 
 CREATE TABLE `tambahan` (
@@ -106,32 +178,32 @@ CREATE TABLE `tambahan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `nama_lengkap` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `password` varchar(100) DEFAULT NULL,
   `role` enum('admin','pelanggan') DEFAULT 'pelanggan'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
 INSERT INTO `users` (`user_id`, `nama_lengkap`, `email`, `password`, `role`) VALUES
-(2, 'fazi', 'faizbilah979@gmail.com', '$2y$10$rxd/ES8ratFvrS4uM.NB6OpG0OhHwoRgiyFey28lE8V3YmImTYGly', 'pelanggan'),
-(3, 'Admin', 'admin@gmail.com', '$2y$10$qUMYnN6SyFIkStO.P/czKu.HS6DlRSWTfOH7AJ4a6ehLff3NwbFHi', 'admin'),
-(4, 'anjani', 'anjai@gmail.com', '$2y$10$F.CJ54W0RWYj5.Y1B.8x7u0cLqbXQ4l2PmI3P2snpNu00rTo9LQoK', 'pelanggan');
+(2, 'fazi', 'faizbilah979@gmail.com', '123456', 'pelanggan'),
+(3, 'Admin', 'admin@gmail.com', 'admin123', 'admin'),
+(9, 'anja', 'anja@gmail.com', '12', 'pelanggan');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `detail_pesanan`
+-- Indeks untuk tabel `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
   ADD PRIMARY KEY (`detail_id`),
@@ -140,84 +212,97 @@ ALTER TABLE `detail_pesanan`
   ADD KEY `fk_detail_tambahan` (`tambahan_id`);
 
 --
--- Indexes for table `menu`
+-- Indeks untuk tabel `kategori`
 --
-ALTER TABLE `menu`
-  ADD PRIMARY KEY (`menu_id`);
+ALTER TABLE `kategori`
+  ADD PRIMARY KEY (`kategori_id`);
 
 --
--- Indexes for table `pembayaran`
+-- Indeks untuk tabel `menu`
+--
+ALTER TABLE `menu`
+  ADD PRIMARY KEY (`menu_id`),
+  ADD KEY `fk_menu_kategori` (`kategori_id`);
+
+--
+-- Indeks untuk tabel `pembayaran`
 --
 ALTER TABLE `pembayaran`
   ADD PRIMARY KEY (`pembayaran_id`),
   ADD KEY `fk_pembayaran_pesanan` (`pesanan_id`);
 
 --
--- Indexes for table `pesanan`
+-- Indeks untuk tabel `pesanan`
 --
 ALTER TABLE `pesanan`
   ADD PRIMARY KEY (`pesanan_id`),
   ADD KEY `fk_pesanan_user` (`user_id`);
 
 --
--- Indexes for table `tambahan`
+-- Indeks untuk tabel `tambahan`
 --
 ALTER TABLE `tambahan`
   ADD PRIMARY KEY (`tambahan_id`);
 
 --
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `detail_pesanan`
+-- AUTO_INCREMENT untuk tabel `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
-  MODIFY `detail_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT for table `menu`
+-- AUTO_INCREMENT untuk tabel `kategori`
+--
+ALTER TABLE `kategori`
+  MODIFY `kategori_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT untuk tabel `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
--- AUTO_INCREMENT for table `pembayaran`
+-- AUTO_INCREMENT untuk tabel `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
--- AUTO_INCREMENT for table `pesanan`
+-- AUTO_INCREMENT untuk tabel `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `pesanan_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pesanan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
--- AUTO_INCREMENT for table `tambahan`
+-- AUTO_INCREMENT untuk tabel `tambahan`
 --
 ALTER TABLE `tambahan`
   MODIFY `tambahan_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `detail_pesanan`
+-- Ketidakleluasaan untuk tabel `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
   ADD CONSTRAINT `fk_detail_menu` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -225,16 +310,22 @@ ALTER TABLE `detail_pesanan`
   ADD CONSTRAINT `fk_detail_tambahan` FOREIGN KEY (`tambahan_id`) REFERENCES `tambahan` (`tambahan_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `pembayaran`
+-- Ketidakleluasaan untuk tabel `menu`
+--
+ALTER TABLE `menu`
+  ADD CONSTRAINT `fk_menu_kategori` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`kategori_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `pembayaran`
 --
 ALTER TABLE `pembayaran`
   ADD CONSTRAINT `fk_pembayaran_pesanan` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`pesanan_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `pesanan`
+-- Ketidakleluasaan untuk tabel `pesanan`
 --
 ALTER TABLE `pesanan`
-  ADD CONSTRAINT `fk_pesanan_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_pesanan_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
