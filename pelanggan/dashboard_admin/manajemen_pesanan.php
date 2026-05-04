@@ -40,6 +40,20 @@ $pesanan_list = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $pesanan_list[] = $row;
 }
+$payment_status = $pesanan['status_pembayaran'] ?? 'Belum Bayar';
+    $status_dp = $pesanan['status_dp'] ?? 'Belum Bayar';
+    $jumlah_dp = (int)($pesanan['jumlah_dp'] ?? 0); // Ambil data jumlah_dp
+    
+    // LOGIKA OTOMATIS:
+    // Jika jumlah_dp lebih dari 0, maka otomatis Tipe adalah DP
+    if ($jumlah_dp > 0) { 
+        $tipe_pembayaran = 'DP (50%)'; 
+        $badge_class = 'badge-dp'; 
+    } else { 
+        // Jika tidak ada DP, maka tipenya FULL
+        $tipe_pembayaran = 'FULL (100%)'; 
+        $badge_class = 'badge-full'; 
+    }
 ?>
 
 <!DOCTYPE html>
@@ -183,6 +197,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <div><span class="text-gray-600">Tanggal Acara:</span> <span class="font-medium" id="modalTglAcara"></span></div>
                         <div><span class="text-gray-600">Waktu Acara:</span> <span class="font-medium" id="modalWaktuAcara"></span></div>
                         <div><span class="text-gray-600">Total Pesanan:</span> <span class="font-bold text-orange-600" id="modalTotal"></span></div>
+                        <div><span class="text-gray-600">Metode Pembayaran:</span> <span class="font-medium text-blue-600" id="modalMetodePembayaran"></span></div>
                         <div><span class="text-gray-600">Tipe Pembayaran:</span> <span class="font-medium" id="modalTipePembayaran"></span></div>
                         <div><span class="text-gray-600">Status Pembayaran:</span> <span class="font-medium" id="modalStatusPembayaran"></span></div>
                     </div>
@@ -207,6 +222,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         let currentPaymentStatus = null;
 
         function showDetailModal(pesanan, details) {
+            // 1. Mengisi Informasi Dasar
             document.getElementById('modalTitle').textContent = `Detail Pesanan #ORD-${String(pesanan.pesanan_id).padStart(3, '0')}`;
             document.getElementById('modalNama').textContent = pesanan.nama_lengkap || 'N/A';
             document.getElementById('modalNoHp').textContent = pesanan.no_handphone || '-';
@@ -216,46 +232,49 @@ while ($row = mysqli_fetch_assoc($result)) {
             document.getElementById('modalWaktuAcara').textContent = pesanan.waktu_acara !== '00:00:00' ? pesanan.waktu_acara : '-';
             document.getElementById('modalTotal').textContent = 'Rp ' + parseInt(pesanan.total_pesan).toLocaleString('id-ID');
             
+            // 2. Simpan ID untuk keperluan proses (konfirmasi/kirim)
+            currentPembayaranId = pesanan.pembayaran_id;
+            currentPesananId = pesanan.pesanan_id;
+
+            // 3. LOGIKA OTOMATIS TIPE PEMBAYARAN (Deteksi dari nominal DP)
+            let tipePembayaranHTML = '';
+            const jmlDp = parseInt(pesanan.jumlah_dp) || 0;
+
+            if (jmlDp > 0) {
+                tipePembayaranHTML = `<span class="badge-dp">DP (50%)</span> <span class="text-xs text-gray-500 ml-1">(Bayar: Rp ${jmlDp.toLocaleString('id-ID')})</span>`;
+            } else {
+                tipePembayaranHTML = `<span class="badge-full">LUNAS / FULL (100%)</span>`;
+            }
+            document.getElementById('modalTipePembayaran').innerHTML = tipePembayaranHTML;
+
+            // 4. Status Pembayaran Visual
             const paymentStatus = pesanan.status_pembayaran;
             const statusDp = pesanan.status_dp;
-            currentPembayaranId = pesanan.pembayaran_id;
-            currentPesananId = pesanan.pesanan_id; // Simpan Pesanan ID
-            currentPaymentStatus = paymentStatus;
+            
+            document.getElementById('modalStatusPembayaran').innerHTML = (paymentStatus === 'Selesai' || statusDp === 'Selesai')
+                ? `<span class="status-badge payment-sudah">Sudah Dibayar</span>`
+                : `<span class="status-badge payment-belum">Belum Bayar</span>`;
 
-            let tipePembayaran = 'Belum Ada';
-            if (statusDp == 'Selesai') {
-                tipePembayaran = '<span class="badge-dp">DP (50%)</span>' + (pesanan.jumlah_dp > 0 ? ' - Rp ' + parseInt(pesanan.jumlah_dp).toLocaleString('id-ID') : '');
-            } else if (paymentStatus === 'Selesai') {
-                tipePembayaran = '<span class="badge-full">FULL (100%)</span>';
-            }
-            document.getElementById('modalTipePembayaran').innerHTML = tipePembayaran;
-
-            document.getElementById('modalStatusPembayaran').innerHTML = paymentStatus === 'Belum Bayar' 
-                ? `<span class="status-badge payment-belum">${paymentStatus}</span>`
-                : `<span class="status-badge payment-sudah">${paymentStatus}</span>`;
-
-            // LOGIKA TOMBOL AKSI
+            // 5. LOGIKA TOMBOL AKSI (Otomatis ganti teks tanpa pilih-pilih lagi)
             const confirmBtn = document.getElementById('confirmPaymentBtn');
-            let aksiTerpilih = '';
-
             if (paymentStatus !== 'Selesai' && statusDp !== 'Selesai') {
-                confirmBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Konfirmasi Pembayaran';
+                // Jika belum bayar, tombol berfungsi untuk KONFIRMASI UANG MASUK
+                confirmBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Konfirmasi Pembayaran Diterima';
                 confirmBtn.className = "bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition font-medium";
-                confirmBtn.disabled = false;
-                aksiTerpilih = 'konfirmasi_bayar';
+                confirmBtn.style.display = 'block';
+                confirmBtn.setAttribute('data-aksi', 'konfirmasi_bayar');
             } else if (pesanan.status_pesanan !== 'Dikirim') {
+                // Jika sudah bayar tapi belum dikirim, tombol berubah jadi KIRIM
                 confirmBtn.innerHTML = '<i class="fas fa-truck me-2"></i> Kirim Pesanan Sekarang';
                 confirmBtn.className = "bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition font-medium";
-                confirmBtn.disabled = false;
-                aksiTerpilih = 'kirim_pesanan';
+                confirmBtn.style.display = 'block';
+                confirmBtn.setAttribute('data-aksi', 'kirim_pesanan');
             } else {
-                confirmBtn.innerHTML = '<i class="fas fa-check-double me-2"></i> Pesanan Selesai & Dikirim';
-                confirmBtn.className = "bg-gray-400 text-white px-6 py-2 rounded-lg cursor-not-allowed font-medium";
-                confirmBtn.disabled = true;
-                aksiTerpilih = '';
+                // Jika sudah beres semua, sembunyikan tombol
+                confirmBtn.style.display = 'none';
             }
-            confirmBtn.setAttribute('data-aksi', aksiTerpilih);
 
+            // 6. Menampilkan Item Menu (Looping)
             let itemsHTML = '';
             details.forEach(item => {
                 const imagePath = item.gambar ? 'img/' + item.gambar : 'https://via.placeholder.com/200x150?text=No+Image';
