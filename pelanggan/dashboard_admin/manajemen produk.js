@@ -83,8 +83,34 @@ window.editProduk = function(id) {
                 if (descBaru !== null) produk.d = descBaru;
             }
 
-            renderProducts();
-            alert("Produk berhasil diperbarui!");
+            // --- BAGIAN EDIT GAMBAR ---
+            const gantiGambar = confirm("Apakah ingin mengubah foto produk?");
+            if (gantiGambar) {
+                // Buat elemen input file secara sementara (hidden)
+                let fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*'; // Hanya menerima gambar
+
+                fileInput.onchange = e => {
+                    let file = e.target.files[0];
+                    if (file) {
+                        let reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = readerEvent => {
+                            // Update property gambar pada objek produk (misal properti 'i' atau 'img')
+                            produk.i = readerEvent.target.result; 
+                            
+                            renderProducts(); // Render ulang setelah gambar terbaca
+                            alert("Produk dan Foto berhasil diperbarui!");
+                        }
+                    }
+                }
+                fileInput.click(); // Buka jendela pilih file
+            } else {
+                renderProducts();
+                alert("Produk berhasil diperbarui!");
+            }
+            // ---------------------------
         }
     }
 };

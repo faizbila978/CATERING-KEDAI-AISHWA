@@ -21,11 +21,12 @@ move_uploaded_file($tmp, __DIR__ . "/../img/" . $namaBaru);
 
 // =======================
 // INSERT KE DATABASE
-// =======================
+// ======================
+$kategori_id = 1;
 $query = "INSERT INTO menu 
-          (nama_menu, deskripsi, harga_satuan, gambar, kategori)
+          (nama_menu, deskripsi, harga_satuan, gambar, kategori_id)
           VALUES 
-          ('$nama', '$deskripsi', '$harga', '$namaBaru', '$kategori')";
+          ('$nama', '$deskripsi', '$harga', '$namaBaru', '$kategori_id')";
 
 if(mysqli_query($conn, $query)){
     echo "<script>
