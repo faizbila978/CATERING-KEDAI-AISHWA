@@ -41,6 +41,12 @@ if (!empty($_GET['tahun'])) {
     $where_clauses[] = "YEAR(p.tanggal_pesan) = '$tahun'";
 }
 
+// Filter Status (TAMBAHAN AREA HIJAU)
+if (!empty($_GET['status_filter'])) {
+    $st_filter = mysqli_real_escape_string($conn, $_GET['status_filter']);
+    $where_clauses[] = "p.status_pesanan = '$st_filter'";
+}
+
 // Gabungkan klausa WHERE jika ada filter yang diisi
 $where_sql = "";
 if (count($where_clauses) > 0) {
@@ -129,7 +135,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             </header>
 
             <div class="flex-1 p-6 overflow-y-auto">
-                
+
                 <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200 mb-6 flex flex-wrap items-center justify-between gap-4">
                     <form method="GET" action="manajemen_pesanan.php" class="flex flex-wrap items-end gap-4 w-full">
                         
@@ -144,15 +150,24 @@ while ($row = mysqli_fetch_assoc($result)) {
                         </div>
 
                         <div class="w-40">
+                            <label class="block text-xs font-bold text-gray-500 mb-1">STATUS</label>
+                            <select name="status_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 bg-white">
+                                <option value="">Semua Status</option>
+                                <option value="Menunggu Bayar" <?php echo (isset($_GET['status_filter']) && $_GET['status_filter'] == 'Menunggu Bayar') ? 'selected' : ''; ?>>Menunggu</option>
+                                <option value="Pending" <?php echo (isset($_GET['status_filter']) && $_GET['status_filter'] == 'Pending') ? 'selected' : ''; ?>>Pending</option>
+                                <option value="Diproses" <?php echo (isset($_GET['status_filter']) && $_GET['status_filter'] == 'Diproses') ? 'selected' : ''; ?>>Proses</option>
+                                <option value="Dikirim" <?php echo (isset($_GET['status_filter']) && $_GET['status_filter'] == 'Dikirim') ? 'selected' : ''; ?>>Kirim</option>
+                                <option value="Selesai" <?php echo (isset($_GET['status_filter']) && $_GET['status_filter'] == 'Selesai') ? 'selected' : ''; ?>>Selesai</option>
+                                <option value="Dibatalkan" <?php echo (isset($_GET['status_filter']) && $_GET['status_filter'] == 'Dibatalkan') ? 'selected' : ''; ?>>Batal</option>
+                            </select>
+                        </div>
+
+                        <div class="w-32">
                             <label class="block text-xs font-bold text-gray-500 mb-1">BULAN</label>
                             <select name="bulan" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 bg-white">
-                                <option value="">Semua Bulan</option>
+                                <option value="">Bulan</option>
                                 <?php
-                                $bulan_array = [
-                                    '01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April',
-                                    '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus',
-                                    '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
-                                ];
+                                $bulan_array = ['01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April', '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus', '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'];
                                 $selected_bulan = $_GET['bulan'] ?? '';
                                 foreach ($bulan_array as $num => $name) {
                                     $selected = ($selected_bulan == $num) ? 'selected' : '';
@@ -162,10 +177,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </select>
                         </div>
 
-                        <div class="w-40">
+                        <div class="w-32">
                             <label class="block text-xs font-bold text-gray-500 mb-1">TAHUN</label>
                             <select name="tahun" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 bg-white">
-                                <option value="">Semua Tahun</option>
+                                <option value="">Tahun</option>
                                 <?php
                                 $tahun_sekarang = date('Y');
                                 $selected_tahun = $_GET['tahun'] ?? '';
@@ -187,6 +202,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         </div>
                     </form>
                 </div>
+
                 <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -216,67 +232,62 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         $details = [];
                                         while ($d = mysqli_fetch_assoc($detail_query)) { $details[] = $d; }
                                         
-                                        // Cek Status Pembayaran
                                         $payment_status = $pesanan['status_pembayaran'] ?? 'Belum Bayar';
                                         $status_dp = $pesanan['status_dp'] ?? 'Belum Bayar';
                                         $is_paid = ($payment_status === 'Selesai' || $status_dp === 'Selesai');
                                         
-                                        // Logika Tipe Pembayaran
                                         $tipe_pembayaran = 'Belum Ada';
                                         $badge_class = '';
                                         if ($status_dp == 'Selesai') { $tipe_pembayaran = 'DP (50%)'; $badge_class = 'badge-dp'; }
                                         elseif ($payment_status == 'Selesai') { $tipe_pembayaran = 'FULL (100%)'; $badge_class = 'badge-full'; }
 
-                                        // ================= LOGIKA STATUS PESANAN (BARU) =================
-$status_db = $pesanan['status_pesanan'];
-$next_status = '';
-$btn_text = '';
-$btn_class = '';
-$confirm_msg = '';
-$clickable = true;
+                                        // ================= LOGIKA STATUS PESANAN (SESUAI INSTRUKSI) =================
+                                        $status_db = $pesanan['status_pesanan'];
+                                        $next_status = '';
+                                        $btn_text = '';
+                                        $btn_class = '';
+                                        $confirm_msg = '';
+                                        $clickable = true;
 
-if (!$is_paid) {
-    if ($status_db === 'Dibatalkan') {
-        $btn_text = ' Dibatalkan';
-        $btn_class = 'bg-red-100 text-red-700 border-red-300 cursor-not-allowed opacity-75';
-        $clickable = false;
-    } else {
-        // Status awal jika belum bayar
-        $btn_text = ' Menunggu Bayar';
-        $btn_class = 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-red-100 hover:text-red-700 hover:border-red-400';
-        $next_status = 'Dibatalkan';
-        $confirm_msg = 'Pelanggan belum membayar. Batalkan pesanan ini?';
-    }
-} else {
-    // JIKA SUDAH DIBAYAR (Otomatis masuk ke alur proses)
-    if (empty($status_db) || $status_db === 'Dipending' || $status_db === 'Menunggu Bayar') {
-        // Langsung arahkan ke Diproses setelah admin konfirmasi bayar
-        $btn_text = ' Siap Diproses?';
-        $btn_class = 'bg-yellow-100 text-yellow-800 border-yellow-300 hover:bg-blue-100 hover:text-blue-700 hover:border-blue-400';
-        $next_status = 'Diproses';
-        $confirm_msg = 'Pembayaran valid. Ubah status menjadi DIPROSES?';
-    } elseif ($status_db === 'Diproses') {
-        $btn_text = ' Sedang Diproses';
-        $btn_class = 'bg-blue-100 text-blue-800 border-blue-300 hover:bg-orange-100 hover:text-orange-700 hover:border-orange-400';
-        $next_status = 'Dikirim';
-        $confirm_msg = 'Pesanan sudah siap? Ubah status menjadi DIKIRIM?';
-    } elseif ($status_db === 'Dikirim') {
-        $btn_text = ' Sedang Dikirim';
-        $btn_class = 'bg-orange-100 text-orange-800 border-orange-300 hover:bg-green-100 hover:text-green-700 hover:border-green-400';
-        $next_status = 'Selesai';
-        $confirm_msg = 'Pesanan sudah diterima? Ubah status menjadi SELESAI?';
-    } elseif ($status_db === 'Selesai') {
-        $btn_text = ' Selesai';
-        $btn_class = 'bg-green-100 text-green-800 border-green-300 cursor-not-allowed';
-        $clickable = false;
-    }
-}
+                                        if (!$is_paid) {
+                                            if ($status_db === 'Dibatalkan') {
+                                                $btn_text = 'Dibatalkan';
+                                                $btn_class = 'bg-red-100 text-red-700 border-red-300 cursor-not-allowed opacity-75';
+                                                $clickable = false;
+                                            } else {
+                                                $btn_text = 'Menunggu Bayar';
+                                                $btn_class = 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-red-100 hover:text-red-700 hover:border-red-400';
+                                                $next_status = 'Dibatalkan';
+                                                $confirm_msg = 'Pelanggan belum membayar. Batalkan pesanan ini?';
+                                            }
+                                        } else {
+                                            // JIKA SUDAH DIBAYAR (Otomatis alur admin)
+                                            if (empty($status_db) || $status_db === 'Menunggu Bayar' || $status_db === 'Pending') {
+                                                $btn_text = 'Pending';
+                                                $btn_class = 'bg-yellow-100 text-yellow-800 border-yellow-300 hover:bg-blue-100 hover:text-blue-700 hover:border-blue-400';
+                                                $next_status = 'Diproses';
+                                                $confirm_msg = 'Pembayaran valid. Ubah status menjadi PROSES?';
+                                            } elseif ($status_db === 'Diproses') {
+                                                $btn_text = 'Proses';
+                                                $btn_class = 'bg-blue-100 text-blue-800 border-blue-300 hover:bg-orange-100 hover:text-orange-700 hover:border-orange-400';
+                                                $next_status = 'Dikirim';
+                                                $confirm_msg = 'Pesanan sudah siap? Ubah status menjadi KIRIM?';
+                                            } elseif ($status_db === 'Dikirim') {
+                                                $btn_text = 'Kirim';
+                                                $btn_class = 'bg-orange-100 text-orange-800 border-orange-300 hover:bg-green-100 hover:text-green-700 hover:border-green-400';
+                                                $next_status = 'Selesai';
+                                                $confirm_msg = 'Pesanan sudah diterima? Ubah status menjadi SELESAI?';
+                                            } elseif ($status_db === 'Selesai') {
+                                                $btn_text = 'Selesai';
+                                                $btn_class = 'bg-green-100 text-green-800 border-green-300 cursor-not-allowed';
+                                                $clickable = false;
+                                            }
+                                        }
 
-                                        // Render UI Status Button
                                         if ($clickable) {
                                             $ui_status_pesanan = "
                                             <button onclick=\"confirmNextStatus({$pesanan['pesanan_id']}, '$next_status', '$confirm_msg')\" 
-                                                    class='text-xs font-bold border rounded px-3 py-1.5 w-full max-w-[120px] shadow-sm transition duration-200 $btn_class' title='Klik untuk mengubah ke: $next_status'>
+                                                    class='text-xs font-bold border rounded px-3 py-1.5 w-full max-w-[120px] shadow-sm transition duration-200 $btn_class'>
                                                 $btn_text
                                             </button>";
                                         } else {
@@ -285,7 +296,6 @@ if (!$is_paid) {
                                                 $btn_text
                                             </span>";
                                         }
-                                        // ==============================================================================
                                     ?>
                                     <tr class="hover:bg-pink-50 transition duration-200 border-l-4 border-transparent hover:border-pink-500 bg-white">
                                         <td class="px-5 py-4 whitespace-nowrap font-mono text-sm font-bold text-gray-700">#ORD-<?php echo str_pad($pesanan['pesanan_id'], 3, '0', STR_PAD_LEFT); ?></td>
@@ -302,11 +312,7 @@ if (!$is_paid) {
                                                 <?php echo ($status_dp == 'Selesai') ? 'DP Dibayar' : (($payment_status === 'Selesai') ? 'Selesai' : 'Belum Bayar'); ?>
                                             </span>
                                         </td>
-                                        
-                                        <td class="px-5 py-4 whitespace-nowrap text-center">
-                                            <?php echo $ui_status_pesanan; ?>
-                                        </td>
-
+                                        <td class="px-5 py-4 whitespace-nowrap text-center"><?php echo $ui_status_pesanan; ?></td>
                                         <td class="px-4 py-4 whitespace-nowrap text-center">
                                             <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded text-sm transition duration-200 font-medium shadow-sm" 
                                                     onclick="showDetailModal(<?php echo htmlspecialchars(json_encode($pesanan)); ?>, <?php echo htmlspecialchars(json_encode($details)); ?>)">
@@ -337,7 +343,6 @@ if (!$is_paid) {
                 <h3 class="text-xl font-bold text-gray-800" id="modalTitle">Detail Pesanan</h3>
                 <button onclick="closeDetailModal()" class="text-gray-500 hover:text-gray-700 text-2xl"><i class="fas fa-times"></i></button>
             </div>
-
             <div class="grid grid-cols-2 gap-6 mb-6">
                 <div>
                     <h4 class="font-bold text-gray-700 mb-3">Informasi Pelanggan</h4>
@@ -345,172 +350,81 @@ if (!$is_paid) {
                         <div><span class="text-gray-600">Nama:</span> <span class="font-medium" id="modalNama"></span></div>
                         <div><span class="text-gray-600">No. HP:</span> <span class="font-medium" id="modalNoHp"></span></div>
                         <div><span class="text-gray-600">Alamat:</span> <span class="font-medium text-xs" id="modalAlamat"></span></div>
-                        <div><span class="text-gray-600">Catatan:</span> <span class="font-medium text-xs" id="modalCatatan"></span></div>
                     </div>
                 </div>
                 <div>
-                    <h4 class="font-bold text-gray-700 mb-3">Informasi Acara & Pembayaran</h4>
+                    <h4 class="font-bold text-gray-700 mb-3">Informasi Acara</h4>
                     <div class="space-y-2 text-sm">
-                        <div><span class="text-gray-600">Tanggal Acara:</span> <span class="font-medium" id="modalTglAcara"></span></div>
-                        <div><span class="text-gray-600">Waktu Acara:</span> <span class="font-medium" id="modalWaktuAcara"></span></div>
-                        <div><span class="text-gray-600">Total Pesanan:</span> <span class="font-bold text-pink-600" id="modalTotal"></span></div>
-                        <div><span class="text-gray-600">Metode Pembayaran:</span> <span class="font-medium text-blue-600" id="modalMetodePembayaran"></span></div>
-                        <div><span class="text-gray-600">Tipe Pembayaran:</span> <span class="font-medium" id="modalTipePembayaran"></span></div>
-                        <div><span class="text-gray-600">Status Pembayaran:</span> <span class="font-medium" id="modalStatusPembayaran"></span></div>
+                        <div><span class="text-gray-600">Tanggal:</span> <span class="font-medium" id="modalTglAcara"></span></div>
+                        <div><span class="text-gray-600">Total:</span> <span class="font-bold text-pink-600" id="modalTotal"></span></div>
+                        <div><span class="text-gray-600">Status:</span> <span id="modalStatusPembayaran"></span></div>
                     </div>
                 </div>
             </div>
-
-            <h4 class="font-bold text-gray-700 mb-3 border-t pt-6">Detail Item Pesanan</h4>
+            <h4 class="font-bold text-gray-700 mb-3 border-t pt-6">Item Pesanan</h4>
             <div id="itemsContainer" class="space-y-4 mb-6"></div>
-
-            <div class="bg-gray-100 -m-6 mt-6 px-6 py-4 flex justify-between gap-3">
-                <button id="confirmPaymentBtn" onclick="confirmPaymentFromModal()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition duration-200 font-medium shadow-sm">
-                    <i class="fas fa-check-circle me-2"></i> Konfirmasi Pembayaran
-                </button>
-                <button onclick="closeDetailModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition duration-200 font-medium shadow-sm">Tutup</button>
+            <div class="bg-gray-100 -m-6 mt-6 px-6 py-4 flex justify-end">
+                <button onclick="closeDetailModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition font-medium">Tutup</button>
             </div>
         </div>
     </div>
 
     <script>
-        // FUNGSI UNTUK UPDATE STATUS PESANAN (TOMBOL DI TABEL)
         function confirmNextStatus(pesananId, nextStatus, pesanKonfirmasi) {
             if (confirm(pesanKonfirmasi)) {
-                // Membuat form otomatis via Javascript lalu di-submit
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = 'manajemen_pesanan.php';
                 
-                const inputAction = document.createElement('input');
-                inputAction.type = 'hidden';
-                inputAction.name = 'action';
-                inputAction.value = 'update_status_next';
+                const inputs = {
+                    'action': 'update_status_next',
+                    'pesanan_id': pesananId,
+                    'status_baru': nextStatus
+                };
+
+                for (let key in inputs) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = inputs[key];
+                    form.appendChild(input);
+                }
                 
-                const inputId = document.createElement('input');
-                inputId.type = 'hidden';
-                inputId.name = 'pesanan_id';
-                inputId.value = pesananId;
-                
-                const inputStatus = document.createElement('input');
-                inputStatus.type = 'hidden';
-                inputStatus.name = 'status_baru';
-                inputStatus.value = nextStatus;
-                
-                form.appendChild(inputAction);
-                form.appendChild(inputId);
-                form.appendChild(inputStatus);
                 document.body.appendChild(form);
-                
                 form.submit();
             }
         }
-
-        // VARIABEL DAN FUNGSI UNTUK MODAL DETAIL
-        let currentPembayaranId = null;
-        let currentPesananId = null; 
 
         function showDetailModal(pesanan, details) {
             document.getElementById('modalTitle').textContent = `Detail Pesanan #ORD-${String(pesanan.pesanan_id).padStart(3, '0')}`;
             document.getElementById('modalNama').textContent = pesanan.nama_lengkap || 'N/A';
             document.getElementById('modalNoHp').textContent = pesanan.no_handphone || '-';
             document.getElementById('modalAlamat').textContent = pesanan.alamat || '-';
-            document.getElementById('modalCatatan').textContent = pesanan.catatan || '-';
             document.getElementById('modalTglAcara').textContent = pesanan.tanggal_acara !== '0000-00-00' ? new Date(pesanan.tanggal_acara).toLocaleDateString('id-ID') : '-';
-            document.getElementById('modalWaktuAcara').textContent = pesanan.waktu_acara !== '00:00:00' ? pesanan.waktu_acara : '-';
             document.getElementById('modalTotal').textContent = 'Rp ' + parseInt(pesanan.total_pesan).toLocaleString('id-ID');
             
-            currentPembayaranId = pesanan.pembayaran_id;
-            currentPesananId = pesanan.pesanan_id;
-
-            let tipePembayaranHTML = '';
-            const jmlDp = parseInt(pesanan.jumlah_dp) || 0;
-
-            if (jmlDp > 0) {
-                tipePembayaranHTML = `<span class="badge-dp">DP (50%)</span> <span class="text-xs text-gray-500 ml-1">(Bayar: Rp ${jmlDp.toLocaleString('id-ID')})</span>`;
-            } else {
-                tipePembayaranHTML = `<span class="badge-full">LUNAS / FULL (100%)</span>`;
-            }
-            document.getElementById('modalTipePembayaran').innerHTML = tipePembayaranHTML;
-
-            const paymentStatus = pesanan.status_pembayaran;
-            const statusDp = pesanan.status_dp;
-            
-            document.getElementById('modalStatusPembayaran').innerHTML = (paymentStatus === 'Selesai' || statusDp === 'Selesai')
-                ? `<span class="status-badge payment-sudah">Sudah Dibayar</span>`
+            const is_paid = (pesanan.status_pembayaran === 'Selesai' || pesanan.status_dp === 'Selesai');
+            document.getElementById('modalStatusPembayaran').innerHTML = is_paid 
+                ? `<span class="status-badge payment-sudah">Lunas</span>`
                 : `<span class="status-badge payment-belum">Belum Bayar</span>`;
-
-            const confirmBtn = document.getElementById('confirmPaymentBtn');
-            if (paymentStatus !== 'Selesai' && statusDp !== 'Selesai') {
-                confirmBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i> Konfirmasi Pembayaran Diterima';
-                confirmBtn.className = "bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition font-medium";
-                confirmBtn.style.display = 'block';
-                confirmBtn.setAttribute('data-aksi', 'konfirmasi_bayar');
-            } else if (pesanan.status_pesanan !== 'Dikirim') {
-                confirmBtn.innerHTML = '<i class="fas fa-truck me-2"></i> Kirim Pesanan Sekarang';
-                confirmBtn.className = "bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-lg transition font-medium";
-                confirmBtn.style.display = 'block';
-                confirmBtn.setAttribute('data-aksi', 'kirim_pesanan');
-            } else {
-                confirmBtn.style.display = 'none';
-            }
 
             let itemsHTML = '';
             details.forEach(item => {
-                const imagePath = item.gambar ? 'img/' + item.gambar : 'https://via.placeholder.com/200x150?text=No+Image';
+                const img = item.gambar ? 'img/' + item.gambar : 'https://via.placeholder.com/200x150';
                 itemsHTML += `
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <img src="${imagePath}" class="menu-item-image mb-3" onerror="this.src='https://via.placeholder.com/200x150?text=No+Image'">
-                        <div class="text-sm">
-                            <span class="text-gray-600 font-medium">Menu:</span> <span class="font-bold block text-gray-900">${item.nama_menu || 'N/A'}</span>
-                            <div class="grid grid-cols-3 gap-4 mt-2">
-                                <div><span class="text-gray-600">Harga:</span><span class="block">Rp ${parseInt(item.harga_satuan).toLocaleString('id-ID')}</span></div>
-                                <div><span class="text-gray-600">Jumlah:</span><span class="block">${item.jumlah_menu}x</span></div>
-                                <div><span class="text-gray-600">Subtotal:</span><span class="block font-bold text-pink-600">Rp ${parseInt(item.harga_satuan * item.jumlah_menu).toLocaleString('id-ID')}</span></div>
-                            </div>
+                    <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <img src="${img}" class="w-16 h-16 object-cover rounded">
+                        <div class="flex-1">
+                            <p class="font-bold text-gray-800">${item.nama_menu}</p>
+                            <p class="text-xs text-gray-500">${item.jumlah_menu} x Rp ${parseInt(item.harga_satuan).toLocaleString('id-ID')}</p>
                         </div>
                     </div>`;
             });
-            document.getElementById('itemsContainer').innerHTML = itemsHTML || '<div class="text-center text-gray-500 py-4">Tidak ada item</div>';
+            document.getElementById('itemsContainer').innerHTML = itemsHTML;
             document.getElementById('detailModal').classList.add('active');
         }
 
         function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
-
-        function confirmPaymentFromModal() {
-            const confirmBtn = document.getElementById('confirmPaymentBtn');
-            const aksi = confirmBtn.getAttribute('data-aksi');
-
-            if (aksi === 'konfirmasi_bayar') {
-                if (confirm('Konfirmasi bahwa pembayaran sudah diterima?')) {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = 'proses_pembayaran.php';
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'pembayaran_id';
-                    input.value = currentPembayaranId;
-                    form.appendChild(input);
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            } else if (aksi === 'kirim_pesanan') {
-                if (confirm('Apakah pesanan sudah siap dan ingin dikirim sekarang?')) {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = 'proses_kirim.php';
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'pesanan_id';
-                    input.value = currentPesananId;
-                    form.appendChild(input);
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            }
-        }
-
-        document.getElementById('detailModal').addEventListener('click', function(e) { if (e.target === this) closeDetailModal(); });
     </script>
 </body>
 </html>
