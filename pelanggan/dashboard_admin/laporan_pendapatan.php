@@ -12,15 +12,11 @@ $bulan_nama = [
     '07'=>'Juni', '08'=>'Juli', '09'=>'Agustus', '10'=>'September', '11'=>'Oktober', '12'=>'November', '13'=>'Desember'
 ];
 
-// Logika Kondisi WHERE: Jika 01 (Semua Bulan), maka jangan filter berdasarkan bulan
-$kondisi_bulan = ($bulan_pilihan == '01') ? "" : "AND MONTH(tanggal_pembayaran) = '" . (intval($bulan_pilihan) - 1) . "'"; 
-// Catatan: intval($bulan_pilihan)-1 karena di array kamu Januari dimulai dari index 02. 
-// Namun agar lebih aman dan standar database, sebaiknya gunakan logika di bawah ini:
-
+// Logika Filter WHERE
 if ($bulan_pilihan == '01') {
     $where_query = "AND YEAR(tanggal_pembayaran) = '$tahun_pilihan'";
 } else {
-    // Sesuaikan index: Karena '02' adalah Januari (bulan 1 di SQL)
+    // Penyesuaian index karena Januari dimulai dari 02 di array $bulan_nama
     $bulan_sql = intval($bulan_pilihan) - 1;
     $where_query = "AND MONTH(tanggal_pembayaran) = '$bulan_sql' AND YEAR(tanggal_pembayaran) = '$tahun_pilihan'";
 }
@@ -38,7 +34,7 @@ $jumlah_pesanan = $row_pesanan_count['jml'] ?? 0;
 
 $rata_rata = ($jumlah_pesanan > 0) ? ($total_pendapatan / $jumlah_pesanan) : 0;
 
-// 2. Data untuk Diagram (Tetap Jan-Des agar tren terlihat utuh)
+// 2. Data untuk Diagram (Jan - Des)
 $labels_bulan_chart = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 $data_bulanan = array_fill(0, 12, 0);
 
@@ -53,7 +49,7 @@ while($r = mysqli_fetch_assoc($query_chart)){
     }
 }
 
-// 3. Query History Tabel (Menggunakan $where_query agar bisa "Semua Bulan")
+// 3. Query History Tabel
 $query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayaran_id, p.total_pembayaran, p.metode_pembayaran, p.status_pembayaran, ps.status_pesanan 
     FROM pembayaran p JOIN pesanan ps ON p.pesanan_id = ps.pesanan_id 
     WHERE p.status_pembayaran = '$status_filter' $where_query
@@ -153,7 +149,7 @@ $query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayar
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-xl border flex flex-col">
-                    <h2 class="font-bold text-slate-800 mb-6 italic underline decoration-pink-500">Tren Pendapatan Tahunan</h2>
+                    <h2 class="font-bold text-slate-800 mb-6 italic underline decoration-pink-500">Tren Pendapatan Bulanan</h2>
                     <div class="flex-1 flex items-center">
                         <canvas id="incomeChart"></canvas>
                     </div>
