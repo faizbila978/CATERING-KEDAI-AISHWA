@@ -126,6 +126,81 @@ $established_year = 2018;
             <div class="text-center mt-5">
                 <a href="login.php" class="btn btn-pink px-5 py-3 shadow">Lihat Semua Menu Lengkap</a>
             </div>
+
+            <!-- Testimonial Form Section -->
+    <section id="isi-testimoni" class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <span class="text-pink fw-bold text-uppercase small" style="letter-spacing: 2px;">Bagikan Pengalamanmu</span>
+                            <h2 class="fw-bold mt-2">Kirim Testimoni</h2>
+                            <p class="text-muted">Bagikan kepuasan Anda setelah menikmati hidangan kami</p>
+                        </div>
+
+                        <!-- KODINGAN NOTIFIKASI SEMENTARA SETELAH SUBMIT -->
+                        <?php if (isset($_SESSION['notif'])): ?>
+                            <div class="alert alert-<?php echo $_SESSION['notif']['status']; ?> alert-dismissible fade show rounded-3 mb-4" role="alert">
+                                <div class="d-flex align-items-center">
+                                    <span class="fs-5 me-2">
+                                        <?php echo ($_SESSION['notif']['status'] == 'success') ? '✅' : '❌'; ?>
+                                    </span>
+                                    <div>
+                                        <?php echo $_SESSION['notif']['pesan']; ?>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <?php unset($_SESSION['notif']); // Menghapus notifikasi setelah halaman dimuat ulang ?>
+                        <?php endif; ?>
+
+                        <form action="proses_testimoni.php" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label fw-600">Produk yang Dibeli</label>
+                                <select name="nama_produk" class="form-select custom-input" required>
+                                    <option value="" selected disabled>Pilih Menu...</option>
+                                    <option value="Paket Ayam Goreng">Paket Ayam Goreng</option>
+                                    <option value="Paket Ayam Bakar">Paket Ayam Bakar</option>
+                                    <option value="Paket Ayam Geprek">Paket Ayam Geprek</option>
+                                    <option value="Paket Ayam Geprek">Rice Bowl</option>
+                                    <option value="Paket Ayam Geprek">Tumpeng Nusantara</option>
+                                    <option value="Paket Ayam Geprek">Tumpeng Nusantara Spesial</option>
+                                    <option value="Paket Ayam Geprek">Tumpeng Nusantara Premium</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-600">Rating Bintang</label>
+                                <div class="rating-wrapper">
+                                    <select name="rating" class="form-select custom-input" required>
+                                        <option value="5">⭐⭐⭐⭐⭐ (Sangat Puas)</option>
+                                        <option value="4">⭐⭐⭐⭐ (Puas)</option>
+                                        <option value="3">⭐⭐⭐ (Cukup)</option>
+                                        <option value="2">⭐⭐ (Kurang)</option>
+                                        <option value="1">⭐ (Buruk)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-600">Ulasan / Deskripsi</label>
+                                <textarea name="deskripsi" class="form-control custom-input" rows="4" placeholder="Ceritakan rasa dan kualitas pelayanan kami..." required></textarea>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-600">Foto Hidangan</label>
+                                <input type="file" name="foto_produk" class="form-control custom-input" accept="image/*" required>
+                                <div class="form-text">Unggah foto produk yang Anda terima (Format: JPG/PNG).</div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-pink py-3 fw-bold shadow-sm">Kirim Testimoni Sekarang</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 

@@ -13,6 +13,10 @@
             <i class="fas fa-th-large mr-3 w-5 text-orange-300 group-hover:text-white"></i>
             <span class="font-medium">Manajemen Produk</span>
         </a>
+        <a href="admin_testimoni.php" class="flex items-center p-3 rounded-lg hover:bg-orange-600 transition group">
+            <i class="fas fa-star-half-stroke mr-3 w-5 text-orange-300 group-hover:text-white"></i>
+            <span class="font-medium">Testimoni Pelanggan</span>
+        </a>
         <a href="manajemen_pesanan.php" class="flex items-center p-3 rounded-lg hover:bg-orange-600 transition group">
             <i class="fas fa-shopping-cart mr-3 w-5 text-orange-300 group-hover:text-white"></i>
             <span>Manajemen Pesanan</span>
