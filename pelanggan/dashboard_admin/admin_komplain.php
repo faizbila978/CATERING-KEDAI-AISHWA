@@ -1,33 +1,16 @@
 <?php
 session_start();
+require_once 'koneksi.php';
 
-// Koneksi ke Database
-$host     = "localhost";
-$username = "root";
-$password = "";
-$database = "kedai_aishwa";
-$conn = mysqli_connect($host, $username, $password, $database);
-
-if (!$conn) {
-    die("Koneksi gagal: " . mysqli_connect_error());
+// 🔐 Proteksi Hak Akses Admin
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+    header("Location: login.php");
+    exit();
 }
 
-// Fitur Update Status Komplain oleh Admin
-if (isset($_POST['update_status'])) {
-    $id_komplain = $_POST['id_komplain'];
-    $status_baru = $_POST['status'];
-    
-    $update_query = "UPDATE komplain SET status = '$status_baru' WHERE id = '$id_komplain'";
-    if (mysqli_query($conn, $update_query)) {
-        $msg = "<div class='alert alert-success'>Status komplain ID #$id_komplain berhasil diperbarui!</div>";
-    } else {
-        $msg = "<div class='alert alert-danger'>Gagal memperbarui status.</div>";
-    }
-}
-
-// Ambil semua data komplain dari database (Urutkan dari yang terbaru)
-$query_tampil = "SELECT * FROM komplain ORDER BY tanggal_masuk DESC";
-$result = mysqli_query($conn, $query_tampil);
+// Mengambil seluruh data komplain masuk (Terbaru di atas)
+$query = "SELECT * FROM komplain ORDER BY waktu_masuk DESC";
+$result = mysqli_query($koneksi, $query);
 ?>
 
 <!DOCTYPE html>
@@ -35,100 +18,93 @@ $result = mysqli_query($conn, $query_tampil);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin | Kelola Komplain Kedai Aishwa</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8f9fa; }
-        .admin-header { background-color: #212529; color: white; padding: 20px 0; mb-4: 30px; }
-        .table-card { border-radius: 12px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .badge-pending { background-color: #ffc107; color: #000; }
-        .badge-proses { background-color: #0dcaf0; color: #fff; }
-        .badge-selesai { background-color: #198754; color: #fff; }
-        .img-bukti { max-width: 100px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        .img-bukti:hover { transform: scale(1.1); }
-    </style>
+    <title>Admin Kedai Aishwa | Pusat Komplain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="font-sans text-gray-800 flex h-screen overflow-hidden">
 
-    <div class="admin-header mb-4">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div>
-                <h2 class="mb-0 fw-bold">Kedai Aishwa Admin Panel</h2>
-                <small class="text-muted">Manajemen Komplain & Masukan Pelanggan</small>
+    <?php include('sidebar.php'); ?>
+
+    <main class="flex-1 overflow-y-auto bg-orange-50 flex flex-col">
+        
+        <header class="bg-white/90 backdrop-blur-sm shadow-sm p-4 px-8 flex justify-between items-center sticky top-0 z-10 border-b border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-700">Manajemen Komplain Pelanggan</h2>
+            <span class="text-sm text-red-500 bg-red-50 px-4 py-2 rounded-full font-semibold">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>Pusat Resolusi
+            </span>
+        </header>
+
+        <div class="p-8 flex-1">
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-red-500/10 to-transparent flex justify-between items-center">
+                    <div>
+                        <h3 class="font-extrabold text-xl text-gray-800">Tiket Kendala Masuk</h3>
+                        <p class="text-sm text-gray-500 mt-1">Daftar keluhan kualitas hidangan atau pelayanan dari pembeli.</p>
+                    </div>
+                    <span class="bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full">
+                        Total: <?php echo mysqli_num_rows($result); ?> Kasus
+                    </span>
+                </div>
+                
+                <div class="p-6">
+                    <?php if (mysqli_num_rows($result) == 0): ?>
+                        <div class="text-center py-16">
+                            <div class="text-green-400 text-6xl mb-4">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </div>
+                            <h4 class="text-gray-400 text-lg font-medium">Luar biasa! Tidak ada komplain atau kendala saat ini.</h4>
+                        </div>
+                    <?php else: ?>
+                        <div class="overflow-x-auto rounded-xl border border-gray-200">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-gray-200 text-sm font-bold text-gray-600 bg-gray-50/70">
+                                        <th class="p-4 pl-6" width="15%">Bukti Foto</th>
+                                        <th class="p-4" width="20%">Nama Menu</th>
+                                        <th class="p-4" width="15%">Tanggal Acara</th>
+                                        <th class="p-4" width="35%">Detail Keluhan</th>
+                                        <th class="p-4 pr-6" width="15%">Waktu Lapor</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+                                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                                        <tr class="hover:bg-red-50/20 transition-colors">
+                                            <td class="p-4 pl-6">
+                                                <a href="<?php echo htmlspecialchars($row['foto']); ?>" target="_blank" class="block w-16 h-16 group relative overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+                                                    <img src="<?php echo htmlspecialchars($row['foto']); ?>" alt="Bukti Kasus" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs transition">
+                                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td class="p-4 font-bold text-gray-900">
+                                                <?php echo htmlspecialchars($row['nama_produk']); ?>
+                                            </td>
+                                            <td class="p-4 text-gray-600 font-medium">
+                                                <i class="fa-regular fa-calendar-days text-gray-400 me-1"></i>
+                                                <?php echo date('d-m-Y', strtotime($row['tanggal_acara'])); ?>
+                                            </td>
+                                            <td class="p-4">
+                                                <p class="text-red-700 text-xs bg-red-50 p-3 rounded-xl border border-red-100/50 leading-relaxed">
+                                                    "<?php echo htmlspecialchars($row['deskripsi']); ?>"
+                                                </p>
+                                            </td>
+                                            <td class="p-4 pr-6 text-gray-500 text-xs">
+                                                <div><i class="fa-regular fa-clock me-1 text-gray-400"></i><?php echo date('d M Y', strtotime($row['waktu_masuk'])); ?></div>
+                                                <div class="ps-4 mt-0.5 text-gray-400"><?php echo date('H:i', strtotime($row['waktu_masuk'])); ?> WIB</div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
-            <a href="index.php" class="btn btn-outline-light btn-sm">Lihat Website</a>
         </div>
-    </div>
+    </main>
 
-    <div class="container">
-        <?php if(isset($msg)) echo $msg; ?>
-
-        <div class="card table-card p-4">
-            <h4 class="fw-bold mb-4">Daftar Komplain Masuk</h4>
-            
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Tanggal Masuk</th>
-                            <th>Produk</th>
-                            <th>Tanggal Acara</th>
-                            <th>Deskripsi Masalah</th>
-                            <th>Foto Bukti</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (mysqli_num_rows($result) > 0): ?>
-                            <?php while($row = mysqli_fetch_assoc($result)): ?>
-                                <tr>
-                                    <td><strong>#<?php echo $row['id']; ?></strong></td>
-                                    <td><small class="text-muted"><?php echo date('d M Y, H:i', strtotime($row['tanggal_masuk'])); ?></small></td>
-                                    <td><span class="badge bg-secondary"><?php echo $row['nama_produk']; ?></span></td>
-                                    <td><?php echo date('d/m/Y', strtotime($row['tanggal_acara'])); ?></td>
-                                    <td><p class="mb-0 small" style="max-width: 250px;"><?php echo nl2br($row['deskripsi']); ?></p></td>
-                                    <td>
-                                        <a href="uploads/<?php echo $row['foto']; ?>" target="_blank">
-                                            <img src="uploads/<?php echo $row['foto']; ?>" class="img-bukti" alt="Bukti Komplain">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <?php 
-                                        $status = $row['status'];
-                                        $badge_class = 'badge-pending';
-                                        if($status == 'Diproses') $badge_class = 'badge-proses';
-                                        if($status == 'Selesai') $badge_class = 'badge-selesai';
-                                        ?>
-                                        <span class="badge <?php echo $badge_class; ?> px-3 py-2 rounded-pill"><?php echo $status; ?></span>
-                                    </td>
-                                    <td>
-                                        <!-- Form Update Status Singkat -->
-                                        <form action="" method="POST" class="d-flex gap-1 align-items-center">
-                                            <input type="hidden" name="id_komplain" value="<?php echo $row['id']; ?>">
-                                            <select name="status" class="form-select form-select-sm" style="width: 110px;">
-                                                <option value="Pending" <?php if($status == 'Pending') echo 'selected'; ?>>Pending</option>
-                                                <option value="Diproses" <?php if($status == 'Diproses') echo 'selected'; ?>>Diproses</option>
-                                                <option value="Selesai" <?php if($status == 'Selesai') echo 'selected'; ?>>Selesai</option>
-                                            </select>
-                                            <button type="submit" name="update_status" class="btn btn-primary btn-sm">Simpan</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="8" class="text-center py-4 text-muted">Belum ada komplain yang masuk.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

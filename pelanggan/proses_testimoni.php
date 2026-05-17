@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Menyusun pesan sukses untuk dikirim kembali
         $_SESSION['notif'] = [
             'status' => 'success',
-            'pesan' => 'Terima kasih! Testimoni Anda berhasil dikirim dan telah masuk ke sistem dashboard admin Kedai Aishwa.'
+            'pesan' => 'Terima kasih! Testimoni Anda berhasil dikirim dan telah masuk ke sistem Catering Kedai Aishwa.'
         ];
     } else {
         $_SESSION['notif'] = [
