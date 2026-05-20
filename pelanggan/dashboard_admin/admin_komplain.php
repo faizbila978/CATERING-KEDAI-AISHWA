@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'koneksi.php';
+require_once '../koneksi.php';
 
 // 🔐 Proteksi Hak Akses Admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
@@ -96,7 +96,7 @@ $result = mysqli_query($koneksi, $query);
                                                 <div class="ps-4 mt-0.5 text-gray-400"><?php echo date('H:i', strtotime($row['waktu_masuk'])); ?> WIB</div>
                                             </td>
                                         </tr>
-                                    <?php endforeach; ?>
+                                    <?php endwhile; ?>
                                 </tbody>
                             </table>
                         </div>

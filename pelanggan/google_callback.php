@@ -5,9 +5,8 @@ require_once 'vendor/autoload.php';
 // Koneksi ke database catering
 $conn = mysqli_connect("localhost", "root", "", "catering_kedai_aishwa"); 
 
-// GANTI DENGAN DATA DARI GOOGLE CLOUD CONSOLE ANDA
-$clientID = 'ganti sendiri';
-$clientSecret = 'ganti sendiri'; 
+// GANTI DENGAN DATA DARI GOOGLE 
+
 $redirectUri = 'http://localhost/CATERING-KEDAI-AISHWA/CATERING-KEDAI-AISHWA/pelanggan/google_callback.php';
 
 $client = new Google_Client();

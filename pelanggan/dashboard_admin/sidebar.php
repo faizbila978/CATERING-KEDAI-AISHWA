@@ -17,8 +17,8 @@
             <i class="fas fa-star-half-stroke mr-3 w-5 text-orange-300 group-hover:text-white"></i>
             <span class="font-medium">Testimoni Pelanggan</span>
         </a>
-        <a href="admin_komplain.php" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-orange-600/20 text-gray-700 hover:text-orange-700 transition">
-            <i class="fa-solid fa-triangle-exclamation w-5 text-center text-lg text-red-500"></i>
+        <a href="admin_komplain.php" class="flex items-center p-3 rounded-lg hover:bg-orange-600  transition group">
+            <i class="fas fa-triangle-exclamation mr-3 w-5  text-orange-300 group-hover:text-white"></i>
             <span class="font-medium">Komplain Pelanggan</span>
         </a>
         <a href="manajemen_pesanan.php" class="flex items-center p-3 rounded-lg hover:bg-orange-600 transition group">

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'koneksi.php';
+include('../koneksi.php');
 
 // 🔐 Proteksi admin (Sesuaikan dengan variabel session login Anda)
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
