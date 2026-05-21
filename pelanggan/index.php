@@ -89,7 +89,7 @@ $established_year = 2018;
                             <span class="position-absolute top-0 end-0 m-3 badge bg-pink px-3 py-2 rounded-pill">Best Seller</span>
                         </div>
                         <div class="card-body p-4">
-                            <h5 class="card-title fw-bold">Ayam Bakar Madu</h5>
+                            <h5 class="card-title fw-bold">Paket Ayam Bakar</h5>
                             <p class="card-text text-muted small">nasi, ayam, mie goreng jawa, sambel, lalapan, aqua gelas.</p>
                             <div class="d-flex justify-content-between align-items-center mt-4">
                                 <span class="fw-bold text-pink fs-5">Rp 20.000</span>
@@ -103,10 +103,10 @@ $established_year = 2018;
                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden menu-card">
                         <img src="img/kentang.png" class="card-img-top" alt="Beef Teriyaki Bowl" style="height: 250px; object-fit: cover;">
                         <div class="card-body p-4">
-                            <h5 class="card-title fw-bold">Beef Teriyaki Bowl</h5>
-                            <p class="card-text text-muted small">Daging sapi slice dengan saus premium.</p>
+                            <h5 class="card-title fw-bold">Rice Bowl</h5>
+                            <p class="card-text text-muted small">Daging slice dengan saus premium.</p>
                             <div class="d-flex justify-content-between align-items-center mt-4">
-                                <span class="fw-bold text-pink fs-5">Rp 45.000</span>
+                                <span class="fw-bold text-pink fs-5">Rp 10.000</span>
                                 <a href="login.php" class="btn btn-outline-dark btn-sm rounded-pill px-3">Pesan</a>
                             </div>
                         </div>
@@ -120,7 +120,7 @@ $established_year = 2018;
                             <h5 class="card-title fw-bold">Tumpeng nusantara spesial</h5>
                             <p class="card-text text-muted small">nasi kuning, mie jawa, telur, ayam suwir.</p>
                             <div class="d-flex justify-content-between align-items-center mt-4">
-                                <span class="fw-bold text-pink fs-5">Rp 50.000</span>
+                                <span class="fw-bold text-pink fs-5">Rp 250.000</span>
                                 <a href="login.php" class="btn btn-outline-dark btn-sm rounded-pill px-3">Pesan</a>
                             </div>
                         </div>
@@ -130,6 +130,77 @@ $established_year = 2018;
 
             <div class="text-center mt-5">
                 <a href="login.php" class="btn btn-pink px-5 py-3 shadow">Lihat Semua Menu Lengkap</a>
+            </div>
+        </div>
+    </section>
+
+    <?php
+$testimonials = [
+    [
+        "nama_produk" => "Paket Ayam Bakar",
+        "username" => "@susan_lia", // <--- Tambahan Username Pelanggan
+        "deskripsi" => "Ayam bakarnya beneran meresap sampai ke dalam! Manis gurihnya pas banget, lauk pauk pendampingnya juga lengkap dan segar. Sangat direkomendasikan!",
+        "rating" => 5,
+        "foto" => "img/ayambakar.png" 
+    ],
+    [
+        "nama_produk" => "RiceBowl",
+        "username" => "@rean_setiawan", // <--- Tambahan Username Pelanggan
+        "deskripsi" => "Dagingnya empuk banget dan saus teriyakinya berasa premium. Porsi pas untuk makan siang di kantor, kemasannya juga rapi dan higienis.",
+        "rating" => 4,
+        "foto" => "img/kentang.png"
+    ],
+    [
+        "nama_produk" => "Tumpeng Nusantara Spesial",
+        "username" => "@amalia_putri", // <--- Tambahan Username Pelanggan
+        "deskripsi" => "Pesan ini untuk acara syukuran keluarga, tampilannya sangat cantik dan estetik. Rasa nasi kuningnya gurih pulen, semua tamu undangan memujinya.",
+        "rating" => 5,
+        "foto" => "img/tumpeng.png"
+    ]
+];
+?>
+
+    <section id="testimoni" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="text-pink fw-bold text-uppercase small" style="letter-spacing: 2px;">Testimoni Pelanggan</span>
+                <h2 class="display-5 fw-bold mt-2">Apa Kata Mereka?</h2>
+                <div class="mx-auto mt-3" style="width: 80px; height: 3px; background-color: var(--soft-gold, #ffc107);"></div>
+            </div>
+
+            <div class="row g-4">
+                <?php foreach ($testimonials as $testi): ?>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center test-card">
+                        
+                        <div class="mx-auto mb-3 overflow-hidden rounded-circle shadow-sm" style="width: 90px; height: 90px; border: 3px solid #ffc107;">
+                            <img src="<?php echo $testi['foto']; ?>" alt="<?php echo $testi['nama_produk']; ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        
+                        <h5 class="fw-bold text-dark mb-0"><?php echo $testi['nama_produk']; ?></h5>
+                        
+                        <!-- MENAMPILKAN USERNAME PELANGGAN -->
+                        <p class="text-pink small mb-2" style="font-size: 0.85rem; font-weight: 600;"><?php echo $testi['username']; ?></p>
+                        
+                        <div class="text-warning mb-3">
+                            <?php 
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= $testi['rating']) {
+                                    echo '<span class="star-icon">★</span>';
+                                } else {
+                                    echo '<span class="star-icon-empty">☆</span>';
+                                }
+                            }
+                            ?>
+                        </div>
+                        
+                        <p class="card-text text-muted small fst-italic mb-0">
+                            "<?php echo $testi['deskripsi']; ?>"
+                        </p>
+                        
+                    </div>
+                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -182,6 +253,15 @@ $established_year = 2018;
                                 <form action="proses_testimoni.php" method="POST" enctype="multipart/form-data">
                                     <input type="hidden" name="jenis_form" value="testimoni">
                                     
+                                    <!-- TAMBAHAN: Input Username Testimoni -->
+                                    <div class="mb-3">
+                                        <label class="form-label fw-600">Username Anda</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white text-muted border-end-0">@</span>
+                                            <input type="text" name="username" class="form-control custom-input border-start-0 ps-0" placeholder="username" required>
+                                        </div>
+                                    </div>
+
                                     <div class="mb-3">
                                         <label class="form-label fw-600">Produk yang Dibeli</label>
                                         <select name="nama_produk" class="form-select custom-input" required>
@@ -231,6 +311,15 @@ $established_year = 2018;
                                 </div>
                                 <form action="proses_komplain.php" method="POST" enctype="multipart/form-data">
                                     <input type="hidden" name="jenis_form" value="komplain">
+
+                                    <!-- TAMBAHAN: Input Username Komplain -->
+                                    <div class="mb-3">
+                                        <label class="form-label fw-600">Username Anda</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white text-muted border-end-0">@</span>
+                                            <input type="text" name="username" class="form-control custom-input border-start-0 ps-0" placeholder="contoh: fika_qilah" required>
+                                        </div>
+                                    </div>
 
                                     <div class="mb-3">
                                         <label class="form-label fw-600">Nama Produk / Menu</label>
