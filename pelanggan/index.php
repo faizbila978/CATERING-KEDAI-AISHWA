@@ -3,8 +3,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$site_title = "Kedai Aishwa | Authentic Taste, Modern Presentation";
-$brand_name = "Kedai Aishwa";
+$site_title = "Catering Kedai Aishwa | Authentic Taste, Modern Presentation";
+$brand_name = "Catering Kedai Aishwa";
 $established_year = 2018;
 ?>
 
@@ -35,8 +35,10 @@ $established_year = 2018;
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item"><a class="nav-link mx-3" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link mx-3" href="#">Lihat Menu</a></li>
-                    <li class="nav-item"><a href="login.php" class="btn btn-pink ms-lg-3">Order Now</a></li>
+                    <li class="nav-item"><a class="nav-link mx-3" href="#menu">Lihat Menu</a></li>
+                    <li class="nav-item"><a class="nav-link mx-3" href="#testimoni">Testimoni</a></li>
+                    <li class="nav-item"><a class="nav-link mx-3" href="#kontak">Kontak</a></li>
+                    <li class="nav-item"><a href="login.php" class="btn btn-pink ms-lg-3">Pesan Sekarang</a></li>
                 </ul>
             </div>
         </div>
@@ -53,7 +55,6 @@ $established_year = 2018;
                     </p>
                     
                     <div class="d-flex gap-3 align-items-center">
-                        <a href="login.php" class="btn btn-pink shadow-lg">Lihat Katalog Menu</a>
                         <a href="status.php" class="btn btn-outline-dark shadow-sm">Lihat Pesanan</a>
                     </div>
                 </div>
@@ -78,7 +79,7 @@ $established_year = 2018;
             <div class="text-center mb-5">
                 <span class="text-pink fw-bold text-uppercase small" style="letter-spacing: 2px;">Pilihan Terbaik</span>
                 <h2 class="display-5 fw-bold mt-2">Menu Favorit Kami</h2>
-                <div class="mx-auto mt-3" style="width: 80px; height: 3px; background-color: var(--soft-gold);"></div>
+                <div class="mx-auto mt-3" style="width: 80px; height: 3px; background-color: var(--soft-gold, #ffc107);"></div>
             </div>
 
             <div class="row g-4">
@@ -135,30 +136,30 @@ $established_year = 2018;
     </section>
 
     <?php
-$testimonials = [
-    [
-        "nama_produk" => "Paket Ayam Bakar",
-        "username" => "@susan_lia", // <--- Tambahan Username Pelanggan
-        "deskripsi" => "Ayam bakarnya beneran meresap sampai ke dalam! Manis gurihnya pas banget, lauk pauk pendampingnya juga lengkap dan segar. Sangat direkomendasikan!",
-        "rating" => 5,
-        "foto" => "img/ayambakar.png" 
-    ],
-    [
-        "nama_produk" => "RiceBowl",
-        "username" => "@rean_setiawan", // <--- Tambahan Username Pelanggan
-        "deskripsi" => "Dagingnya empuk banget dan saus teriyakinya berasa premium. Porsi pas untuk makan siang di kantor, kemasannya juga rapi dan higienis.",
-        "rating" => 4,
-        "foto" => "img/kentang.png"
-    ],
-    [
-        "nama_produk" => "Tumpeng Nusantara Spesial",
-        "username" => "@amalia_putri", // <--- Tambahan Username Pelanggan
-        "deskripsi" => "Pesan ini untuk acara syukuran keluarga, tampilannya sangat cantik dan estetik. Rasa nasi kuningnya gurih pulen, semua tamu undangan memujinya.",
-        "rating" => 5,
-        "foto" => "img/tumpeng.png"
-    ]
-];
-?>
+    $testimonials = [
+        [
+            "nama_produk" => "Paket Ayam Bakar",
+            "username" => "@susan_lia",
+            "deskripsi" => "Ayam bakarnya beneran meresap sampai ke dalam! Manis gurihnya pas banget, lauk pauk pendampingnya juga lengkap dan segar. Sangat direkomendasikan!",
+            "rating" => 5,
+            "foto" => "img/ayambakar.png" 
+        ],
+        [
+            "nama_produk" => "RiceBowl",
+            "username" => "@rean_setiawan",
+            "deskripsi" => "Dagingnya empuk banget dan saus teriyakinya berasa premium. Porsi pas untuk makan siang di kantor, kemasannya juga rapi dan higienis.",
+            "rating" => 4,
+            "foto" => "img/kentang.png"
+        ],
+        [
+            "nama_produk" => "Tumpeng Nusantara Spesial",
+            "username" => "@amalia_putri",
+            "deskripsi" => "Pesan ini untuk acara syukuran keluarga, tampilannya sangat cantik dan estetik. Rasa nasi kuningnya gurih pulen, semua tamu undangan memujinya.",
+            "rating" => 5,
+            "foto" => "img/tumpeng.png"
+        ]
+    ];
+    ?>
 
     <section id="testimoni" class="py-5 bg-light">
         <div class="container">
@@ -179,7 +180,6 @@ $testimonials = [
                         
                         <h5 class="fw-bold text-dark mb-0"><?php echo $testi['nama_produk']; ?></h5>
                         
-                        <!-- MENAMPILKAN USERNAME PELANGGAN -->
                         <p class="text-pink small mb-2" style="font-size: 0.85rem; font-weight: 600;"><?php echo $testi['username']; ?></p>
                         
                         <div class="text-warning mb-3">
@@ -253,7 +253,6 @@ $testimonials = [
                                 <form action="proses_testimoni.php" method="POST" enctype="multipart/form-data">
                                     <input type="hidden" name="jenis_form" value="testimoni">
                                     
-                                    <!-- TAMBAHAN: Input Username Testimoni -->
                                     <div class="mb-3">
                                         <label class="form-label fw-600">Username Anda</label>
                                         <div class="input-group">
@@ -312,7 +311,6 @@ $testimonials = [
                                 <form action="proses_komplain.php" method="POST" enctype="multipart/form-data">
                                     <input type="hidden" name="jenis_form" value="komplain">
 
-                                    <!-- TAMBAHAN: Input Username Komplain -->
                                     <div class="mb-3">
                                         <label class="form-label fw-600">Username Anda</label>
                                         <div class="input-group">
@@ -364,6 +362,45 @@ $testimonials = [
             </div>
         </div>
     </section>
+
+    <!-- BAGIAN FOOTER KONTAK PENDEK & MINIMALIS (BERUBAH DI SINI) -->
+    <footer id="kontak" class="py-4 bg-pink text-white">
+        <div class="container">
+            <div class="row g-3 justify-content-between align-items-center text-center text-md-start">
+                
+                <!-- Kiri: Nama Brand Utama -->
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-1"><?php echo $brand_name; ?></h5>
+                    <p class="small mb-0 opacity-75">PREMIUM CATERING SERVICE</p>
+                </div>
+                
+                <!-- Kanan: Informasi Kontak Tanpa Kotak -->
+                <div class="col-md-8">
+                    <div class="row g-2 justify-content-md-end text-md-end">
+                        <div class="col-12 col-sm-auto px-3">
+                            <span class="me-1">📱</span> 
+                            <a href="https://wa.me/62895323107636" target="_blank" class="text-white text-decoration-none fw-semibold small">0895323107636</a>
+                        </div>
+                        <div class="col-12 col-sm-auto px-3 border-sm-start border-white-50">
+                            <span class="me-1">👥</span> 
+                            <span class="fw-semibold small">FB: Azwan Coker</span>
+                        </div>
+                        <div class="col-12 px-3 mt-1 text-md-end">
+                            <span class="me-1">📍</span> 
+                            <span class="small opacity-90" style="font-size: 0.85rem;">BLOK DESA, Rt.02/Rw.01 Desa Tanjungsari, Karangampel, Indramayu</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <hr class="my-3 border-white-50">
+            
+            <div class="text-center text-white-50" style="font-size: 0.8rem;">
+                &copy; <?php echo date("Y"); ?> <?php echo $brand_name; ?>
+            </div>
+        </div>
+    </footer>
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
