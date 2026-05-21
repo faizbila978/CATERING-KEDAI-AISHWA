@@ -1,0 +1,51 @@
+body{
+        font-family:'Plus Jakarta Sans', sans-serif;
+        background:#fff0f5;
+    }
+
+    .login-card{
+        width:950px;
+        border-radius:25px;
+    }
+
+    .bg-admin{
+        background:linear-gradient(135deg,#ff4f81,#ff85a2);
+    }
+
+    .text-maroon{
+        color:#ff4f81;
+    }
+
+    .custom-input{
+        height:55px;
+        border-radius:12px;
+        border:1px solid #ffd1dc;
+        padding-left:15px;
+        transition:.3s;
+    }
+
+    .custom-input:focus{
+        box-shadow:0 0 10px rgba(255,79,129,0.2);
+        border-color:#ff4f81;
+    }
+
+    .btn-admin{
+        background:#ff4f81;
+        color:white;
+        border:none;
+        border-radius:12px;
+        transition:.3s;
+    }
+
+    .btn-admin:hover{
+        background:#e63e6d;
+        color:white;
+    }
+
+    .card{
+        background:white;
+    }
+
+    a{
+        color:#ff4f81 !important;
+    }

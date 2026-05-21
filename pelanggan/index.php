@@ -55,7 +55,12 @@ $established_year = 2018;
                     </p>
                     
                     <div class="d-flex gap-3 align-items-center">
+<<<<<<< HEAD
                         <a href="status.php" class="btn btn-outline-dark shadow-sm">Lihat Pesanan</a>
+=======
+                        <a href="login.php" class="btn btn-pink shadow-lg">Lihat Katalog Menu</a>
+                        <a href="riwayat_pesanan.php" class="btn btn-outline-dark shadow-sm">Lihat Pesanan</a>
+>>>>>>> 31c84c9c3f5244392c93b68b80f73ba9bd8ed631
                     </div>
                 </div>
 
