@@ -128,21 +128,42 @@ $keyword = isset($_GET['search']) ? $_GET['search'] : '';
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg sticky-top py-3">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3 text-pink" href="index.php">Kedai Aishwa</a>
-            <div class="ms-auto d-flex align-items-center gap-3">
-                <div class="d-none d-md-block text-end">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">Selamat Datang,</small>
-                    <span class="fw-bold"><?php echo explode(' ', $_SESSION['nama'])[0]; ?></span>
-                </div>
-                <div class="vr mx-2 d-none d-md-block"></div>
-                <a href="logout.php" class="btn btn-sm btn-outline-danger px-3 rounded-pill" onclick="return confirm('Yakin ingin keluar?')">
-                    <i class="bi bi-box-arrow-right me-1"></i> Logout
-                </a>
-            </div>
+<nav class="navbar navbar-expand-lg fixed-top py-3" style="background: rgba(255, 255, 255, 0.9) !important; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05);">
+    <div class="container">
+        <a class="navbar-brand fw-bold fs-3 text-pink" href="index.php">Kedai Aishwa</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link mx-2 fw-semibold text-dark" href="index.php">
+                        <i class="bi bi-house-door me-1"></i> Home
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link mx-2 fw-semibold text-dark" href="riwayat_pesanan.php">
+                        <i class="bi bi-receipt me-1"></i> Riwayat Pesanan
+                    </a>
+                </li>
+
+                <li class="nav-item ms-lg-3 d-flex align-items-center gap-3 mt-3 mt-lg-0">
+                    <div class="d-none d-lg-block text-end lh-1">
+                        <small class="text-muted d-block" style="font-size: 0.7rem;">Selamat Datang,</small>
+                        <span class="fw-bold text-dark"><?php echo isset($_SESSION['nama']) ? explode(' ', $_SESSION['nama'])[0] : 'User'; ?></span>
+                    </div>
+                    
+                    <div class="vr mx-1 d-none d-lg-block text-secondary"></div>
+                    
+                    <a href="logout.php" class="btn btn-outline-danger rounded-pill px-3 shadow-sm" onclick="return confirm('Yakin ingin keluar?')">
+                        Logout
+                    </a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <main class="container py-5">
         <header class="mb-5">

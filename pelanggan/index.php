@@ -3,6 +3,28 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// --- LOGIKA MENANGKAP KIRIMAN FORM ---
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
+    // Jika yang dikirim adalah FORM TESTIMONI
+    if (isset($_POST['rating'])) {
+        // Tempatkan logika query INSERT INTO tabel_testimoni kamu di sini jika ada
+        
+        $_SESSION['notif_sukses'] = "Terima kasih! Testimoni kuliner Anda berhasil dikirim.";
+        header("Location: index.php#isi-testimoni");
+        exit();
+    }
+    
+    // Jika yang dikirim adalah FORM KOMPLAIN
+    if (isset($_POST['pesanan_id']) && !isset($_POST['rating'])) {
+        // Tempatkan logika query INSERT INTO tabel_komplain dan upload foto di sini jika ada
+        
+        $_SESSION['notif_sukses'] = "Komplain berhasil diajukan. Tim Kedai Aishwa akan segera memeriksa kendala Anda.";
+        header("Location: index.php#isi-testimoni");
+        exit();
+    }
+}
+
 $site_title = "Kedai Aishwa | Authentic Taste, Modern Presentation";
 $brand_name = "Kedai Aishwa";
 $established_year = 2018;
@@ -15,28 +37,46 @@ $established_year = 2018;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $site_title; ?></title>
     
-    <!-- Bootstrap & Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- CSS Utama Anda -->
     <link rel="stylesheet" href="Landing Page.css">
-    <!-- Hubungkan ke CSS Tambahan Form Testimoni & Komplain yang Baru Dipisah -->
-    <link rel="stylesheet" href="style_tambahan.css">
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg fixed-top py-3">
+    <nav class="navbar navbar-expand-lg fixed-top py-3" style="background: rgba(255, 255, 255, 0.9) !important; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05);">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-3 text-pink" href="#"><?php echo $brand_name; ?></a>
+            <a class="navbar-brand fw-bold fs-3 text-pink" href="index.php"><?php echo $brand_name; ?></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link mx-3" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link mx-3" href="#">Lihat Menu</a></li>
-                    <li class="nav-item"><a href="login.php" class="btn btn-pink ms-lg-3">Order Now</a></li>
+                    <li class="nav-item"><a class="nav-link mx-3 fw-semibold" href="index.php">Home</a></li>
+                    
+                    <?php if(isset($_SESSION['user_email'])): ?>
+                        <li class="nav-item"><a class="nav-link mx-3 fw-semibold" href="menu.php">Lihat Menu</a></li>
+                        
+                        <li class="nav-item ms-lg-3 d-flex align-items-center gap-3 mt-3 mt-lg-0">
+                            <div class="d-none d-lg-block text-end lh-1">
+                                <small class="text-muted d-block" style="font-size: 0.7rem;">Selamat Datang,</small>
+                                <span class="fw-bold text-dark"><?php echo isset($_SESSION['nama']) ? explode(' ', $_SESSION['nama'])[0] : 'User'; ?></span>
+                            </div>
+                            
+                            <div class="vr mx-1 d-none d-lg-block text-secondary"></div>
+                            
+                            <a href="menu.php" class="btn btn-pink rounded-pill px-4 shadow-sm">Menu Utama</a>
+                            <a href="logout.php" class="btn btn-outline-danger rounded-pill px-3 shadow-sm" onclick="return confirm('Yakin ingin keluar?')">
+                                Logout
+                            </a>
+                        </li>
+
+                    <?php else: ?>
+                        <li class="nav-item"><a class="nav-link mx-3 fw-semibold" href="login.php">Lihat Menu</a></li>
+                        <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                            <a href="login.php" class="btn btn-pink rounded-pill px-4 shadow-sm">Login / Order</a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
@@ -54,7 +94,7 @@ $established_year = 2018;
                     
                     <div class="d-flex gap-3 align-items-center">
                         <a href="login.php" class="btn btn-pink shadow-lg">Lihat Katalog Menu</a>
-                        <a href="riwayat_pesanan.php" class="btn btn-outline-dark shadow-sm">Lihat Pesanan</a>
+                        <a href="riwayat_pesanan.php" class="btn btn-outline-dark shadow-sm">Look Orders</a>
                     </div>
                 </div>
 
@@ -135,30 +175,30 @@ $established_year = 2018;
     </section>
 
     <?php
-$testimonials = [
-    [
-        "nama_produk" => "Paket Ayam Bakar",
-        "username" => "@susan_lia", // <--- Tambahan Username Pelanggan
-        "deskripsi" => "Ayam bakarnya beneran meresap sampai ke dalam! Manis gurihnya pas banget, lauk pauk pendampingnya juga lengkap dan segar. Sangat direkomendasikan!",
-        "rating" => 5,
-        "foto" => "img/ayambakar.png" 
-    ],
-    [
-        "nama_produk" => "RiceBowl",
-        "username" => "@rean_setiawan", // <--- Tambahan Username Pelanggan
-        "deskripsi" => "Dagingnya empuk banget dan saus teriyakinya berasa premium. Porsi pas untuk makan siang di kantor, kemasannya juga rapi dan higienis.",
-        "rating" => 4,
-        "foto" => "img/kentang.png"
-    ],
-    [
-        "nama_produk" => "Tumpeng Nusantara Spesial",
-        "username" => "@amalia_putri", // <--- Tambahan Username Pelanggan
-        "deskripsi" => "Pesan ini untuk acara syukuran keluarga, tampilannya sangat cantik dan estetik. Rasa nasi kuningnya gurih pulen, semua tamu undangan memujinya.",
-        "rating" => 5,
-        "foto" => "img/tumpeng.png"
-    ]
-];
-?>
+    $testimonials = [
+        [
+            "nama_produk" => "Paket Ayam Bakar",
+            "username" => "@susan_lia",
+            "deskripsi" => "Ayam bakarnya beneran meresap sampai ke dalam! Manis gurihnya pas banget, lauk pauk pendampingnya juga lengkap dan segar. Sangat direkomendasikan!",
+            "rating" => 5,
+            "foto" => "img/ayambakar.png" 
+        ],
+        [
+            "nama_produk" => "RiceBowl",
+            "username" => "@rean_setiawan",
+            "deskripsi" => "Dagingnya empuk banget dan saus teriyakinya berasa premium. Porsi pas untuk makan siang di kantor, kemasannya juga rapi dan higienis.",
+            "rating" => 4,
+            "foto" => "img/kentang.png"
+        ],
+        [
+            "nama_produk" => "Tumpeng Nusantara Spesial",
+            "username" => "@amalia_putri",
+            "deskripsi" => "Pesan ini untuk acara syukuran keluarga, tampilannya sangat cantik dan estetik. Rasa nasi kuningnya gurih pulen, semua tamu undangan memujinya.",
+            "rating" => 5,
+            "foto" => "img/tumpeng.png"
+        ]
+    ];
+    ?>
 
     <section id="testimoni" class="py-5 bg-light">
         <div class="container">
@@ -178,8 +218,6 @@ $testimonials = [
                         </div>
                         
                         <h5 class="fw-bold text-dark mb-0"><?php echo $testi['nama_produk']; ?></h5>
-                        
-                        <!-- MENAMPILKAN USERNAME PELANGGAN -->
                         <p class="text-pink small mb-2" style="font-size: 0.85rem; font-weight: 600;"><?php echo $testi['username']; ?></p>
                         
                         <div class="text-warning mb-3">
@@ -197,7 +235,6 @@ $testimonials = [
                         <p class="card-text text-muted small fst-italic mb-0">
                             "<?php echo $testi['deskripsi']; ?>"
                         </p>
-                        
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -205,159 +242,117 @@ $testimonials = [
         </div>
     </section>
 
-    <!-- Testimonial & Complaint Section -->
-    <section id="isi-testimoni" class="py-5 bg-light">
+    <section id="isi-testimoni" class="py-5 bg-light border-top">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                <div class="col-lg-8 col-md-10">
+                    <div class="card border-0 shadow-lg p-4 p-md-5" style="border-radius: 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
                         
-                        <!-- Notifikasi Sistem -->
-                        <?php if (isset($_SESSION['notif'])): ?>
-                            <div class="alert alert-<?php echo $_SESSION['notif']['status']; ?> alert-dismissible fade show rounded-3 mb-4" role="alert">
-                                <div class="d-flex align-items-center">
-                                    <span class="fs-5 me-2">
-                                        <?php echo ($_SESSION['notif']['status'] == 'success') ? '✅' : '❌'; ?>
+                        <?php if (isset($_SESSION['user_email'])): ?>
+                            <ul class="nav nav-pills custom-pills mb-4 justify-content-center gap-2" id="formTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active px-4 py-2 fw-bold" id="testi-tab" data-bs-toggle="tab" data-bs-target="#testi-pane" type="button" role="tab">
+                                        Beri Testimoni
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link px-4 py-2 fw-bold" id="komplain-tab" data-bs-toggle="tab" data-bs-target="#komplain-pane" type="button" role="tab">
+                                        Ajukan Komplain
+                                    </button>
+                                </li>
+                            </ul> 
+                            <p class="text-muted">Kritik, saran, maupun testimoni Anda sangat berharga untuk menjaga kualitas hidangan premium kami.</p>
+
+<?php if (isset($_SESSION['notif_sukses'])): ?>
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mx-auto mb-4 text-start" role="alert" style="max-width: 600px; background-color: #e6f6ec; color: #155724; border-radius: 15px;">
+        <div class="d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill me-2 flex-shrink-0" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </svg>
+            <div>
+                <strong>Berhasil!</strong> <?php echo $_SESSION['notif_sukses']; ?>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['notif_sukses']); // Hapus notifikasi setelah direfresh ?>
+<?php endif; ?>
+<ul class="nav nav-pills custom-pills mb-4 justify-content-center gap-2" id="formTab" role="tablist">
+                            <div class="tab-content" id="formTabContent">
+                                <div class="tab-pane fade show active" id="testi-pane" role="tabpanel" tabindex="0">
+                                    <div class="text-center mb-4">
+                                        <h3 class="fw-bold text-dark mb-1">Bagikan Pengalaman Anda</h3>
+
+                                        <p class="text-muted small">Ulasan Anda sangat berarti untuk meningkatkan kualitas pelayanan kami.</p>
+                                    </div>
+                                    <form action="" method="POST">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-600">Nama Lengkap</label>
+                                            <input type="text" name="nama" class="form-control custom-input" value="<?php echo htmlspecialchars($_SESSION['nama']); ?>" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-600">Rating Kepuasan</label>
+                                            <select name="rating" class="form-select custom-input" required>
+                                                <option value="" disabled selected>Pilih Bintang...</option>
+                                                <option value="5">⭐⭐⭐⭐⭐ Sangat Puas</option>
+                                                <option value="4">⭐⭐⭐⭐ Puas</option>
+                                                <option value="3">⭐⭐⭐ Cukup</option>
+                                                <option value="2">⭐⭐ Kurang Puas</option>
+                                                <option value="1">⭐ Kecewa</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label fw-600">Pesan Testimoni</label>
+                                            <textarea name="pesan" class="form-control custom-input" rows="4" placeholder="Tuliskan kesan pesan Anda terhadap hidangan dan pelayanan kami..." required></textarea>
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-pink py-3 fw-bold shadow-sm">Kirim Testimoni Juara</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane fade" id="komplain-pane" role="tabpanel" tabindex="0">
+                                    <div class="text-center mb-4">
+                                        <h3 class="fw-bold text-dark mb-1">Pusat Bantuan & Komplain</h3>
+                                        <p class="text-muted small">Ada kendala dengan pesanan Anda? Laporkan di sini, kami siap membantu.</p>
+                                    </div>
+                                    <form action="" method="POST" enctype="multipart/form-data">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-600">ID Pesanan (Invoice)</label>
+                                            <input type="text" name="pesanan_id" class="form-control custom-input" placeholder="Contoh: ORD-20231005" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-600">Deskripsi Masalah / Komplain</label>
+                                            <textarea name="deskripsi" class="form-control custom-input" rows="4" placeholder="Mohon jelaskan secara detail kendala atau kekurangan pesanan yang Anda terima..." required></textarea>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label fw-600">Foto Bukti Hidangan</label>
+                                            <input type="file" name="foto_produk" class="form-control custom-input" accept="image/*" required>
+                                            <div class="form-text">Wajib unggah foto kondisi produk sebagai bukti (Format: JPG/PNG).</div>
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-dark py-3 fw-bold shadow-sm">Kirim Komplain Masukan</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        <?php else: ?>
+                            <div class="text-center py-5">
+                                <div class="mb-4">
+                                    <span class="p-3 bg-light rounded-circle d-inline-block shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="#ad2d5e" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                                        </svg>
                                     </span>
-                                    <div>
-                                        <?php echo $_SESSION['notif']['pesan']; ?>
-                                    </div>
                                 </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <h4 class="fw-bold text-dark mb-2">Ingin Memberikan Ulasan?</h4>
+                                <p class="text-muted mx-auto" style="max-width: 420px;">Silakan masuk ke akun Anda terlebih dahulu untuk membagikan testimoni kuliner atau mengajukan komplain ke Kedai Aishwa.</p>
+                                <a href="login.php" class="btn btn-pink rounded-pill px-5 py-2.5 mt-3 shadow-sm fw-bold">
+                                    Login Sekarang
+                                </a>
                             </div>
-                            <?php unset($_SESSION['notif']); ?>
                         <?php endif; ?>
-
-                        <!-- Pilihan Navigasi Tab Feedback -->
-                        <ul class="nav nav-tabs nav-justified border-0 mb-4" id="feedbackTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active fs-5 border-0 bg-transparent pb-3" id="testi-tab" data-bs-toggle="tab" data-bs-target="#testi-pane" type="button" role="tab" aria-controls="testi-pane" aria-selected="true">
-                                    ✍️ Kirim Testimoni
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link fs-5 border-0 bg-transparent pb-3" id="komplain-tab" data-bs-toggle="tab" data-bs-target="#komplain-pane" type="button" role="tab" aria-controls="komplain-pane" aria-selected="false">
-                                    ⚠️ Kirim Komplain
-                                </button>
-                            </li>
-                        </ul>
-
-                        <!-- Tab Content / Formulir -->
-                        <div class="tab-content" id="feedbackTabContent">
-                            
-                            <!-- FORM TESTIMONI -->
-                            <div class="tab-pane fade show active" id="testi-pane" role="tabpanel" aria-labelledby="testi-tab" tabindex="0">
-                                <div class="text-center mb-4">
-                                    <p class="text-muted">Bagikan kepuasan Anda setelah menikmati hidangan kami</p>
-                                </div>
-                                <form action="proses_testimoni.php" method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="jenis_form" value="testimoni">
-                                    
-                                    <!-- TAMBAHAN: Input Username Testimoni -->
-                                    <div class="mb-3">
-                                        <label class="form-label fw-600">Username Anda</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-white text-muted border-end-0">@</span>
-                                            <input type="text" name="username" class="form-control custom-input border-start-0 ps-0" placeholder="username" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-600">Produk yang Dibeli</label>
-                                        <select name="nama_produk" class="form-select custom-input" required>
-                                            <option value="" selected disabled>Pilih Menu...</option>
-                                            <option value="Paket Ayam Goreng">Paket Ayam Goreng</option>
-                                            <option value="Paket Ayam Bakar">Paket Ayam Bakar</option>
-                                            <option value="Paket Ayam Geprek">Paket Ayam Geprek</option>
-                                            <option value="Rice Bowl">Rice Bowl</option>
-                                            <option value="Tumpeng Nusantara">Tumpeng Nusantara</option>
-                                            <option value="Tumpeng Nusantara Spesial">Tumpeng Nusantara Spesial</option>
-                                            <option value="Tumpeng Nusantara Premium">Tumpeng Nusantara Premium</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-600">Rating Bintang</label>
-                                        <select name="rating" class="form-select custom-input" required>
-                                            <option value="5">⭐⭐⭐⭐⭐ (Sangat Puas)</option>
-                                            <option value="4">⭐⭐⭐⭐ (Puas)</option>
-                                            <option value="3">⭐⭐⭐ (Cukup)</option>
-                                            <option value="2">⭐⭐ (Kurang)</option>
-                                            <option value="1">⭐ (Buruk)</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-600">Ulasan / Deskripsi</label>
-                                        <textarea name="deskripsi" class="form-control custom-input" rows="4" placeholder="Ceritakan rasa dan kualitas pelayanan kami..." required></textarea>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label class="form-label fw-600">Foto Hidangan</label>
-                                        <input type="file" name="foto_produk" class="form-control custom-input" accept="image/*" required>
-                                        <div class="form-text">Unggah foto produk yang Anda terima (Format: JPG/PNG).</div>
-                                    </div>
-
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-pink py-3 fw-bold shadow-sm">Kirim Testimoni Sekarang</button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <!-- FORM KOMPLAIN -->
-                            <div class="tab-pane fade" id="komplain-pane" role="tabpanel" aria-labelledby="komplain-tab" tabindex="0">
-                                <div class="text-center mb-4">
-                                    <p class="text-muted">Ada kendala dengan pesanan Anda? Beritahu kami agar kami bisa segera memperbaikinya</p>
-                                </div>
-                                <form action="proses_komplain.php" method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="jenis_form" value="komplain">
-
-                                    <!-- TAMBAHAN: Input Username Komplain -->
-                                    <div class="mb-3">
-                                        <label class="form-label fw-600">Username Anda</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-white text-muted border-end-0">@</span>
-                                            <input type="text" name="username" class="form-control custom-input border-start-0 ps-0" placeholder="contoh: fika_qilah" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-600">Nama Produk / Menu</label>
-                                        <select name="nama_produk" class="form-select custom-input" required>
-                                            <option value="" selected disabled>Pilih Menu yang Bermasalah...</option>
-                                            <option value="Paket Ayam Goreng">Paket Ayam Goreng</option>
-                                            <option value="Paket Ayam Bakar">Paket Ayam Bakar</option>
-                                            <option value="Paket Ayam Geprek">Paket Ayam Geprek</option>
-                                            <option value="Rice Bowl">Rice Bowl</option>
-                                            <option value="Tumpeng Nusantara">Tumpeng Nusantara</option>
-                                            <option value="Tumpeng Nusantara Spesial">Tumpeng Nusantara Spesial</option>
-                                            <option value="Tumpeng Nusantara Premium">Tumpeng Nusantara Premium</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-600">Tanggal Acara (Saat Pembelian)</label>
-                                        <input type="date" name="tanggal_acara" class="form-control custom-input" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-600">Deskripsi Masalah / Komplain</label>
-                                        <textarea name="deskripsi" class="form-control custom-input" rows="4" placeholder="Mohon jelaskan secara detail kendala atau kekurangan pesanan yang Anda terima..." required></textarea>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label class="form-label fw-600">Foto Bukti Hidangan</label>
-                                        <input type="file" name="foto_produk" class="form-control custom-input" accept="image/*" required>
-                                        <div class="form-text">Wajib unggah foto kondisi produk sebagai bukti (Format: JPG/PNG).</div>
-                                    </div>
-
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-dark py-3 fw-bold shadow-sm">Kirim Komplain Masukan</button>
-                                    </div>
-                                </form>
-                            </div>
-
-                        </div> <!-- End Tab Content -->
 
                     </div>
                 </div>
@@ -365,7 +360,6 @@ $testimonials = [
         </div>
     </section>
 
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
