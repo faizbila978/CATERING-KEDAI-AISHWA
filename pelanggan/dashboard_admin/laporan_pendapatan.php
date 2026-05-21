@@ -3,57 +3,66 @@ include('../koneksi.php');
 
 if (!isset($koneksi) && isset($conn)) { $koneksi = $conn; }
 
-$bulan_pilihan = isset($_GET['bulan']) ? $_GET['bulan'] : date('m');
-$tahun_pilihan = isset($_GET['tahun']) ? $_GET['tahun'] : date('Y');
-$status_filter = isset($_GET['status_pembayaran']) ? $_GET['status_pembayaran'] : 'Selesai';
+// --- LOGIKA PROSES STATUS ---
+if (isset($_GET['action']) && $_GET['action'] == 'update_status' && isset($_GET['id'])) {
+    $id_bayar = $_GET['id'];
+    $tgl_sekarang = date('Y-m-d');
+    $waktu_sekarang = date('H:i:s');
 
-$bulan_nama = [
-    '01'=>'Semua Bulan', '02'=>'Januari', '03'=>'Februari', '04'=>'Maret', '05'=>'April', '06'=>'Mei',
-    '07'=>'Juni', '08'=>'Juli', '09'=>'Agustus', '10'=>'September', '11'=>'Oktober', '12'=>'November', '13'=>'Desember'
-];
+    // Update status menjadi Selesai
+    $update = mysqli_query($koneksi, "UPDATE pembayaran SET 
+        status_pembayaran = 'Selesai', 
+        tanggal_pembayaran = '$tgl_sekarang',
+        waktu_pembayaran = '$waktu_sekarang'
+        WHERE pembayaran_id = '$id_bayar'");
 
-// Logika Filter WHERE
-if ($bulan_pilihan == '01') {
-    $where_query = "AND YEAR(tanggal_pembayaran) = '$tahun_pilihan'";
-} else {
-    // Penyesuaian index karena Januari dimulai dari 02 di array $bulan_nama
-    $bulan_sql = intval($bulan_pilihan) - 1;
-    $where_query = "AND MONTH(tanggal_pembayaran) = '$bulan_sql' AND YEAR(tanggal_pembayaran) = '$tahun_pilihan'";
-}
-
-// 1. Query Statistik Utama
-$query_total = mysqli_query($koneksi, "SELECT SUM(total_pembayaran) as total FROM pembayaran 
-    WHERE status_pembayaran = '$status_filter' $where_query");
-$row_total = mysqli_fetch_assoc($query_total);
-$total_pendapatan = $row_total['total'] ?? 0;
-
-$query_pesanan_count = mysqli_query($koneksi, "SELECT COUNT(*) as jml FROM pembayaran 
-    WHERE status_pembayaran = '$status_filter' $where_query");
-$row_pesanan_count = mysqli_fetch_assoc($query_pesanan_count);
-$jumlah_pesanan = $row_pesanan_count['jml'] ?? 0;
-
-$rata_rata = ($jumlah_pesanan > 0) ? ($total_pendapatan / $jumlah_pesanan) : 0;
-
-// 2. Data untuk Diagram (Jan - Des)
-$labels_bulan_chart = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-$data_bulanan = array_fill(0, 12, 0);
-
-$query_chart = mysqli_query($koneksi, "SELECT MONTH(tanggal_pembayaran) as bln, SUM(total_pembayaran) as total 
-    FROM pembayaran WHERE status_pembayaran = 'Selesai' AND YEAR(tanggal_pembayaran) = '$tahun_pilihan'
-    GROUP BY MONTH(tanggal_pembayaran) ORDER BY bln ASC");
-
-while($r = mysqli_fetch_assoc($query_chart)){
-    $index = (int)$r['bln'] - 1; 
-    if($index >= 0 && $index < 12) {
-        $data_bulanan[$index] = $r['total'];
+    if ($update) {
+        echo "<script>alert('Status Berhasil Diperbarui!'); window.location.href='laporan_pendapatan.php';</script>";
     }
 }
 
-// 3. Query History Tabel
-$query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayaran_id, p.total_pembayaran, p.metode_pembayaran, p.status_pembayaran, ps.status_pesanan 
-    FROM pembayaran p JOIN pesanan ps ON p.pesanan_id = ps.pesanan_id 
-    WHERE p.status_pembayaran = '$status_filter' $where_query
-    ORDER BY p.tanggal_pembayaran DESC");
+// 1. Ambil Parameter Filter
+$bulan_pilihan = isset($_GET['bulan']) ? $_GET['bulan'] : date('m');
+$tahun_pilihan = isset($_GET['tahun']) ? $_GET['tahun'] : date('Y');
+
+$bulan_nama = [
+    'all' => 'Semua Bulan', '01' => 'Januari', '02' => 'Februari', '03' => 'Maret',
+    '04' => 'April', '05' => 'Mei', '06' => 'Juni', '07' => 'Juli',
+    '08' => 'Agustus', '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
+];
+
+// 2. Query untuk Statistik Box (Hanya Selesai)
+$where_stats = ($bulan_pilihan == 'all') 
+    ? "AND YEAR(p.tanggal_pembayaran) = '$tahun_pilihan'" 
+    : "AND MONTH(p.tanggal_pembayaran) = '$bulan_pilihan' AND YEAR(p.tanggal_pembayaran) = '$tahun_pilihan'";
+
+$query_stats = mysqli_query($koneksi, "SELECT SUM(p.total_pembayaran) as total, COUNT(p.pembayaran_id) as jml 
+    FROM pembayaran p 
+    WHERE p.status_pembayaran = 'Selesai' $where_stats");
+$res_stats = mysqli_fetch_assoc($query_stats);
+
+$total_pendapatan = $res_stats['total'] ?? 0;
+$jumlah_transaksi = $res_stats['jml'] ?? 0;
+$rata_rata = ($jumlah_transaksi > 0) ? ($total_pendapatan / $jumlah_transaksi) : 0;
+
+// 3. Query Chart
+$data_chart = array_fill(0, 12, 0);
+$query_chart = mysqli_query($koneksi, "SELECT MONTH(tanggal_pembayaran) as bln, SUM(total_pembayaran) as total 
+    FROM pembayaran 
+    WHERE status_pembayaran = 'Selesai' AND YEAR(tanggal_pembayaran) = '$tahun_pilihan'
+    GROUP BY MONTH(tanggal_pembayaran)");
+
+while($rc = mysqli_fetch_assoc($query_chart)){
+    $data_chart[(int)$rc['bln'] - 1] = (float)$rc['total'];
+}
+
+// 4. Query Riwayat Transaksi (HANYA STATUS SELESAI)
+// Bagian ini telah diperbaiki untuk menyaring pesanan yang belum bayar
+$query_history = mysqli_query($koneksi, "SELECT p.*, ps.tanggal_acara, ps.alamat 
+    FROM pembayaran p 
+    JOIN pesanan ps ON p.pesanan_id = ps.pesanan_id 
+    WHERE p.status_pembayaran = 'Selesai' $where_stats
+    ORDER BY p.tanggal_pembayaran DESC"); 
 ?>
 
 <!DOCTYPE html>
@@ -64,9 +73,6 @@ $query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayar
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .status-oval { border-radius: 9999px; padding: 4px 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; border: 1px solid; min-width: 90px; text-align: center; display: inline-block; }
-    </style>
 </head>
 <body class="bg-[#D1D5DB] font-sans flex">
     <?php include('sidebar.php'); ?>
@@ -81,7 +87,7 @@ $query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayar
             </div>
             <div class="flex items-center gap-4">
                 <div class="bg-pink-600 text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest">
-                    <i class="fas fa-receipt mr-2"></i> <?= $jumlah_pesanan ?> Transaksi
+                    <i class="fas fa-receipt mr-2"></i> <?= $jumlah_transaksi ?> Transaksi Selesai
                 </div>
                 <button onclick="window.print()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 shadow-md">
                     <i class="fas fa-print mr-2"></i> Cetak
@@ -115,16 +121,15 @@ $query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayar
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2 bg-white rounded-2xl shadow-xl overflow-hidden border">
                     <div class="p-5 border-b bg-gray-50/50 flex justify-between items-center">
-                        <h2 class="font-bold text-slate-800">Riwayat Transaksi</h2>
+                        <h2 class="font-bold text-slate-800">Riwayat Transaksi (Selesai)</h2>
                         <span class="text-[10px] text-slate-400 font-bold uppercase"><?= $bulan_nama[$bulan_pilihan] ?> <?= $tahun_pilihan ?></span>
                     </div>
                     <table class="w-full text-left">
                         <thead class="bg-slate-50 text-slate-400 text-[10px] uppercase font-bold">
                             <tr>
-                                <th class="px-6 py-4 text-center">Tanggal</th>
-                                <th class="px-6 py-4 text-center">ID Bayar</th>
-                                <th class="px-6 py-4 text-center">Tipe</th>
-                                <th class="px-6 py-4 text-center">Status</th>
+                                <th class="px-6 py-4 text-center">Tgl Bayar</th>
+                                <th class="px-6 py-4">Detail Pesanan</th>
+                                <th class="px-6 py-4 text-center">Metode</th>
                                 <th class="px-6 py-4 text-right">Total</th>
                             </tr>
                         </thead>
@@ -133,16 +138,20 @@ $query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayar
                                 <?php while($row = mysqli_fetch_assoc($query_history)) : ?>
                                 <tr class="hover:bg-slate-50 transition">
                                     <td class="px-6 py-4 text-center"><?= date('d/m/Y', strtotime($row['tanggal_pembayaran'])) ?></td>
-                                    <td class="px-6 py-4 text-center font-mono font-bold">#PAY-<?= $row['pembayaran_id'] ?></td>
-                                    <td class="px-6 py-4 text-center"><span class="text-blue-600 font-bold"><?= $row['metode_pembayaran'] ?></span></td>
-                                    <td class="px-6 py-4 text-center">
-                                        <span class="status-oval border-green-500 text-green-600 bg-green-50 text-[9px]"><?= $row['status_pembayaran'] ?></span>
+                                    <td class="px-6 py-4">
+                                        <div class="font-bold">#PAY-<?= $row['pembayaran_id'] ?></div>
+                                        <div class="text-[10px] text-slate-400"><?= substr($row['alamat'], 0, 30) ?>...</div>
                                     </td>
-                                    <td class="px-6 py-4 text-right font-bold text-slate-900">Rp <?= number_format($row['total_pembayaran'], 0, ',', '.') ?></td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="px-2 py-1 bg-gray-100 rounded uppercase font-semibold text-[9px]"><?= $row['metode_pembayaran'] ?></span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right font-bold text-slate-900">
+                                        Rp <?= number_format($row['total_pembayaran'], 0, ',', '.') ?>
+                                    </td>
                                 </tr>
                                 <?php endwhile; ?>
                             <?php else : ?>
-                                <tr><td colspan="5" class="px-6 py-10 text-center text-slate-400 italic">Tidak ada data transaksi.</td></tr>
+                                <tr><td colspan="4" class="px-6 py-10 text-center text-slate-400 italic">Tidak ada data transaksi selesai ditemukan.</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
@@ -152,11 +161,6 @@ $query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayar
                     <h2 class="font-bold text-slate-800 mb-6 italic underline decoration-pink-500">Tren Pendapatan Bulanan</h2>
                     <div class="flex-1 flex items-center">
                         <canvas id="incomeChart"></canvas>
-                    </div>
-                    <div class="mt-6 p-4 bg-slate-50 rounded-lg">
-                        <p class="text-[10px] text-slate-500 leading-relaxed italic">
-                            * Grafik menampilkan perbandingan total pendapatan dari Januari sampai Desember pada tahun <strong><?= $tahun_pilihan ?></strong>.
-                        </p>
                     </div>
                 </div>
             </div>
@@ -168,14 +172,13 @@ $query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayar
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: <?= json_encode($labels_bulan_chart) ?>,
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
                 datasets: [{
                     label: 'Pendapatan (Rp)',
-                    data: <?= json_encode($data_bulanan) ?>,
+                    data: <?= json_encode($data_chart) ?>,
                     backgroundColor: 'rgba(219, 39, 119, 0.1)',
                     borderColor: 'rgb(219, 39, 119)',
                     borderWidth: 3,
-                    pointBackgroundColor: 'rgb(219, 39, 119)',
                     tension: 0.4,
                     fill: true
                 }]
@@ -186,15 +189,8 @@ $query_history = mysqli_query($koneksi, "SELECT p.tanggal_pembayaran, p.pembayar
                 scales: {
                     y: { 
                         beginAtZero: true, 
-                        ticks: { 
-                            font: { size: 9 },
-                            callback: function(value) { return 'Rp ' + value.toLocaleString(); }
-                        } 
-                    },
-                    x: { ticks: { font: { size: 8 } } }
-                },
-                plugins: {
-                    legend: { display: false }
+                        ticks: { callback: function(value) { return 'Rp ' + value.toLocaleString(); } } 
+                    }
                 }
             }
         });

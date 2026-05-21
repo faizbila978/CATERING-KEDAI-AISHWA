@@ -10,7 +10,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 // Mengambil seluruh data komplain masuk (Terbaru di atas)
 $query = "SELECT * FROM komplain ORDER BY waktu_masuk DESC";
-$result = mysqli_query($koneksi, $query);
+$result = mysqli_query($conn, $query);
 ?>
 
 <!DOCTYPE html>

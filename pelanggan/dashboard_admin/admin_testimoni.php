@@ -10,7 +10,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 
 // Ambil data testimoni dari database (Terbaru berada di paling atas)
 $query = "SELECT * FROM testimoni ORDER BY waktu_masuk DESC";
-$result = mysqli_query($koneksi, $query);
+$result = mysqli_query($conn, $query);
 ?>
 
 <!DOCTYPE html>

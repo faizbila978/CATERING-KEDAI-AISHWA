@@ -241,7 +241,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         if ($status_dp == 'Selesai') { $tipe_pembayaran = 'DP (50%)'; $badge_class = 'badge-dp'; }
                                         elseif ($payment_status == 'Selesai') { $tipe_pembayaran = 'FULL (100%)'; $badge_class = 'badge-full'; }
 
-                                        // ================= LOGIKA STATUS PESANAN (SESUAI INSTRUKSI) =================
+                                        // ================= LOGIKA STATUS PESANAN (REVISI KONFIRMASI) =================
                                         $status_db = $pesanan['status_pesanan'];
                                         $next_status = '';
                                         $btn_text = '';
@@ -255,13 +255,14 @@ while ($row = mysqli_fetch_assoc($result)) {
                                                 $btn_class = 'bg-red-100 text-red-700 border-red-300 cursor-not-allowed opacity-75';
                                                 $clickable = false;
                                             } else {
+                                                // REVISI: Bisa klik untuk konfirmasi pembayaran manual ke Pending
                                                 $btn_text = 'Menunggu Bayar';
-                                                $btn_class = 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-red-100 hover:text-red-700 hover:border-red-400';
-                                                $next_status = 'Dibatalkan';
-                                                $confirm_msg = 'Pelanggan belum membayar. Batalkan pesanan ini?';
+                                                $btn_class = 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-yellow-100 hover:text-yellow-700 hover:border-yellow-400';
+                                                $next_status = 'Pending';
+                                                $confirm_msg = 'Konfirmasi pembayaran telah diterima? Status akan berubah menjadi PENDING.';
                                             }
                                         } else {
-                                            // JIKA SUDAH DIBAYAR (Otomatis alur admin)
+                                            // JIKA SUDAH DIBAYAR (Alur Admin Sesuai Instruksi)
                                             if (empty($status_db) || $status_db === 'Menunggu Bayar' || $status_db === 'Pending') {
                                                 $btn_text = 'Pending';
                                                 $btn_class = 'bg-yellow-100 text-yellow-800 border-yellow-300 hover:bg-blue-100 hover:text-blue-700 hover:border-blue-400';
