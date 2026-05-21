@@ -3,13 +3,19 @@ session_start();
 include 'koneksi.php';
 
 // Pastikan user sudah login
+// Pastikan user sudah login
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 
+// Tangkap ID pesanan dari URL jika ada, jika tidak gunakan dari session
+if (isset($_GET['id'])) {
+    $_SESSION['pesanan_id'] = mysqli_real_escape_string($conn, $_GET['id']);
+}
+
 if (!isset($_SESSION['pesanan_id'])) {
-    header('Location: formulir.php');
+    header('Location: riwayat_pesanan.php');
     exit();
 }
 
@@ -90,125 +96,7 @@ $status_dp = $pembayaran['status_dp'] ?? 'Belum Bayar';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        :root {
-    --primary-pink: #ad2d5e;
-    --primary-hover: #8a244b;
-    --soft-pink: #fdf2f6;
-    --text-dark: #2d2d2d;
-}
-
-body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-    color: var(--text-dark);
-}
-
-        .card-custom {
-            border: none;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-        }
-
-        .status-badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            display: inline-block;
-        }
-
-        .status-pending {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-success {
-            background-color: #DCFCE7;
-            color: #166534;
-        }
-
-        .timeline {
-            position: relative;
-        }
-
-        .timeline-item {
-            display: flex;
-            margin-bottom: 24px;
-            position: relative;
-        }
-
-        .timeline-item.completed .timeline-marker {
-            background-color: #10B981;
-            color: white;
-        }
-
-        .timeline-item.pending .timeline-marker {
-            background-color: var(--primary-pink);
-            color: white;
-        }
-
-        .timeline-marker {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 16px;
-            flex-shrink: 0;
-        }
-
-        .timeline-content h6 {
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        .payment-method-badge {
-            background-color: var(--primary-pink);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .btn-pink {
-            background-color: var(--primary-pink);
-            color: white;
-            border: none;
-            padding: 12px 32px;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-pink:hover {
-            background-color: var(--primary-hover);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .payment-info {
-            background-color: var(--soft-pink);
-            border-left: 4px solid var(--primary-pink);
-            padding: 16px;
-            border-radius: 8px;
-        }
-
-        .success-icon {
-            font-size: 64px;
-            color: #10B981;
-            margin-bottom: 16px;
-        }
-
-        .highlight-text {
-            color: var(--primary-pink);
-            font-weight: 600;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="Status.php">
 </head>
 <body>
 
@@ -376,9 +264,18 @@ body {
             </div>
 
             <!-- BUTTONS -->
-            <div class="d-grid gap-2">
-                <a href="menu.php" class="btn btn-pink">
-                    <i class="bi bi-arrow-left me-2"></i> Kembali ke Menu
+            <div class="d-grid gap-2 mt-4">
+                <?php 
+                // Fitur Edit Pesanan muncul HANYA JIKA pesanan belum dikonfirmasi admin atau belum dikirim
+                if ($pesanan['status_pesanan'] != 'Dikirim' && $pesanan['status_pesanan'] != 'Diproses' && !$is_shipped): 
+                ?>
+                    <a href="edit_pesanan.php?id=<?php echo $pesanan_id; ?>" class="btn btn-warning fw-bold text-white mb-2 py-2" style="border-radius: 25px;">
+                        <i class="bi bi-pencil-square me-2"></i> Edit Detail Pesanan
+                    </a>
+                <?php endif; ?>
+                
+                <a href="riwayat_pesanan.php" class="btn btn-pink">
+                    <i class="bi bi-arrow-left me-2"></i> Kembali ke Pesanan Saya
                 </a>
             </div>
 
