@@ -38,98 +38,14 @@ $dp_rekomendasi = $total_pesanan * 0.5; // 50% DP
     <title>Metode Pembayaran - Kedai Aishwa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-pink: #ad2d5e;
-            --primary-hover: #8a244b;
-            --soft-pink: #fdf2f6;
-            --text-dark: #2d2d2d;
-        }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #fcfcfc;
-            color: var(--text-dark);
-        }
-
-        .btn-pink { 
-            background-color: var(--primary-pink); 
-            color: white; 
-            border: none; 
-            border-radius: 50px;
-            font-weight: 700;
-            transition: 0.3s;
-        }
-        
-        .btn-pink:hover { 
-            background-color: var(--primary-hover); 
-            color: white; 
-            transform: translateY(-2px);
-        }
-
-        .payment-option {
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-            border: 2px solid #eee; 
-            background: white;
-        }
-        
-        .payment-option:hover { 
-            border-color: var(--primary-pink) !important; 
-            transform: translateY(-3px);
-        }
-        
-        .payment-option.selected { 
-            border-color: var(--primary-pink) !important; 
-            background-color: var(--soft-pink); 
-        }
-
-        .status-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        
-        .status-belum {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
-        
-        .status-selesai {
-            background-color: #dcfce7;
-            color: #15803d;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .tab-button {
-            cursor: pointer;
-            padding: 1rem;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-
-        .tab-button.active {
-            border-bottom-color: var(--primary-pink);
-            color: var(--primary-pink);
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="payment.css">
 </head>
 <body>
 
 <div class="container mx-auto px-4 py-8 max-w-7xl">
-    <a href="formulir.php" class="text-gray-600 hover:text-gray-800 mb-6 inline-flex items-center">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali ke Detail Pesanan
-    </a>
+    <a href="formulir.php?pesanan_id=<?php echo $pesanan_id; ?>" class="text-gray-600 hover:text-gray-800 mb-6 inline-flex items-center">
+    <i class="fas fa-arrow-left mr-2"></i> Kembali ke Detail Pesanan
+</a>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Konten Utama -->

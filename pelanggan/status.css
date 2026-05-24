@@ -1,14 +1,18 @@
 :root {
-    --maroon: #ad2d5e;
-    --soft-pink: #fdf2f6;
+    --pink-primary: #ad2d5e;       /* Diubah ke Maroon/Pink gelap estetik seperti formulir */
+    --pink-hover: #8a244b;         /* Warna hover maroon yang lebih pekat */
+    --soft-pink: #fdf2f4;          /* Warna background soft maroon yang sangat lembut */
+    --gray-light: #e0e0e0;         /* Warna abu-abu untuk step yang belum aktif */
 }
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: #fcfcfc;
+    color: #333333;
 }
 
-.text-maroon { color: var(--maroon); }
+/* Utilitas Warna Baru */
+.text-pink { color: var(--pink-primary); }
 .bg-soft-pink { background-color: var(--soft-pink); }
 
 .order-track {
@@ -31,50 +35,111 @@ body {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: #e0e0e0;
+    background: var(--gray-light);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 14px;
     z-index: 2;
+    transition: all 0.3s ease;
 }
 
 .order-track-status-line {
     width: 2px;
     height: 100%;
-    background: #e0e0e0;
+    background: var(--gray-light);
 }
 
-/* Logic Warna Status */
+/* Sembunyikan garis vertikal pada step terakhir agar tidak tembus ke bawah */
+.order-track-step:last-child .order-track-status-line {
+    display: none;
+}
+
+/* LOGIKA WARNA TIMELINE STATUS (PINK MAROON) */
+/* 1. Status Selesai (Completed) */
 .completed .order-track-status-dot {
-    background: var(--maroon);
+    background: var(--pink-primary);
 }
 .completed .order-track-status-line {
-    background: var(--maroon);
+    background: var(--pink-primary);
 }
 
+/* 2. Status Aktif/Sedang Berjalan (Active) */
 .active .order-track-status-dot {
-    background: var(--maroon);
+    background: var(--pink-primary);
     box-shadow: 0 0 0 5px var(--soft-pink);
+}
+.active .order-track-status-line {
+    background: var(--gray-light); /* Garis ke bawahnya tetap abu-abu sebelum selesai */
 }
 
 .order-track-text-stat {
     font-size: 16px;
+    font-weight: 600;
 }
 
-.btn-soft-maroon {
+/* TOMBOL-TOMBOL KUSTOM (KEDAI AISHWA) */
+/* Tombol Utama Pink Solid */
+.btn-pink {
+    background-color: var(--pink-primary);
+    color: white;
+    font-weight: 600;
+    border-radius: 25px;
+    padding: 8px 20px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-pink:hover {
+    background-color: var(--pink-hover);
+    color: white;
+    box-shadow: 0 4px 12px rgba(173, 45, 94, 0.2);
+}
+
+/* Tombol Soft Pink (Soft Maroon Lama) */
+.btn-soft-pink {
     background-color: var(--soft-pink);
+    color: var(--pink-primary);
+    font-weight: 600;
+    border-radius: 25px;
     border: none;
     font-size: 13px;
+    transition: all 0.3s ease;
 }
 
-.btn-outline-maroon {
-    border: 2px solid var(--maroon);
-    color: var(--maroon);
+.btn-soft-pink:hover {
+    background-color: #fbcad9;
+    color: var(--pink-hover);
 }
 
-.btn-outline-maroon:hover {
-    background-color: var(--maroon);
+/* Tombol Outline Pink */
+.btn-outline-pink {
+    border: 2px solid var(--pink-primary);
+    color: var(--pink-primary);
+    font-weight: 600;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-pink:hover {
+    background-color: var(--pink-primary);
     color: white;
+    box-shadow: 0 4px 12px rgba(173, 45, 94, 0.2);
+}
+
+/* Card Kustom Estetik */
+.card-custom {
+    border: 1px solid #e0e0e0; /* Ditambahkan border tipis halus senada dengan formulir */
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    background-color: #ffffff;
+}
+
+/* Kustomisasi alert info agar senada dengan formulir */
+.alert-info-custom {
+    background-color: #E0F2FE;
+    border-color: #0284C7;
+    color: #0C4A6E;
+    border-left: 4px solid #0284C7;
 }

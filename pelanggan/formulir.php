@@ -2,11 +2,48 @@
 session_start();
 include 'koneksi.php';
 
+// ====================================================================
+// FITUR BARU: MENGEMBALIKAN PESANAN JIKA USER KEMBALI DARI PEMBAYARAN
+// ====================================================================
+if (isset($_GET['pesanan_id'])) {
+    $pesanan_id = $_GET['pesanan_id'];
+    
+    $query_detail = mysqli_query($conn, "SELECT * FROM detail_pesanan WHERE pesanan_id = '$pesanan_id'");
+    if ($query_detail && mysqli_num_rows($query_detail) > 0) {
+        $_SESSION['keranjang'] = []; 
+        while ($row = mysqli_fetch_assoc($query_detail)) {
+            $_SESSION['keranjang'][$row['menu_id']] = $row['jumlah_menu']; 
+        }
+    }
+    
+    mysqli_query($conn, "DELETE FROM pembayaran WHERE pesanan_id = '$pesanan_id'");
+    mysqli_query($conn, "DELETE FROM detail_pesanan WHERE pesanan_id = '$pesanan_id'");
+    mysqli_query($conn, "DELETE FROM pesanan WHERE pesanan_id = '$pesanan_id'");
+    
+    unset($_SESSION['pesanan_id']);
+}
+// ====================================================================
+
 if (!isset($_SESSION['keranjang']) || empty($_SESSION['keranjang'])) {
     echo "<script>alert('Pilih menu dulu ya!'); window.location='menu.php';</script>";
     exit();
 }
+
+// --------------------------------------------------------------------
+// AMBIL BATASAN DINAMIS DARI DATABASE (PENGATURAN ADMIN)
+// --------------------------------------------------------------------
+$query_setting = mysqli_query($conn, "SELECT * FROM pengaturan_sistem WHERE id = 1");
+$setting = mysqli_fetch_assoc($query_setting);
+
+// minimal_porsi di sini sekarang berfungsi sebagai BATAS MAKSIMAL TAMPUNGAN DAPUR PER HARI (misal: 700)
+$max_porsi_sistem = isset($setting['minimal_porsi']) ? intval($setting['minimal_porsi']) : 700;
+$batas_hari_sistem = isset($setting['batasan_hari']) ? intval($setting['batasan_hari']) : 2;
+
+// Hitung tanggal minimal untuk atribut 'min' pada tag input HTML
+$tanggal_minimal_html = date('Y-m-d', strtotime("+$batas_hari_sistem days"));
+
 $total_bayar = 0;
+$total_porsi_keranjang = 0;
 ?>
 
 <!DOCTYPE html>
@@ -89,6 +126,7 @@ $total_bayar = 0;
                     if ($menu):
                         $subtotal = $menu['harga_satuan'] * $jumlah;
                         $total_bayar += $subtotal;
+                        $total_porsi_keranjang += $jumlah;
                 ?>
                 <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
                     
@@ -113,11 +151,10 @@ $total_bayar = 0;
                                value="<?php echo $jumlah; ?>" 
                                min="0"
                                class="form-control form-control-sm border-0 bg-transparent text-center mx-1" 
-                               style="width: 40px; font-weight: bold;"
-                               title="Isi 0 untuk hapus item"
-                               onchange="this.form.submit()">
+                               style="width: 45px; font-weight: bold;"
+                               title="Isi 0 untuk hapus item">
 
-                        <button type="button" class="btn btn-sm fw-bold text-pink" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange()">+</button>
+                        <button type="button" class="btn btn-sm fw-bold text-pink" onclick="tambahItem(this)">+</button>
                     </form>
                 </div>
                 <?php endif; endforeach; ?>
@@ -131,15 +168,16 @@ $total_bayar = 0;
 
                 <div class="alert alert-info-custom mb-4 rounded-3" role="alert">
                     <i class="bi bi-info-circle me-2"></i>
-                    <strong>Petunjuk:</strong> Setelah konfirmasi, pesanan Anda akan muncul di admin untuk verifikasi pembayaran.
+                    <strong>Petunjuk Kuota:</strong> Batas pemesanan minimal **H+<?php echo $batas_hari_sistem; ?>** dari hari ini. Dapur kami memiliki kapasitas kuota maksimal **<?php echo number_format($max_porsi_sistem, 0, ',', '.'); ?> porsi** per hari acara untuk menjaga kualitas rasa.
                 </div>
 
                 <form id="pesananForm" action="proses_pesan.php" method="POST">
                     <input type="hidden" name="total_harga" value="<?php echo $total_bayar; ?>">
+                    <input type="hidden" id="total_porsi_keranjang" value="<?php echo $total_porsi_keranjang; ?>">
 
                     <div class="mb-3">
                         <label class="small fw-bold text-muted mb-1">NAMA PENERIMA</label>
-                        <input type="text" name="nama" class="form-control rounded-3" value="<?php echo isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : ''; ?>" required>
+                        <input type="text" name="nama" class="form-control rounded-3" required>
                     </div>
 
                     <div class="mb-3">
@@ -149,7 +187,10 @@ $total_bayar = 0;
 
                     <div class="mb-3">
                         <label class="small fw-bold text-muted mb-1">TANGGAL ACARA</label>
-                        <input type="date" name="tanggal_acara" class="form-control rounded-3" required>
+                        <input type="date" id="tanggal_acara" name="tanggal_acara" 
+                               min="<?php echo $tanggal_minimal_html; ?>" 
+                               class="form-control rounded-3" onchange="cekKuotaTanggal(this)" required>
+                        <div id="kuotaFeedback" class="form-text fw-bold mt-1" style="display:none;"></div>
                     </div>
 
                     <div class="mb-3">
@@ -174,6 +215,12 @@ $total_bayar = 0;
                                 Rp <?php echo number_format($total_bayar, 0, ',', '.'); ?>
                             </h4>
                         </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top border-200">
+                            <span class="small fw-bold text-muted">Porsi Keranjang Anda</span>
+                            <span class="badge bg-secondary rounded-pill px-3 py-2 fw-bold">
+                                <?php echo $total_porsi_keranjang; ?> Porsi
+                            </span>
+                        </div>
                     </div>
 
                     <div class="processing-indicator" id="processingIndicator">
@@ -184,11 +231,6 @@ $total_bayar = 0;
                     <button type="submit" class="btn btn-pink w-100 py-3 rounded-pill fw-bold shadow-sm" id="submitBtn">
                         <i class="bi bi-check-circle me-2"></i> KONFIRMASI SEKARANG
                     </button>
-
-                    <p class="text-center text-muted small mt-3" style="font-size: 0.8rem;">
-                        <i class="bi bi-shield-check me-1"></i> 
-                        Pesanan akan ditampilkan kepada admin untuk verifikasi pembayaran
-                    </p>
                 </form>
             </div>
         </div>
@@ -196,13 +238,64 @@ $total_bayar = 0;
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bundle.min.js"></script>
 
 <script>
+const MAX_PORSI_SISTEM = <?php echo $max_porsi_sistem; ?>;
+const BATAS_HARI_SISTEM = <?php echo $batas_hari_sistem; ?>;
+let kuotaTersediaSisa = MAX_PORSI_SISTEM; // Default awal bebas
+
+function cekKuotaTanggal(input) {
+    if (!input.value) return;
+
+    let tglPilihan = new Date(input.value);
+    let hariIni = new Date();
+    hariIni.setHours(0, 0, 0, 0);
+    tglPilihan.setHours(0, 0, 0, 0);
+    
+    let selisihWaktu = tglPilihan.getTime() - hariIni.getTime();
+    let selisihHari = Math.ceil(selisihWaktu / (1000 * 3600 * 24));
+
+    // 1. Validasi H-* biasa
+    if (selisihHari < BATAS_HARI_SISTEM) {
+        alert("Pemesanan tidak boleh H-" + BATAS_HARI_SISTEM + "! Silakan pilih tanggal minimal " + BATAS_HARI_SISTEM + " hari dari sekarang.");
+        input.value = ""; 
+        document.getElementById('kuotaFeedback').style.display = 'none';
+        return;
+    }
+
+    // 2. AJAX Check Kuota Produksi Berdasarkan Tanggal yang Dipilih
+    let tglString = input.value;
+    let feedbackDiv = document.getElementById('kuotaFeedback');
+    
+    fetch('cek_kuota_ajax.php?tanggal=' + tglString)
+        .then(response => response.json())
+        .then(data => {
+            let porsiTerpakai = parseInt(data.total_terpakai);
+            kuotaTersediaSisa = MAX_PORSI_SISTEM - porsiTerpakai;
+            let porsiKeranjang = parseInt(document.getElementById('total_porsi_keranjang').value);
+
+            feedbackDiv.style.display = 'block';
+            
+            if (kuotaTersediaSisa <= 0) {
+                feedbackDiv.className = "form-text fw-bold mt-1 text-danger";
+                feedbackDiv.innerHTML = `<i class="bi bi-x-circle-fill"></i> Kuota Tanggal Ini Habis! (Terpakai: ${porsiTerpakai}/${MAX_PORSI_SISTEM} porsi).`;
+            } else if (porsiKeranjang > kuotaTersediaSisa) {
+                feedbackDiv.className = "form-text fw-bold mt-1 text-warning";
+                feedbackDiv.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Slot sisa ${kuotaTersediaSisa} porsi. Keranjang Anda (${porsiKeranjang} porsi) melebihi batas harian!`;
+            } else {
+                feedbackDiv.className = "form-text fw-bold mt-1 text-success";
+                feedbackDiv.innerHTML = `<i class="bi bi-check-circle-fill"></i> Aman! Sisa kuota produksi hari ini: ${kuotaTersediaSisa} porsi.`;
+            }
+        })
+        .catch(err => {
+            console.error("Gagal memuat kuota harian", err);
+        });
+}
+
 function kurangiItem(btn) {
     let input = btn.nextElementSibling;
     let jumlah = parseInt(input.value);
-
     if (jumlah <= 1) {
         if (confirm("Item akan dihapus dari keranjang. Lanjutkan?")) {
             input.value = 0;
@@ -214,9 +307,58 @@ function kurangiItem(btn) {
     }
 }
 
-// Handle form submission
+function tambahItem(btn) {
+    let input = btn.previousElementSibling;
+    input.stepUp();
+    input.form.submit();
+}
+
+// --- SESSION STORAGE DRAFT INPUT ---
+const formFields = document.querySelectorAll('#pesananForm input, #pesananForm textarea');
+formFields.forEach(field => {
+    field.addEventListener('input', function() {
+        if (this.name) sessionStorage.setItem('draft_pesanan_' + this.name, this.value);
+    });
+});
+
+window.addEventListener('DOMContentLoaded', function() {
+    formFields.forEach(field => {
+        if (field.name) {
+            let savedValue = sessionStorage.getItem('draft_pesanan_' + field.name);
+            if (savedValue !== null && field.type !== 'hidden') field.value = savedValue;
+        }
+    });
+    // Triger cek kuota jika tanggal sudah terisi dari draft
+    let tglInput = document.getElementById('tanggal_acara');
+    if(tglInput.value) cekKuotaTanggal(tglInput);
+});
+
+document.getElementById('pesananForm').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') e.preventDefault(); 
+});
+
+// --- VALIDASI SUBMIT ---
 document.getElementById('pesananForm').addEventListener('submit', function(e) {
-    // Tampilkan processing indicator
+    let tglInput = document.getElementById('tanggal_acara');
+    let porsiKeranjang = parseInt(document.getElementById('total_porsi_keranjang').value);
+    
+    if (!tglInput.value) {
+        e.preventDefault();
+        alert("Silakan pilih tanggal acara terlebih dahulu.");
+        return false;
+    }
+
+    // Validasi final jika porsi melampaui sisa kuota dapur harian
+    if (porsiKeranjang > kuotaTersediaSisa) {
+        e.preventDefault();
+        if (kuotaTersediaSisa <= 0) {
+            alert("Maaf, pendaftaran pesanan ditutup untuk tanggal tersebut karena kuota porsi produksi katering sudah penuh.");
+        } else {
+            alert("Gagal Konfirmasi! Kuota harian sisa " + kuotaTersediaSisa + " porsi lagi. Pesanan Anda sebanyak " + porsiKeranjang + " porsi terlalu banyak untuk hari tersebut.");
+        }
+        return false;
+    }
+
     document.getElementById('processingIndicator').style.display = 'block';
     document.getElementById('submitBtn').disabled = true;
 });

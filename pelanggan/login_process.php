@@ -12,30 +12,38 @@ if (!$conn) {
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
 
+// Mencegah SQL Injection dasar pada input email
+$email = mysqli_real_escape_string($conn, $email);
+
 // ambil data user
 $query = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
 $data = mysqli_fetch_assoc($query);
 
 if ($data) {
+    
+    // Cek apakah role pengguna adalah 'pelanggan'
+    if ($data['role'] == 'pelanggan') {
+        
+        // 🔥 LANGSUNG CEK TANPA HASH
+        if ($password == $data['password']) {
 
-    // 🔥 LANGSUNG CEK TANPA HASH
-    if ($password == $data['password']) {
+            // Set session
+            $_SESSION['user_id'] = $data['user_id'];
+            $_SESSION['nama'] = $data['nama_lengkap'];
+            $_SESSION['role'] = $data['role'];
+            $_SESSION['user_email'] = $data['email'];
 
-        $_SESSION['user_id'] = $data['user_id'];
-        $_SESSION['user_id'] = $data['user_id'];
-        $_SESSION['nama'] = $data['nama_lengkap'];
-        $_SESSION['role'] = $data['role'];
-        $_SESSION['user_email'] = $data['email'];
-
-        if ($data['role'] == 'admin') {
-            header("Location: dashboard_admin/index.php");
-        } else {
+            // Karena hanya pelanggan, langsung arahkan ke menu
             header("Location: menu.php");
-        }
-        exit;
+            exit;
 
+        } else {
+            echo "<script>alert('Password salah!'); window.location='login.php';</script>";
+        }
+        
     } else {
-        echo "<script>alert('Password salah!'); window.location='login.php';</script>";
+        // Jika rolenya bukan pelanggan (misal admin mencoba login di sini)
+        echo "<script>alert('Akses ditolak! Anda bukan pelanggan.'); window.location='login.php';</script>";
     }
 
 } else {

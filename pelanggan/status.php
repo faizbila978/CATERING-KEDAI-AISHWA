@@ -3,7 +3,6 @@ session_start();
 include 'koneksi.php';
 
 // Pastikan user sudah login
-// Pastikan user sudah login
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
@@ -23,27 +22,27 @@ $pesanan_id = $_SESSION['pesanan_id'];
 $method = $_GET['method'] ?? null;
 $type = $_GET['type'] ?? 'full'; // 'full' atau 'dp'
 
-// Ambil data pesanan
-// Ambil data pembayaran dan pesanan terbaru
-$query = "SELECT p.*, pb.status_pembayaran, pb.status_dp, pb.metode_pembayaran 
+// PERBAIKAN QUERY: Menambahkan pb.pembayaran_id agar tidak undefined array key
+$query = "SELECT p.*, pb.pembayaran_id, pb.status_pembayaran, pb.status_dp, pb.metode_pembayaran 
           FROM pesanan p 
           LEFT JOIN pembayaran pb ON p.pesanan_id = pb.pesanan_id 
           WHERE p.pesanan_id = '$pesanan_id'";
 $result = mysqli_query($conn, $query);
 $pesanan = mysqli_fetch_assoc($result);
 
-// Logika penentu apakah pembayaran sudah benar-benar "Selesai" (Dikonfirmasi Admin)
-$is_paid = ($pesanan['status_pembayaran'] == 'Selesai' || $pesanan['status_dp'] == 'Selesai');
-// Logika apakah pesanan sudah dikirim
-$is_shipped = ($pesanan['status_pesanan'] == 'Dikirim');
-
 if (!$pesanan) {
     echo "<script>alert('Pesanan tidak ditemukan!'); window.location='menu.php';</script>";
     exit();
 }
 
+// Gunakan null coalescing ?? untuk menghindari notice jika record pembayaran belum terbentuk
+$pembayaran_id = $pesanan['pembayaran_id'] ?? null;
 $total_pesanan = $pesanan['total_pesan'];
-$pembayaran_id = $pesanan['pembayaran_id'];
+
+// Logika penentu apakah pembayaran sudah benar-benar "Selesai" (Dikonfirmasi Admin)
+$is_paid = ($pesanan['status_pembayaran'] == 'Selesai' || $pesanan['status_dp'] == 'Selesai');
+// Logika apakah pesanan sudah dikirim
+$is_shipped = ($pesanan['status_pesanan'] == 'Dikirim');
 
 // Tentukan jumlah pembayaran
 if ($type == 'dp') {
@@ -54,37 +53,45 @@ if ($type == 'dp') {
     $jenis_pembayaran = 'FULL (100%)';
 }
 
-// PROSES: Jika ada method pembayaran, update status pembayaran
+// PROSES: Jika ada method pembayaran dari parameter URL, update/insert status pembayaran
 if ($method) {
-    if ($type == 'dp') {
-        // Jangan langsung 'Selesai', tapi 'Menunggu Konfirmasi'
-        $update_query = "UPDATE pembayaran SET 
-                        status_dp = 'Menunggu Konfirmasi', 
-                        jumlah_dp = '$jumlah_bayar',
-                        metode_pembayaran = '$method',
-                        tanggal_pembayaran = NOW()
-                        WHERE pembayaran_id = '$pembayaran_id'";
+    if ($pembayaran_id) {
+        if ($type == 'dp') {
+            $update_query = "UPDATE pembayaran SET 
+                            status_dp = 'Menunggu Konfirmasi', 
+                            jumlah_dp = '$jumlah_bayar',
+                            metode_pembayaran = '$method',
+                            tanggal_pembayaran = NOW()
+                            WHERE pembayaran_id = '$pembayaran_id'";
+        } else {
+            $update_query = "UPDATE pembayaran SET 
+                            status_pembayaran = 'Menunggu Konfirmasi', 
+                            metode_pembayaran = '$method',
+                            tanggal_pembayaran = NOW()
+                            WHERE pembayaran_id = '$pembayaran_id'";
+        }
+        mysqli_query($conn, $update_query);
     } else {
-        $update_query = "UPDATE pembayaran SET 
-                        status_pembayaran = 'Menunggu Konfirmasi', 
-                        metode_pembayaran = '$method',
-                        tanggal_pembayaran = NOW()
-                        WHERE pembayaran_id = '$pembayaran_id'";
+        if ($type == 'dp') {
+            $insert_query = "INSERT INTO pembayaran (pesanan_id, metode_pembayaran, tanggal_pembayaran, total_pembayaran, status_pembayaran, jumlah_dp, status_dp) 
+                             VALUES ('$pesanan_id', '$method', NOW(), '$total_pesanan', 'Belum Bayar', '$jumlah_bayar', 'Menunggu Konfirmasi')";
+        } else {
+            $insert_query = "INSERT INTO pembayaran (pesanan_id, metode_pembayaran, tanggal_pembayaran, total_pembayaran, status_pembayaran) 
+                             VALUES ('$pesanan_id', '$method', NOW(), '$total_pesanan', 'Menunggu Konfirmasi')";
+        }
+        mysqli_query($conn, $insert_query);
+        $pembayaran_id = mysqli_insert_id($conn);
     }
     
-    mysqli_query($conn, $update_query);
-    
-    // Status pesanan juga jangan langsung dikonfirmasi
     mysqli_query($conn, "UPDATE pesanan SET status_pesanan = 'Menunggu Verifikasi' WHERE pesanan_id = '$pesanan_id'");
+    
+    header("Location: status.php?id=" . $pesanan_id . "&type=" . $type);
+    exit();
 }
 
-// Ambil data pembayaran yang sudah di-update
-$query_pembayaran = "SELECT * FROM pembayaran WHERE pembayaran_id = '$pembayaran_id'";
-$result_pembayaran = mysqli_query($conn, $query_pembayaran);
-$pembayaran = mysqli_fetch_assoc($result_pembayaran);
-
-$status_pembayaran = $pembayaran['status_pembayaran'] ?? 'Belum Bayar';
-$status_dp = $pembayaran['status_dp'] ?? 'Belum Bayar';
+$status_pembayaran = $pesanan['status_pembayaran'] ?? 'Belum Bayar';
+$status_dp = $pesanan['status_dp'] ?? 'Belum Bayar';
+$metode_pembayaran_terpilih = $pesanan['metode_pembayaran'] ?? '-';
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +103,7 @@ $status_dp = $pembayaran['status_dp'] ?? 'Belum Bayar';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" type="text/css" href="Status.php">
+    <link rel="stylesheet" type="text/css" href="status.css"> 
 </head>
 <body>
 
@@ -104,177 +111,156 @@ $status_dp = $pembayaran['status_dp'] ?? 'Belum Bayar';
     <div class="row justify-content-center">
         <div class="col-lg-8">
 
-            <!-- SUCCESS OR PROCESSING -->
-            <?php if ($method): ?>
-                <!-- PEMBAYARAN BERHASIL -->
+            <?php if ($metode_pembayaran_terpilih != '-'): ?>
                 <div class="card card-custom p-5 mb-4 text-center">
-                    <div class="success-icon">
-                        <i class="bi bi-check-circle"></i>
+                    <div class="success-icon text-success fs-1 mb-2">
+                        <i class="bi bi-check-circle-fill"></i>
                     </div>
-                    <h2 class="fw-bold mb-2">Pembayaran Berhasil!</h2>
-                    <p class="text-muted mb-0">Pesanan Anda telah dikonfirmasi dan akan diproses oleh admin</p>
+                    <h2 class="fw-bold mb-2">Pembayaran Tercatat!</h2>
+                    <p class="text-muted mb-0">Pesanan Anda sedang menunggu verifikasi konfirmasi pembayaran oleh Admin.</p>
                 </div>
 
-                <!-- PAYMENT DETAILS -->
                 <div class="card card-custom p-4 mb-4">
-                    <h5 class="fw-bold mb-4">Detail Pembayaran</h5>
+                    <h5 class="fw-bold mb-4 border-bottom pb-2">Detail Pembayaran</h5>
                     
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <small class="text-muted">ID Pesanan</small>
-                            <p class="fw-bold fs-5">#ORD-<?php echo str_pad($pesanan_id, 3, '0', STR_PAD_LEFT); ?></p>
+                            <small class="text-muted mb-1 d-block font-semibold">ID PESANAN</small>
+                            <p class="fw-bold fs-5 mb-0">#ORD-<?php echo str_pad($pesanan_id, 3, '0', STR_PAD_LEFT); ?></p>
                         </div>
                         <div class="col-md-6">
-                            <small class="text-muted">Jenis Pembayaran</small>
-                            <p class="fw-bold fs-5"><span class="payment-method-badge"><?php echo $jenis_pembayaran; ?></span></p>
+                            <small class="text-muted mb-1 d-block font-semibold">JENIS PEMBAYARAN</small>
+                            <p class="fw-bold fs-5 mb-0"><span class="badge bg-secondary rounded-pill px-3"><?php echo ($status_dp != 'Belum Bayar') ? 'DP (50%)' : 'FULL (100%)'; ?></span></p>
                         </div>
                     </div>
 
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <small class="text-muted">Metode Pembayaran</small>
-                            <p class="fw-bold"><?php echo ucfirst(str_replace('-dp', '', $method)); ?></p>
+                            <small class="text-muted mb-1 d-block font-semibold">METODE PEMBAYARAN</small>
+                            <p class="fw-bold mb-0"><?php echo strtoupper(str_replace('-dp', '', $metode_pembayaran_terpilled ?? $metode_pembayaran_terpilih)); ?></p>
                         </div>
                         <div class="col-md-6">
-                            <small class="text-muted">Jumlah Pembayaran</small>
-                            <p class="fw-bold highlight-text">Rp <?php echo number_format($jumlah_bayar, 0, ',', '.'); ?></p>
+                            <small class="text-muted mb-1 d-block font-semibold">JUMLAH YANG DIBAYAR</small>
+                            <p class="fw-bold text-pink fs-5 mb-0">Rp <?php echo number_format(($status_dp != 'Belum Bayar' ? $total_pesanan * 0.5 : $total_pesanan), 0, ',', '.'); ?></p>
                         </div>
                     </div>
 
                     <hr>
 
-                    <div class="payment-info">
-                        <i class="bi bi-info-circle me-2"></i>
-                        <small>Pembayaran Anda telah tercatat. Admin akan mengkonfirmasi pesanan Anda dalam beberapa saat.</small>
+                    <div class="alert alert-info-custom d-flex align-items-center mb-0 rounded-3">
+                        <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                        <small>Pembayaran Anda telah terekam di sistem kami. Admin Kedai Aishwa akan segera melakukan verifikasi pesanan Anda.</small>
                     </div>
                 </div>
 
             <?php else: ?>
-                <!-- MENUNGGU PEMBAYARAN -->
-                <div class="card card-custom p-5 mb-4 text-center">
+                <div class="card card-custom p-5 mb-4 text-center bg-warning-subtle border-warning">
+                    <div class="fs-1 text-warning mb-2"><i class="bi bi-hourglass-split"></i></div>
                     <h2 class="fw-bold mb-2">Menunggu Pembayaran</h2>
-                    <p class="text-muted mb-0">Silakan pilih metode pembayaran di halaman sebelumnya</p>
+                    <p class="text-muted mb-0">Silakan pilih metode pembayaran di halaman checkout / sebelumnya.</p>
                 </div>
             <?php endif; ?>
 
-            <!-- ORDER STATUS -->
             <div class="card card-custom p-4 mb-4">
-                <h5 class="fw-bold mb-4">Status Pesanan</h5>
+                <h5 class="fw-bold mb-4 border-bottom pb-2">Status Pesanan</h5>
                 
-               <div class="timeline">
-    <!-- STEP 1: PESANAN DITERIMA (Selalu Selesai) -->
-    <div class="timeline-item completed">
-        <div class="timeline-marker">
-            <i class="bi bi-check-lg"></i>
-        </div>
-        <div class="timeline-content">
-            <h6 class="fw-bold">Pesanan Diterima</h6>
-            <small class="text-muted">
-                <?php echo date('d/m/Y H:i', strtotime($pesanan['tanggal_pesan'])); ?> WIB
-            </small>
-        </div>
-    </div>
+                <div class="position-relative ps-4" style="border-left: 2px solid #dee2e6;">
+                    <div class="mb-4 position-relative">
+                        <div class="position-absolute bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width:24px; height:24px; left:-33px; top:0;">
+                            <i class="bi bi-check-lg small"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0">Pesanan Diterima</h6>
+                        <small class="text-muted">
+                            <?php echo date('d/m/Y H:i', strtotime($pesanan['tanggal_pesan'])); ?> WIB
+                        </small>
+                    </div>
 
-    <!-- STEP 2: PEMBAYARAN (Selesai jika admin sudah konfirmasi) -->
-    <div class="timeline-item <?php echo $is_paid ? 'completed' : 'pending'; ?>">
-        <div class="timeline-marker">
-            <i class="bi <?php echo $is_paid ? 'bi-check-lg' : 'bi-hourglass-split'; ?>"></i>
-        </div>
-        <div class="timeline-content">
-            <h6 class="fw-bold">Pembayaran Dikonfirmasi</h6>
-            <small class="text-muted">
-                <?php 
-                if ($is_paid) echo "Pembayaran telah diverifikasi admin";
-                else echo "Menunggu verifikasi pembayaran"; 
-                ?>
-            </small>
-        </div>
-    </div>
+                    <div class="mb-4 position-relative">
+                        <div class="position-absolute <?php echo $is_paid ? 'bg-success' : 'bg-warning'; ?> text-white rounded-circle d-flex align-items-center justify-content-center" style="width:24px; height:24px; left:-33px; top:0;">
+                            <i class="bi <?php echo $is_paid ? 'bi-check-lg' : 'bi-hourglass-split'; ?> small"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0">Pembayaran Dikonfirmasi</h6>
+                        <small class="text-muted">
+                            <?php 
+                            if ($is_paid) echo "Pembayaran telah diverifikasi oleh admin Kedai Aishwa";
+                            else echo "Menunggu verifikasi pembayaran / Belum lunas"; 
+                            ?>
+                        </small>
+                    </div>
 
-    <!-- STEP 3: PROSES (Selesai jika sudah bayar, tapi akan berubah saat dikirim) -->
-    <div class="timeline-item <?php echo ($is_paid && !$is_shipped) ? 'pending' : ($is_shipped ? 'completed' : ''); ?>">
-        <div class="timeline-marker">
-            <i class="bi <?php echo $is_shipped ? 'bi-check-lg' : 'bi-gear-fill'; ?>"></i>
-        </div>
-        <div class="timeline-content">
-            <h6 class="fw-bold">Sedang Diproses</h6>
-            <small class="text-muted">
-                <?php 
-                if ($is_shipped) echo "Pesanan selesai diproses";
-                elseif ($is_paid) echo "Admin sedang menyiapkan pesanan Anda";
-                else echo "Menunggu pembayaran";
-                ?>
-            </small>
-        </div>
-    </div>
+                    <div class="mb-4 position-relative">
+                        <div class="position-absolute <?php echo ($is_paid && !$is_shipped) ? 'bg-warning' : ($is_shipped ? 'bg-success' : 'bg-secondary'); ?> text-white rounded-circle d-flex align-items-center justify-content-center" style="width:24px; height:24px; left:-33px; top:0;">
+                            <i class="bi bi-gear-fill small"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0">Sedang Diproses</h6>
+                        <small class="text-muted">
+                            <?php 
+                            if ($is_shipped) echo "Pesanan selesai diproses masakan";
+                            elseif ($is_paid) echo "Dapur kami sedang menyiapkan pesanan hidangan Anda";
+                            else echo "Menunggu penyelesaian pembayaran";
+                            ?>
+                        </small>
+                    </div>
 
-    <!-- STEP 4: PENGIRIMAN (Selesai jika status_pesanan = 'Dikirim') -->
-    <div class="timeline-item <?php echo $is_shipped ? 'completed' : ''; ?>">
-        <div class="timeline-marker">
-            <i class="bi bi-truck"></i>
-        </div>
-        <div class="timeline-content">
-            <h6 class="fw-bold">Dalam Pengiriman</h6>
-            <small class="text-muted">
-                <?php echo $is_shipped ? 'Pesanan sedang dalam perjalanan ke lokasi' : 'Pesanan belum dikirim'; ?>
-            </small>
-        </div>
-    </div>
-</div>
+                    <div class="position-relative">
+                        <div class="position-absolute <?php echo $is_shipped ? 'bg-success' : 'bg-secondary'; ?> text-white rounded-circle d-flex align-items-center justify-content-center" style="width:24px; height:24px; left:-33px; top:0;">
+                            <i class="bi bi-truck small"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0">Dalam Pengiriman / Selesai</h6>
+                        <small class="text-muted">
+                            <?php echo $is_shipped ? 'Pesanan sedang dalam perjalanan ke lokasi acara Anda' : 'Pesanan belum dikirim'; ?>
+                        </small>
+                    </div>
+                </div>
+            </div>
 
-            <!-- ORDER INFO -->
             <div class="card card-custom p-4 mb-4">
-                <h5 class="fw-bold mb-4">Informasi Pesanan</h5>
+                <h5 class="fw-bold mb-4 border-bottom pb-2">Informasi Pesanan</h5>
                 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <small class="text-muted">Tanggal Acara</small>
-                        <p class="fw-bold"><?php echo date('d/m/Y', strtotime($pesanan['tanggal_acara'])); ?></p>
+                        <small class="text-muted small fw-bold">TANGGAL ACARA</small>
+                        <p class="fw-bold mb-0"><?php echo date('d/m/Y', strtotime($pesanan['tanggal_acara'])); ?></p>
                     </div>
                     <div class="col-md-6">
-                        <small class="text-muted">Waktu Acara</small>
-                        <p class="fw-bold"><?php echo $pesanan['waktu_acara']; ?> WIB</p>
+                        <small class="text-muted small fw-bold">WAKTU ACARA</small>
+                        <p class="fw-bold mb-0"><?php echo $pesanan['waktu_acara']; ?> WIB</p>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <small class="text-muted">Alamat Pengiriman</small>
-                    <p class="fw-bold"><?php echo htmlspecialchars($pesanan['alamat']); ?></p>
+                    <small class="text-muted small fw-bold">ALAMAT PENGIRIMAN</small>
+                    <p class="fw-bold mb-0"><?php echo htmlspecialchars($pesanan['alamat']); ?></p>
                 </div>
 
                 <div class="mb-3">
-                    <small class="text-muted">No. Handphone</small>
-                    <p class="fw-bold"><?php echo htmlspecialchars($pesanan['no_handphone']); ?></p>
+                    <small class="text-muted small fw-bold">NO. HANDPHONE</small>
+                    <p class="fw-bold mb-0"><?php echo htmlspecialchars($pesanan['no_handphone']); ?></p>
                 </div>
 
                 <?php if ($pesanan['catatan']): ?>
                 <div>
-                    <small class="text-muted">Catatan Pesanan</small>
-                    <p class="fw-bold"><?php echo htmlspecialchars($pesanan['catatan']); ?></p>
+                    <small class="text-muted small fw-bold">CATATAN PESANAN</small>
+                    <p class="fw-bold mb-0"><?php echo htmlspecialchars($pesanan['catatan']); ?></p>
                 </div>
                 <?php endif; ?>
             </div>
 
-            <!-- TOTAL PESANAN -->
-            <div class="card card-custom p-4 mb-4 bg-light">
+            <div class="bg-light p-3 rounded-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold text-muted mb-0">Total Pesanan</h6>
-                    <h4 class="fw-bold highlight-text mb-0">Rp <?php echo number_format($total_pesanan, 0, ',', '.'); ?></h4>
+                    <h6 class="fw-bold text-muted mb-0">Total Tagihan Pesanan</h6>
+                    <h4 class="fw-bold text-pink mb-0">Rp <?php echo number_format($total_pesanan, 0, ',', '.'); ?></h4>
                 </div>
             </div>
 
-            <!-- BUTTONS -->
             <div class="d-grid gap-2 mt-4">
-                <?php 
-                // Fitur Edit Pesanan muncul HANYA JIKA pesanan belum dikonfirmasi admin atau belum dikirim
-                if ($pesanan['status_pesanan'] != 'Dikirim' && $pesanan['status_pesanan'] != 'Diproses' && !$is_shipped): 
-                ?>
+                <?php if ($pesanan['status_pesanan'] != 'Dikirim' && $pesanan['status_pesanan'] != 'Diproses' && !$is_shipped): ?>
                     <a href="edit_pesanan.php?id=<?php echo $pesanan_id; ?>" class="btn btn-warning fw-bold text-white mb-2 py-2" style="border-radius: 25px;">
                         <i class="bi bi-pencil-square me-2"></i> Edit Detail Pesanan
                     </a>
                 <?php endif; ?>
                 
-                <a href="riwayat_pesanan.php" class="btn btn-pink">
+                <a href="riwayat_pesanan.php" class="btn btn-pink py-3 rounded-pill fw-bold shadow-sm">
                     <i class="bi bi-arrow-left me-2"></i> Kembali ke Pesanan Saya
                 </a>
             </div>

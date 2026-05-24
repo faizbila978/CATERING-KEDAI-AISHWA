@@ -40,17 +40,32 @@
 
                     <!-- Input Data Produk -->
                     <div class="w-full lg:w-1/2 flex flex-col gap-8 justify-center">
-                        <div class="relative">
-                            <input type="text" name="nama_produk" id="inputNama" placeholder="Masukan Nama Produk" class="w-full border-b-2 border-gray-300 p-3 text-lg focus:border-orange-600 outline-none transition bg-transparent" required>
-                        </div>
-                        <div class="relative">
-                            <input type="text" name="harga_produk" id="inputHarga" placeholder="Masukan Harga Produk"
-class="w-full border-b-2 border-gray-300 p-3 text-lg focus:border-orange-600 outline-none transition bg-transparent" required>
-                        </div>
-                        <div class="relative">
-                            <textarea name="deskripsi_produk" id="inputDeskripsi" placeholder="Masukan Deskripsi Produk" class="w-full border-b-2 border-gray-300 p-3 h-32 resize-none focus:border-orange-600 outline-none transition bg-transparent"></textarea>
-                        </div>
-                    </div>
+    <div class="relative">
+        <input type="text" name="nama_produk" id="inputNama" placeholder="Masukan Nama Produk" class="w-full border-b-2 border-gray-300 p-3 text-lg focus:border-orange-600 outline-none transition bg-transparent" required>
+    </div>
+    
+    <div class="relative">
+        <label class="block text-sm font-semibold text-gray-500 mb-1">Pilih Kategori Menu</label>
+        <select name="kategori_id" id="inputKategori" class="w-full border-b-2 border-gray-300 p-3 text-lg focus:border-orange-600 outline-none transition bg-transparent text-gray-700" required>
+            <option value="" disabled selected>-- Pilih Kategori --</option>
+            <?php
+            // Ambil data kategori untuk dropdown
+            include "koneksi.php";
+            $ambil_kategori = mysqli_query($conn, "SELECT * FROM kategori ORDER BY nama_kategori ASC");
+            while($kat = mysqli_fetch_assoc($ambil_kategori)) {
+                echo "<option value='".$kat['kategori_id']."'>".$kat['nama_kategori']."</option>";
+            }
+            ?>
+        </select>
+    </div>
+
+    <div class="relative">
+        <input type="text" name="harga_produk" id="inputHarga" placeholder="Masukan Harga Produk" class="w-full border-b-2 border-gray-300 p-3 text-lg focus:border-orange-600 outline-none transition bg-transparent" required>
+    </div>
+    <div class="relative">
+        <textarea name="deskripsi_produk" id="inputDeskripsi" placeholder="Masukan Deskripsi Produk" class="w-full border-b-2 border-gray-300 p-3 h-32 resize-none focus:border-orange-600 outline-none transition bg-transparent"></textarea>
+    </div>
+</div>
                 </div>
             </div>
 

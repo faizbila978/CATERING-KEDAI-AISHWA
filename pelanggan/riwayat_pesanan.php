@@ -17,7 +17,8 @@ $query = "SELECT p.*,
           (SELECT m.gambar FROM detail_pesanan dp JOIN menu m ON dp.menu_id = m.menu_id WHERE dp.pesanan_id = p.pesanan_id LIMIT 1) as gambar_menu,
           (SELECT m.nama_menu FROM detail_pesanan dp JOIN menu m ON dp.menu_id = m.menu_id WHERE dp.pesanan_id = p.pesanan_id LIMIT 1) as nama_menu,
           (SELECT SUM(dp.jumlah_menu) FROM detail_pesanan dp WHERE dp.pesanan_id = p.pesanan_id) as total_item,
-          pem.status_pembayaran
+          pem.status_pembayaran,
+          pem.metode_pembayaran /* <--- BARIS INI HARUS DITAMBAHKAN */
           FROM pesanan p 
           LEFT JOIN pembayaran pem ON p.pesanan_id = pem.pesanan_id
           WHERE p.user_id = '$user_id' 
@@ -99,24 +100,39 @@ $result = mysqli_query($conn, $query);
                     <i class="bi bi-chevron-right"></i>
                 </div>
 
-                <div class="action-buttons">
-                    <?php 
-                        $status_pesanan = strtolower($row['status_pesanan'] ?? '');
-                        $status_pembayaran = strtolower($row['status_pembayaran'] ?? 'belum bayar');
-                    ?>
+<div class="action-buttons">
+    <?php 
+        $status_pesanan = strtolower($row['status_pesanan'] ?? '');
+        $status_pembayaran = strtolower($row['status_pembayaran'] ?? 'belum bayar');
+        $metode = strtolower($row['metode_pembayaran'] ?? '');
+        
+        // Ambil data detail DP langsung dari join/query tabel pembayaran
+        // (Pastikan kolom status_dp dan jumlah_dp ikut terpanggil di query utama riwayat_pesanan.php)
+        $status_dp = strtolower($row['status_dp'] ?? 'belum bayar');
+        $is_dp_method = (strpos($metode, '-dp') !== false);
+    ?>
 
-                    <?php if ($status_pesanan == 'selesai'): ?>
-                        <a href="index.php#isi-testimoni" class="btn btn-primary" style="background-color: var(--primary-pink); color: white;">Beri Ulasan</a>
-                    <?php elseif ($status_pesanan == 'dibatalkan'): ?>
-                        <button class="btn btn-disabled" disabled>Pesanan Batal</button>
-                    <?php elseif ($status_pembayaran == 'belum bayar' || $status_pembayaran == ''): ?>
-                        <a href="pembayaran.php?id=<?php echo $row['pesanan_id']; ?>" class="btn btn-primary" style="background-color: var(--primary-pink); color: white;">Bayar Sekarang</a>
-                    <?php else: ?>
-                        <button class="btn btn-disabled" disabled>Sedang Diproses</button>
-                    <?php endif; ?>
-                    
-                    <a href="status.php?id=<?php echo $row['pesanan_id']; ?>" class="btn btn-primary">Lihat Status</a>
-                </div>
+    <?php if ($status_pesanan == 'selesai'): ?>
+        <a href="index.php#isi-testimoni" class="btn btn-primary" style="background-color: var(--primary-pink); color: white;">Beri Ulasan</a>
+    <?php elseif ($status_pesanan == 'dibatalkan'): ?>
+        <button class="btn btn-disabled" disabled>Pesanan Batal</button>
+        
+    <?php elseif (($status_pembayaran == 'belum bayar' || $status_pembayaran == '') && $is_dp_method && $status_dp == 'belum bayar'): ?>
+        <a href="payment.php?id=<?php echo $row['pesanan_id']; ?>" class="btn btn-primary" style="background-color: var(--primary-pink); color: white;">Bayar Sekarang (DP)</a>
+        
+    <?php elseif ($status_dp == 'selesai' && ($status_pembayaran == 'belum bayar' || $status_pembayaran == 'menunggu konfirmasi')): ?>
+        <?php if ($status_pembayaran == 'menunggu konfirmasi'): ?>
+            <button class="btn btn-disabled" disabled>Verifikasi Pelunasan...</button>
+        <?php else: ?>
+            <a href="payment Lunas.php?id=<?php echo $row['pesanan_id']; ?>" class="btn btn-primary" style="background-color: #22c55e; color: white;">Bayar Pelunasan</a>
+        <?php endif; ?>
+        
+    <?php else: ?>
+        <button class="btn btn-disabled" disabled>Sedang Diproses</button>
+    <?php endif; ?>
+    
+    <a href="status.php?id=<?php echo $row['pesanan_id']; ?>" class="btn btn-primary">Lihat Status</a>
+</div>
 
             </div>
             
