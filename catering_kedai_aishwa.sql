@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 24 Bulan Mei 2026 pada 09.25
+-- Waktu pembuatan: 02 Jun 2026 pada 16.24
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -47,8 +47,7 @@ CREATE TABLE `detail_pesanan` (
 --
 
 INSERT INTO `detail_pesanan` (`detail_id`, `pesanan_id`, `menu_id`, `harga_satuan`, `jumlah_menu`, `tambahan_id`, `harga_satuan_tambahan`, `jumlah_tambahan`, `tanggal_acara`, `waktu_acara`, `total_detail_pesanan`, `status_detail_pesanan`) VALUES
-(82, 78, 7, 300000.00, 1, NULL, NULL, NULL, NULL, NULL, 300000.00, 'Diproses'),
-(83, 79, 3, 20000.00, 1, NULL, NULL, NULL, NULL, NULL, 20000.00, 'Diproses');
+(89, 84, 3, 20000.00, 1, NULL, NULL, NULL, NULL, NULL, 20000.00, 'Diproses');
 
 -- --------------------------------------------------------
 
@@ -91,7 +90,7 @@ CREATE TABLE `komplain` (
 --
 
 INSERT INTO `komplain` (`id`, `pesanan_id`, `nama_user`, `user_email`, `deskripsi`, `foto_bukti`, `waktu_masuk`) VALUES
-(1, '888', 'fazi', 'faizbilah979@gmail.com', 'kurang jelas artikulasi nya\r\n', '1779546857_bukti.png', '2026-05-23 14:34:17');
+(2, 'ord-987', 'fazi', 'faizbilah979@gmail.com', 'kurang enak', '1780037003_bukti.png', '2026-05-29 06:43:23');
 
 -- --------------------------------------------------------
 
@@ -114,7 +113,7 @@ CREATE TABLE `menu` (
 --
 
 INSERT INTO `menu` (`menu_id`, `nama_menu`, `deskripsi`, `harga_satuan`, `gambar`, `kategori_id`, `is_rekomendasi`) VALUES
-(1, 'Paket Ayam Goreng', 'Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.', 20000, '1778421489_WhatsApp Image 2026-02-21 at 21.48.58.jpeg', 1, 1),
+(1, 'Paket Ayam Goreng', 'Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.', 20000, '1778421489_WhatsApp Image 2026-02-21 at 21.48.58.jpeg', 1, 0),
 (2, 'Paket Ayam Bakar', 'Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.', 20000, '1778118960_WhatsApp Image 2026-02-21 at 22.03.08.jpeg', 1, 1),
 (3, 'Paket Ayam Geprek', 'Nasi, ayam (dada/paha), sambel, lalapan, aqua gelas.', 20000, '1778119151_WhatsApp Image 2026-02-21 at 22.07.53.jpeg', 1, 1),
 (4, 'Rice Bowl', 'Nasi, ayam krispi, sayur/kentang, sambal (geprek, matah, tomat).', 10000, '1778119269_WhatsApp Image 2026-02-16 at 22.03.25.jpeg', 1, 0),
@@ -126,7 +125,7 @@ INSERT INTO `menu` (`menu_id`, `nama_menu`, `deskripsi`, `harga_satuan`, `gambar
 (104, 'Putu Ayu', 'Menu Tambahan', 2000, '1778422042_Resep Putu Ayu Enak Dan Lembut Ala Ncc oleh BunnaBintang.jpeg', 1, 0),
 (105, 'Bolu Kukus', 'Menu Tambahan', 2000, '1778421994_WhatsApp Image 2026-03-06 at 13.55.39.jpeg', 1, 0),
 (106, 'Pisang', 'Menu Tambahan', 2000, '1778422080_Banana Bread Muffin Tops – Oh She Glows.jpeg', 1, 0),
-(107, 'Jeruk', 'Menu Tambahan', 2000, '1778422102_Buah buahan.jpeg', 1, 0),
+(107, 'Jeruk', 'Menu Tambahan', 2000, '1778422102_Buah buahan.jpeg', 1, 1),
 (108, 'Rengginang', 'Menu Tambahan', 1000, '1778422135_download (8).jpeg', 1, 0),
 (109, 'Bolu Jadul', 'Menu Tambahan', 40000, '1778422180_WhatsApp Image 2026-02-21 at 21.47.17.jpeg', 1, 0),
 (110, 'Bolu Meses Keju', 'Menu Tambahan', 50000, '1778422207_WhatsApp Image 2026-02-21 at 21.45.35.jpeg', 1, 0),
@@ -158,8 +157,7 @@ CREATE TABLE `pembayaran` (
 --
 
 INSERT INTO `pembayaran` (`pembayaran_id`, `pesanan_id`, `metode_pembayaran`, `tanggal_pembayaran`, `waktu_pembayaran`, `total_pembayaran`, `status_pembayaran`, `jumlah_dp`, `status_dp`, `tanggal_dp`, `waktu_dp`, `bukti_pelunasan`) VALUES
-(75, 78, 'gopay', '2026-05-24', NULL, 300000.00, 'Selesai', 150000.00, 'Menunggu Konfirmasi', NULL, NULL, NULL),
-(76, 79, 'gopay', '2026-05-24', NULL, 20000.00, 'Selesai', 10000.00, 'Menunggu Konfirmasi', NULL, NULL, NULL);
+(81, 84, 'ovo-dp', '2026-06-02', NULL, 20000.00, 'Belum Bayar', 10000.00, 'Menunggu Konfirmasi', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -201,7 +199,7 @@ CREATE TABLE `pengaturan_web` (
 --
 
 INSERT INTO `pengaturan_web` (`id`, `hero_tagline`, `hero_judul`, `hero_deskripsi`, `no_wa`, `akun_fb`, `alamat`) VALUES
-(1, 'cartering kedai aishwa', 'menu sehat jiwa yang kuat', 'Menghadirkan hidangan Nusantara bercita rasa otentik dengan penyajian berkelas...', '0895323107636', 'FB: Azwan Coker', 'BLOK DESA, Rt.02/Rw.01 Desa Tanjungsari, Karangampel, Indramayu');
+(1, 'cartering kedai aishwa', 'Kelezatan Tradisi, Sentuhan Modern.', 'Menghadirkan hidangan Nusantara bercita rasa otentik dengan penyajian berkelas...', '0895323107636', 'FB: Azwan Coker', 'BLOK DESA, Rt.02/Rw.01 Desa Tanjungsari, Karangampel, Indramayu');
 
 -- --------------------------------------------------------
 
@@ -227,8 +225,7 @@ CREATE TABLE `pesanan` (
 --
 
 INSERT INTO `pesanan` (`pesanan_id`, `user_id`, `tanggal_pesan`, `tanggal_acara`, `waktu_acara`, `alamat`, `no_handphone`, `total_pesan`, `status_pesanan`, `catatan`) VALUES
-(78, 3, '2026-05-24', '2026-05-28', '12:20:00', 'desa kiajaran kulon blok pelabuhan', '085795244257', 300000.00, 'Menunggu Verifikasi', ''),
-(79, 3, '2026-05-24', '2026-05-28', '12:20:00', 'desa kiajaran kulon blok pelabuhan', '085795244257', 20000.00, 'Menunggu Verifikasi', '');
+(84, 3, '2026-06-02', '2026-06-05', '13:09:00', 'desa kiajaran kulon blok pelabuhan', '085795244257', 20000.00, 'Diproses', 'jangan pakai ayam');
 
 -- --------------------------------------------------------
 
@@ -263,7 +260,7 @@ CREATE TABLE `testimoni` (
 --
 
 INSERT INTO `testimoni` (`id`, `nama_produk`, `rating`, `deskripsi`, `foto`, `waktu_masuk`) VALUES
-(1, 'Rice Bowl', 5, 'ds', '1779550716_testi.jpg', '2026-05-23 15:38:36');
+(3, 'Paket Ayam Geprek', 5, 'sangat enak', '1780036503_testi.png', '2026-05-29 06:35:03');
 
 -- --------------------------------------------------------
 
@@ -375,7 +372,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `detail_pesanan`
 --
 ALTER TABLE `detail_pesanan`
-  MODIFY `detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+  MODIFY `detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT untuk tabel `kategori`
@@ -387,7 +384,7 @@ ALTER TABLE `kategori`
 -- AUTO_INCREMENT untuk tabel `komplain`
 --
 ALTER TABLE `komplain`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `menu`
@@ -399,7 +396,7 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT untuk tabel `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `pembayaran_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT untuk tabel `pengaturan_sistem`
@@ -417,7 +414,7 @@ ALTER TABLE `pengaturan_web`
 -- AUTO_INCREMENT untuk tabel `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `pesanan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `pesanan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT untuk tabel `tambahan`
@@ -429,7 +426,7 @@ ALTER TABLE `tambahan`
 -- AUTO_INCREMENT untuk tabel `testimoni`
 --
 ALTER TABLE `testimoni`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`

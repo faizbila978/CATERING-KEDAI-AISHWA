@@ -1,5 +1,14 @@
 <?php
+session_start(); // Membuka session agar data login admin terbaca[cite: 1, 2]
 include "koneksi.php";
+
+// Proteksi Halaman: Jika belum login atau bukan admin, balikkan ke login.php
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+    // Mundur 2 tingkat dari folder /pelanggan/dashboard_admin/ ke root tempat login.php berada
+    header("Location: ../../login.php?status=wajib_login");
+    exit();
+}
+
 $query = mysqli_query($conn, "SELECT * FROM kategori ORDER BY nama_kategori ASC");
 ?>
 <!DOCTYPE html>

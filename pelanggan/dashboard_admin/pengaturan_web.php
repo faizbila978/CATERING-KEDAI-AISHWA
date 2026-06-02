@@ -1,14 +1,18 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    session_start(); // Memastikan session aktif
 }
 
-// Pastikan hanya admin yang bisa mengakses (sesuaikan dengan sistem login Anda)
-// if (!isset($_SESSION['admin_logged_in'])) { header("Location: login.php"); exit(); }
+// 🔐 Proteksi Halaman: Jika belum login atau bukan admin, balikkan ke login.php
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+    // Mundur 2 tingkat keluar dari subfolder dashboard menuju letak file login.php
+    header("Location: ../../login.php?status=wajib_login");
+    exit();
+}
 
-include "../koneksi.php"; // Sesuaikan path koneksi database Anda
+include "../koneksi.php"; // Sesuaikan path koneksi database Anda[cite: 10]
 
-$notif = "";
+$notif = ""; //[cite: 10]
 
 // 1. PROSES UPDATE KETIKA FORM DISUBMIT
 // 1. PROSES UPDATE KETIKA FORM DISUBMIT

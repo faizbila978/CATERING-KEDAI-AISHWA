@@ -50,13 +50,7 @@ session_start();
                     </button>
                 </form>
                 <div class="text-center my-3">
-    <span class="text-muted small">atau masuk dengan</span>
 </div>
-
-<a href="google_auth.php" class="btn btn-outline-dark w-100 py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center">
-    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" class="me-2">
-    Google Account
-</a>
                 
                 <div class="text-center mt-4">
                     <p class="small text-muted">Sudah punya akun? 

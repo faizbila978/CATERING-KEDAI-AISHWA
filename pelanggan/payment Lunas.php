@@ -3,10 +3,7 @@ session_start();
 include 'koneksi.php';
 
 // Pastikan user sudah login
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit();
-}
+
 
 // Ambil pesanan_id dari parameter URL (GET) atau dari Session
 if (isset($_GET['id'])) {

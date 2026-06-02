@@ -1,12 +1,16 @@
 <?php
-session_start();
-include('../koneksi.php');
+session_start(); //[cite: 7]
+include('../koneksi.php'); //[cite: 7]
 
 // 🔐 Proteksi admin
-if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.php");
-    exit();
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') { //[cite: 7]
+    // Jalur diperbaiki: Mundur 2 tingkat ke folder utama tempat login.php berada
+    header("Location: ../../login.php?status=wajib_login");
+    exit(); //[cite: 7]
 }
+
+// 🗑️ LOGIKA PROSES HAPUS TESTIMONI
+// ... (Sisa kode ke bawah, HTML, dan query database semuanya tetap sama)
 
 // 🗑️ LOGIKA PROSES HAPUS TESTIMONI
 if (isset($_GET['hapus_id'])) {

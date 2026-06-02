@@ -15,8 +15,96 @@ session_start();
     body{
         font-family:'Plus Jakarta Sans', sans-serif;
         background:#fff0f5;
+        overflow: hidden; /* Mencegah scroll saat animasi welcome berjalan */
     }
 
+    /* === ANIMASI WELCOME OVERLAY === */
+    .welcome-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(135deg, #ff4f81, #ff85a2);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        animation: fadeOutBg 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        animation-delay: 2.2s; /* Durasi background menetap sebelum menghilang */
+    }
+
+    .welcome-text {
+        font-size: 2.5rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease forwards;
+        animation-delay: 0.3s;
+    }
+
+    .welcome-subtext {
+        font-size: 1.1rem;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s ease forwards;
+        animation-delay: 0.8s;
+    }
+
+    /* Animasi text loading ring */
+    .welcome-loader {
+        margin-top: 25px;
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    /* Keyframes Animasi */
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeOutBg {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(-100%);
+            visibility: hidden;
+        }
+    }
+
+    /* === ANIMASI HALAMAN LOGIN (KONTEN UTAMA) === */
+    .main-content {
+        width: 100%;
+        opacity: 0;
+        transform: scale(0.95);
+        animation: fadeInContent 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        animation-delay: 2.6s; /* Muncul tepat setelah tirai welcome naik */
+    }
+
+    @keyframes fadeInContent {
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* === STYLE LOGIN CARD === */
     .login-card{
         width:950px;
         border-radius:25px;
@@ -67,7 +155,15 @@ session_start();
 </head>
 <body>
 
-<div class="container d-flex align-items-center justify-content-center min-vh-100">
+<!-- 1. LAYER ANIMASI WELCOME -->
+<div class="welcome-overlay">
+    <h1 class="welcome-text">Selamat Datang</h1>
+    <p class="welcome-subtext">di Culinary Atelier Kedai Aishwa</p>
+    <div class="welcome-loader"></div>
+</div>
+
+<!-- 2. KONTEN UTAMA LOGIN (Sudah diperbaiki posisi Flexbox-nya agar presisi di tengah layar) -->
+<div class="main-content container d-flex align-items-center justify-content-center min-vh-100">
 
     <div class="card login-card shadow-lg border-0 overflow-hidden">
 
@@ -147,6 +243,13 @@ session_start();
     </div>
 
 </div>
+
+<!-- JavaScript untuk mengembalikan scroll setelah animasi selesai -->
+<script>
+    setTimeout(() => {
+        document.body.style.overflow = 'auto';
+    }, 3200); // Sesuai dengan total durasi transisi selesai
+</script>
 
 </body>
 </html>

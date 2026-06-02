@@ -1,10 +1,21 @@
 <?php
-// 1. KONEKSI DATABASE & PENGAMBILAN DATA
+session_start(); // Wajib ditambahkan di awal agar data login session terbaca[cite: 1, 2]
+
 // Silakan sesuaikan nama file koneksi database Anda (misal: koneksi.php atau config.php)
-include 'koneksi.php'; 
+include 'koneksi.php';
+
+// 🔐 Proteksi Halaman: Jika belum login atau bukan admin, balikkan ke login.php
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+    // Menggunakan "../../" untuk mundur 2 tingkat keluar dari subfolder dashboard admin
+    header("Location: ../../login.php?status=wajib_login");
+    exit();
+}
 
 $pesan = "";
 $status_pesan = "";
+
+// Cek apakah tabel pengaturan_sistem sudah ada, jika belum buat otomatis
+// ... (Sisa kode proses UPDATE database dan struktur HTML di bawahnya tetap sama) ...
 
 // Cek apakah tabel pengaturan_sistem sudah ada, jika belum buat otomatis (bisa dihapus jika tabel sudah dibuat manual)
 $conn->query("CREATE TABLE IF NOT EXISTS pengaturan_sistem (

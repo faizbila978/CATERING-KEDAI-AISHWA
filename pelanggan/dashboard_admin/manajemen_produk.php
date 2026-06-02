@@ -1,8 +1,17 @@
 <?php
+session_start(); // Wajib dijalankan di awal untuk membaca data session yang aktif
 include "koneksi.php";
+
+// Proteksi Halaman: Jika belum login atau role-nya bukan admin, lempar kembali ke login.php
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+    // Mundur 2 tingkat keluar dari folder (/pelanggan/dashboard_admin/) menuju letak file login.php
+    header("Location: login.php?status=wajib_login");
+    exit();
+}
 
 // 1. Logika Pencarian
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+// ... (Sisa kode ke bawah seperti query database, renderCardPHP, dan HTML di bawahnya tetap sama)
 
 // Query Menu Utama
 $queryMenu = "SELECT * FROM menu";

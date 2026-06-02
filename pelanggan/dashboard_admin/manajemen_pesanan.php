@@ -2,8 +2,11 @@
 session_start();
 include 'koneksi.php';
 
-// Pastikan user adalah admin
+// Proteksi Halaman: Jika belum login atau bukan admin, tendang ke login.php
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+    // Keluar dua tingkat dari folder /dashboard_admin/pelanggan/ ke root projek jika diperlukan, 
+    // atau sesuaikan dengan posisi file login.php Anda.
+    header("Location:login.php?status=wajib_login");
     exit();
 }
 
@@ -158,6 +161,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                             <select name="status_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 bg-white">
                                 <option value="">Semua Status</option>
                                 <option value="Menunggu Bayar">Menunggu</option>
+                                <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Diproses">Proses</option>
                                 <option value="Dikirim">Kirim</option>
@@ -212,7 +216,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         $payment_status = $pesanan['status_pembayaran'] ?? 'Belum Bayar';
                                         $status_dp = $pesanan['status_dp'] ?? 'Belum Bayar';
                                         
-                                        // LOGIKA PERBAIKAN: Penentuan Tipe Skema & Badge Status Bayar
+                                        // Penentuan Tipe Skema & Badge Status Bayar
                                         $tipe_pembayaran = 'Full (100%)';
                                         $badge_skema_class = 'badge-full';
                                         if (strpos(strtolower($pesanan['metode_pembayaran'] ?? ''), '-dp') !== false || $status_dp == 'Selesai' || !empty($pesanan['jumlah_dp'])) {
@@ -231,32 +235,24 @@ while ($row = mysqli_fetch_assoc($result)) {
                                             $ui_status_bayar = "<span class='status-badge payment-belum'>Belum Bayar</span>";
                                         }
 
-                                        // Apakah pesanan ini sudah berhak diproses logistik dapurnya?
-                                        $is_accessible_to_process = ($status_dp === 'Selesai' || $payment_status === 'Selesai' || $payment_status === 'Menunggu Konfirmasi');
-
                                         // ================= LOGIKA STATUS ALUR PESANAN =================
                                         $status_db = $pesanan['status_pesanan'];
                                         $next_status = ''; $btn_text = ''; $btn_class = ''; $confirm_msg = ''; $clickable = true;
 
-                                        if (!$is_accessible_to_process) {
-                                            if ($status_db === 'Dibatalkan') {
-                                                $btn_text = 'Dibatalkan'; $btn_class = 'bg-red-100 text-red-700 border-red-300 cursor-not-allowed'; $clickable = false;
-                                            } else {
-                                                $btn_text = 'Menunggu Bayar'; $btn_class = 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'; $clickable = false;
-                                            }
-                                        } else {
-                                            if (empty($status_db) || $status_db === 'Menunggu Bayar' || $status_db === 'Pending') {
-                                                $btn_text = 'Pending (Terima)'; $btn_class = 'bg-yellow-100 text-yellow-800 border-yellow-300 hover:bg-yellow-200';
-                                                $next_status = 'Diproses'; $confirm_msg = 'Ubah status pesanan ke DIPROSES (Masuk Dapur)?';
-                                            } elseif ($status_db === 'Diproses') {
-                                                $btn_text = 'Diproses (Kirim)'; $btn_class = 'bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200';
-                                                $next_status = 'Dikirim'; $confirm_msg = 'Katering siap diantar? Ubah status ke DIKIRIM?';
-                                            } elseif ($status_db === 'Dikirim') {
-                                                $btn_text = 'Dikirim (Selesai)'; $btn_class = 'bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-200';
-                                                $next_status = 'Selesai'; $confirm_msg = 'Acara selesai & Katering sukses diterima? Ubah status ke SELESAI?';
-                                            } elseif ($status_db === 'Selesai') {
-                                                $btn_text = 'Selesai'; $btn_class = 'bg-green-100 text-green-800 border-green-300 cursor-not-allowed'; $clickable = false;
-                                            }
+                                        // MODIFIKASI: Menghapus pengecekan kaku $is_accessible_to_process agar pesanan masuk bisa langsung dikonfirmasi admin
+                                        if ($status_db === 'Dibatalkan') {
+                                            $btn_text = 'Dibatalkan'; $btn_class = 'bg-red-100 text-red-700 border-red-300 cursor-not-allowed'; $clickable = false;
+                                        } elseif (empty($status_db) || $status_db === 'Menunggu Bayar' || $status_db === 'Pending' || $status_db === 'Menunggu Verifikasi') {
+                                            $btn_text = 'Konfirmasi Pesanan'; $btn_class = 'bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200';
+                                            $next_status = 'Diproses'; $confirm_msg = 'Konfirmasi bahwa pesanan telah masuk & ubah status ke DIPROSES (Masuk Dapur)?';
+                                        } elseif ($status_db === 'Diproses') {
+                                            $btn_text = 'Diproses (Kirim)'; $btn_class = 'bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200';
+                                            $next_status = 'Dikirim'; $confirm_msg = 'Katering siap diantar? Ubah status ke DIKIRIM?';
+                                        } elseif ($status_db === 'Dikirim') {
+                                            $btn_text = 'Dikirim (Selesai)'; $btn_class = 'bg-orange-100 text-orange-800 border-orange-300 hover:bg-orange-200';
+                                            $next_status = 'Selesai'; $confirm_msg = 'Acara selesai & Katering sukses diterima? Ubah status ke SELESAI?';
+                                        } elseif ($status_db === 'Selesai') {
+                                            $btn_text = 'Selesai'; $btn_class = 'bg-green-100 text-green-800 border-green-300 cursor-not-allowed'; $clickable = false;
                                         }
                                     ?>
                                     <tr class="hover:bg-pink-50 bg-white transition">
@@ -271,7 +267,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         <td class="px-4 py-4 text-center"><?php echo $ui_status_bayar; ?></td>
                                         <td class="px-5 py-4 text-center">
                                             <?php if ($clickable): ?>
-                                                <button onclick="confirmNextStatus({$pesanan['pesanan_id']}, '$next_status', '$confirm_msg')" class='text-xs font-bold border rounded px-3 py-1.5 w-full shadow-sm transition <?php echo $btn_class; ?>'>
+                                                <button onclick="confirmNextStatus(<?php echo $pesanan['pesanan_id']; ?>, '<?php echo $next_status; ?>', '<?php echo $confirm_msg; ?>')" class='text-xs font-bold border rounded px-3 py-1.5 w-full shadow-sm transition <?php echo $btn_class; ?>'>
                                                     <?php echo $btn_text; ?>
                                                 </button>
                                             <?php else: ?>
@@ -316,6 +312,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <p>Nama: <span class="font-medium text-gray-900" id="modalNama"></span></p>
                         <p>No. HP: <span class="font-medium text-gray-900" id="modalNoHp"></span></p>
                         <p>Alamat: <span class="font-medium text-gray-900 block text-xs" id="modalAlamat"></span></p>
+                        <p>Catatan: <span class="font-bold text-amber-600 block text-xs" id="modalCatatan"></span></p>
                     </div>
                 </div>
                 <div>
@@ -368,10 +365,12 @@ while ($row = mysqli_fetch_assoc($result)) {
             document.getElementById('modalNoHp').textContent = pesanan.no_handphone || '-';
             document.getElementById('modalAlamat').textContent = pesanan.alamat || '-';
             
+            document.getElementById('modalCatatan').textContent = pesanan.catatan || 'Tidak ada catatan';
+            
             let total = parseInt(pesanan.total_pesan) || 0;
             let dp = parseInt(pesanan.jumlah_dp) || 0;
             let sisa = total - dp;
-            if(pesanan.status_pembayaran === 'Selesai') { sisa = 0; } // jika lunas total, sisa tagihan habis
+            if(pesanan.status_pembayaran === 'Selesai') { sisa = 0; }
 
             document.getElementById('modalTotal').textContent = 'Rp ' + total.toLocaleString('id-ID');
             document.getElementById('modalDP').textContent = 'Rp ' + dp.toLocaleString('id-ID') + (pesanan.status_dp === 'Selesai' ? ' (Paid)' : ' (Unpaid)');
@@ -379,7 +378,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
             let itemsHTML = '';
             details.forEach(item => {
-                const img = item.gambar ? 'img/' + item.gambar : 'https://via.placeholder.com/200x150';
+                const img = item.gambar ? '../img/' + item.gambar : 'https://via.placeholder.com/200x150';
                 itemsHTML += `
                     <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
                         <img src="${img}" class="w-12 h-12 object-cover rounded">
