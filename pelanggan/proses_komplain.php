@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tmp_name  = $_FILES['foto_produk']['tmp_name'];
     $ukuran    = $_FILES['foto_produk']['size'];
     
-    $target_dir = "img/uploads/komplain/";
+    $target_dir = "../img/uploads/komplain/";
     
     if (!is_dir($target_dir)) {
         mkdir($target_dir, 0775, true);
