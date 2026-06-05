@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'koneksi.php';
+include '../koneksi.php';
 
 // ====================================================================
 // FITUR BARU: MENGEMBALIKAN PESANAN JIKA USER KEMBALI DARI PEMBAYARAN
@@ -130,7 +130,7 @@ $total_porsi_keranjang = 0;
                 ?>
                 <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
                     
-                    <img src="img/<?php echo $menu['gambar']; ?>" 
+                    <img src="../img/<?php echo $menu['gambar']; ?>" 
                          class="rounded-3 shadow-sm me-3" 
                          style="width: 80px; height: 80px; object-fit: cover;">
 

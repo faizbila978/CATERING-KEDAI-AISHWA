@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-include "koneksi.php"; // Pastikan koneksi database dipanggil
+include "../koneksi.php"; // Pastikan koneksi database dipanggil
 
 // Ambil data pengaturan web
 $query_pengaturan = mysqli_query($conn, "SELECT * FROM pengaturan_web WHERE id = 1");
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Buat nama file unik agar tidak bentrok
         $ekstensi = pathinfo($nama_file, PATHINFO_EXTENSION);
         $nama_file_baru = time() . "_bukti." . $ekstensi;
-        $path_upload = "img/" . $nama_file_baru;
+        $path_upload = "../img/" . $nama_file_baru;
 
         if (move_uploaded_file($tmp_file, $path_upload)) {
             // Masukkan data komplain ke database
@@ -159,7 +159,7 @@ $menu_link = isset($_SESSION['user_email']) ? 'menu.php' : 'login.php';
 
                 <div class="col-lg-6 mt-5 mt-lg-0">
                     <div class="image-wrapper p-4 text-center">
-                        <img src="img/ayambakar.png" alt="Featured Dish" class="img-fluid main-img shadow-lg">
+                        <img src="../img/ayambakar.png" alt="Featured Dish" class="img-fluid main-img shadow-lg">
                         <div class="stat-card">
                             <div>
                                 <h6 class="mb-0 fw-bold">1.200+ Porsi</h6>
@@ -191,7 +191,7 @@ $menu_link = isset($_SESSION['user_email']) ? 'menu.php' : 'login.php';
                     <div class="col-md-6 col-lg-4">
                         <a href="<?php echo $menu_link; ?>" class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden clickable-card">
                             <div class="position-relative">
-                                <img src="img/<?php echo $menu_fav['gambar']; ?>" class="card-img-top" alt="<?php echo htmlspecialchars($menu_fav['nama_menu']); ?>" style="height: 250px; object-fit: cover;">
+                                <img src="../img/<?php echo $menu_fav['gambar']; ?>" class="card-img-top" alt="<?php echo htmlspecialchars($menu_fav['nama_menu']); ?>" style="height: 250px; object-fit: cover;">
                                 <span class="position-absolute top-0 end-0 m-3 badge bg-pink px-3 py-2 rounded-pill">Rekomendasi</span>
                             </div>
                             <div class="card-body p-4 d-flex flex-column justify-content-between">
