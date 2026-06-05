@@ -1,11 +1,9 @@
 <?php
 session_start();
-include 'koneksi.php';
+include '../koneksi.php';
 
 // Proteksi Halaman: Jika belum login atau bukan admin, tendang ke login.php
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    // Keluar dua tingkat dari folder /dashboard_admin/pelanggan/ ke root projek jika diperlukan, 
-    // atau sesuaikan dengan posisi file login.php Anda.
     header("Location:login.php?status=wajib_login");
     exit();
 }
@@ -22,11 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit();
 }
 
-// PROSES 2: Konfirmasi Pelunasan Pembayaran oleh Admin (TAMBAHAN BARU)
+// PROSES 2: Konfirmasi Pelunasan Pembayaran oleh Admin
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'konfirmasi_lunas') {
     $id_pesanan_pay = mysqli_real_escape_string($conn, $_POST['pesanan_id']);
     
-    // Set status_pembayaran utama menjadi Selesai (Lunas 100%)
     $pay_query = "UPDATE pembayaran SET status_pembayaran = 'Selesai' WHERE pesanan_id = '$id_pesanan_pay'";
     mysqli_query($conn, $pay_query);
     
@@ -107,58 +104,69 @@ while ($row = mysqli_fetch_assoc($result)) {
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .status-badge { 
-            padding: 6px 12px; 
+            padding: 4px 10px; 
             border-radius: 20px; 
-            font-size: 12px; 
+            font-size: 11px; 
             font-weight: bold; 
             display: inline-block;
+            white-space: nowrap;
         }
         .payment-belum { background-color: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
         .payment-dp { background-color: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
         .payment-konfirmasi { background-color: #E0F2FE; color: #0369A1; border: 1px solid #7DD3FC; animation: pulse 2s infinite; }
         .payment-sudah { background-color: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
         
-        .badge-dp { background-color: #FCD34D; color: #78350F; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
-        .badge-full { background-color: #10B981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        .badge-dp { background-color: #FCD34D; color: #78350F; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; white-space: nowrap; }
+        .badge-full { background-color: #10B981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; white-space: nowrap; }
         
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; }
         .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: white; border-radius: 12px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); width: 90%; max-width: 700px; }
+        .modal-content { background: white; border-radius: 12px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); width: 92%; max-width: 650px; }
+
+        /* Custom scrollbar tipis untuk container tabel */
+        .custom-table-scroll::-webkit-scrollbar { height: 6px; }
+        .custom-table-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-table-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen">
 
-    <div class="flex">
+    <!-- Diubah ke flex-col untuk HP, md:flex-row untuk Desktop agar sidebar menyatu dengan pas -->
+    <div class="flex flex-col md:flex-row min-h-screen">
         <?php include('sidebar.php'); ?>
 
-        <main class="flex-1 flex flex-col h-screen">
-            <header class="bg-white shadow-sm border-b border-gray-200 p-6 flex justify-between items-center">
+        <main class="flex-1 flex flex-col h-screen overflow-y-auto">
+            <!-- Header Responsif -->
+            <header class="bg-white shadow-sm border-b border-gray-200 p-4 md:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-800 flex items-center">
                         <i class="fas fa-shopping-cart text-pink-600 mr-3"></i> Manajemen Pesanan
                     </h2>
-                    <p class="text-gray-500 text-sm mt-1">Kelola pesanan dan konfirmasi pembayaran</p>
+                    <p class="text-gray-500 text-xs md:text-sm mt-0.5">Kelola pesanan dan konfirmasi pembayaran</p>
                 </div>
-                <div class="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
+                <div class="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-4 py-1.5 rounded-full text-xs md:text-sm font-bold shadow-md w-full sm:w-auto text-center">
                     <i class="fas fa-bell mr-2"></i> <?php echo count($pesanan_list); ?> PESANAN
                 </div>
             </header>
 
-            <div class="flex-1 p-6 overflow-y-auto">
-                <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200 mb-6 flex flex-wrap items-center justify-between gap-4">
-                    <form method="GET" action="manajemen_pesanan.php" class="flex flex-wrap items-end gap-4 w-full">
-                        <div class="flex-1 min-w-[200px]">
-                            <label class="block text-xs font-bold text-gray-500 mb-1">CARI ID PESANAN</label>
+            <!-- Container Konten Utama -->
+            <div class="flex-1 p-4 md:p-6 space-y-6">
+                
+                <!-- Area Filter Form Responsif -->
+                <div class="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-gray-200">
+                    <form method="GET" action="manajemen_pesanan.php" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 mb-1 tracking-wider">CARI ID PESANAN</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-search text-gray-400 text-sm"></i>
+                                    <i class="fas fa-search text-gray-400 text-xs"></i>
                                 </div>
-                                <input type="text" name="search_id" value="<?php echo isset($_GET['search_id']) ? htmlspecialchars($_GET['search_id']) : ''; ?>" placeholder="Contoh: 068" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition">
+                                <input type="text" name="search_id" value="<?php echo isset($_GET['search_id']) ? htmlspecialchars($_GET['search_id']) : ''; ?>" placeholder="Contoh: 068" class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition bg-gray-50/50">
                             </div>
                         </div>
-                        <div class="w-40">
-                            <label class="block text-xs font-bold text-gray-500 mb-1">STATUS</label>
-                            <select name="status_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 bg-white">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 mb-1 tracking-wider">STATUS</label>
+                            <select name="status_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 bg-white">
                                 <option value="">Semua Status</option>
                                 <option value="Menunggu Bayar">Menunggu</option>
                                 <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
@@ -169,10 +177,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <option value="Dibatalkan">Batal</option>
                             </select>
                         </div>
-                        <div class="w-32">
-                            <label class="block text-xs font-bold text-gray-500 mb-1">BULAN</label>
-                            <select name="bulan" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 bg-white">
-                                <option value="">Bulan</option>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 mb-1 tracking-wider">BULAN</label>
+                            <select name="bulan" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 bg-white">
+                                <option value="">Semua Bulan</option>
                                 <?php
                                 $bulan_array = ['01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April', '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus', '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'];
                                 foreach ($bulan_array as $num => $name) {
@@ -181,26 +189,31 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 ?>
                             </select>
                         </div>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition shadow-sm">Tampilkan</button>
+                        <div>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-xs font-semibold transition shadow-sm w-full h-[34px] tracking-wide uppercase">
+                                <i class="fas fa-filter mr-1.5"></i> Tampilkan
+                            </button>
+                        </div>
                     </form>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-gradient-to-r from-pink-50 to-pink-100 border-b border-pink-200">
+                <!-- Pembungkus Tabel Utama dengan Fitur Horizontal Scroll Aman -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
+                    <div class="overflow-x-auto custom-table-scroll w-full">
+                        <table class="w-full text-left border-collapse min-w-[900px]">
+                            <thead class="bg-gradient-to-r from-pink-50 to-pink-100 border-b border-pink-200 text-pink-900 text-xs font-bold uppercase tracking-wider">
                                 <tr>
-                                    <th class="px-5 py-4 text-left text-xs font-bold text-pink-900 uppercase tracking-wider">ID Pesanan</th>
-                                    <th class="px-5 py-4 text-left text-xs font-bold text-pink-900 uppercase tracking-wider">Pelanggan</th>
-                                    <th class="px-5 py-4 text-left text-xs font-bold text-pink-900 uppercase tracking-wider">Tgl Acara</th>
-                                    <th class="px-5 py-4 text-left text-xs font-bold text-pink-900 uppercase tracking-wider">Total</th>
-                                    <th class="px-4 py-4 text-center text-xs font-bold text-pink-900 uppercase tracking-wider">Tipe Skema</th>
-                                    <th class="px-4 py-4 text-center text-xs font-bold text-pink-900 uppercase tracking-wider">Status Bayar</th>
-                                    <th class="px-5 py-4 text-center text-xs font-bold text-pink-900 uppercase tracking-wider">Status Alur Katering</th>
-                                    <th class="px-4 py-4 text-center text-xs font-bold text-pink-900 uppercase tracking-wider">Aksi</th>
+                                    <th class="px-4 py-3.5 text-center">ID Pesanan</th>
+                                    <th class="px-5 py-3.5">Pelanggan</th>
+                                    <th class="px-4 py-3.5 text-center">Tgl Acara</th>
+                                    <th class="px-5 py-3.5">Total Kontrak</th>
+                                    <th class="px-4 py-3.5 text-center">Tipe Skema</th>
+                                    <th class="px-4 py-3.5 text-center">Status Bayar</th>
+                                    <th class="px-5 py-3.5 text-center">Status Alur Katering</th>
+                                    <th class="px-4 py-3.5 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200">
+                            <tbody class="divide-y divide-gray-200 text-xs text-gray-600">
                                 <?php if (!empty($pesanan_list)): ?>
                                     <?php foreach ($pesanan_list as $pesanan): 
                                         $detail_query = mysqli_query($conn, "
@@ -216,7 +229,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         $payment_status = $pesanan['status_pembayaran'] ?? 'Belum Bayar';
                                         $status_dp = $pesanan['status_dp'] ?? 'Belum Bayar';
                                         
-                                        // Penentuan Tipe Skema & Badge Status Bayar
                                         $tipe_pembayaran = 'Full (100%)';
                                         $badge_skema_class = 'badge-full';
                                         if (strpos(strtolower($pesanan['metode_pembayaran'] ?? ''), '-dp') !== false || $status_dp == 'Selesai' || !empty($pesanan['jumlah_dp'])) {
@@ -224,22 +236,19 @@ while ($row = mysqli_fetch_assoc($result)) {
                                             $badge_skema_class = 'badge-dp';
                                         }
 
-                                        // Styling Label Status Bayar yang Akurat
                                         if ($payment_status === 'Selesai') {
                                             $ui_status_bayar = "<span class='status-badge payment-sudah'><i class='fas fa-check-circle mr-1'></i> Lunas Total</span>";
                                         } elseif ($payment_status === 'Menunggu Konfirmasi') {
-                                            $ui_status_bayar = "<span class='status-badge payment-konfirmasi'><i class='fas fa-clock mr-1'></i> Verifikasi Pelunasan</span>";
+                                            $ui_status_bayar = "<span class='status-badge payment-konfirmasi'><i class='fas fa-clock mr-1'></i> Verifikasi Sisa</span>";
                                         } elseif ($status_dp === 'Selesai') {
                                             $ui_status_bayar = "<span class='status-badge payment-dp'><i class='fas fa-cookie mr-1'></i> Baru Bayar DP</span>";
                                         } else {
                                             $ui_status_bayar = "<span class='status-badge payment-belum'>Belum Bayar</span>";
                                         }
 
-                                        // ================= LOGIKA STATUS ALUR PESANAN =================
                                         $status_db = $pesanan['status_pesanan'];
                                         $next_status = ''; $btn_text = ''; $btn_class = ''; $confirm_msg = ''; $clickable = true;
 
-                                        // MODIFIKASI: Menghapus pengecekan kaku $is_accessible_to_process agar pesanan masuk bisa langsung dikonfirmasi admin
                                         if ($status_db === 'Dibatalkan') {
                                             $btn_text = 'Dibatalkan'; $btn_class = 'bg-red-100 text-red-700 border-red-300 cursor-not-allowed'; $clickable = false;
                                         } elseif (empty($status_db) || $status_db === 'Menunggu Bayar' || $status_db === 'Pending' || $status_db === 'Menunggu Verifikasi') {
@@ -255,41 +264,43 @@ while ($row = mysqli_fetch_assoc($result)) {
                                             $btn_text = 'Selesai'; $btn_class = 'bg-green-100 text-green-800 border-green-300 cursor-not-allowed'; $clickable = false;
                                         }
                                     ?>
-                                    <tr class="hover:bg-pink-50 bg-white transition">
-                                        <td class="px-5 py-4 font-mono text-sm font-bold text-gray-700">#ORD-<?php echo str_pad($pesanan['pesanan_id'], 3, '0', STR_PAD_LEFT); ?></td>
+                                    <tr class="hover:bg-pink-50/50 bg-white transition">
+                                        <td class="px-4 py-4 font-mono font-bold text-gray-700 text-center">#ORD-<?php echo str_pad($pesanan['pesanan_id'], 3, '0', STR_PAD_LEFT); ?></td>
                                         <td class="px-5 py-4">
-                                            <div class="font-medium text-gray-900"><?php echo htmlspecialchars($pesanan['nama_lengkap'] ?? 'N/A'); ?></div>
-                                            <div class="text-xs text-gray-500"><?php echo htmlspecialchars($pesanan['no_handphone'] ?? ''); ?></div>
+                                            <div class="font-semibold text-gray-900"><?php echo htmlspecialchars($pesanan['nama_lengkap'] ?? 'N/A'); ?></div>
+                                            <div class="text-[11px] text-gray-500 mt-0.5"><?php echo htmlspecialchars($pesanan['no_handphone'] ?? ''); ?></div>
                                         </td>
-                                        <td class="px-5 py-4 text-sm text-gray-600"><?php echo date('d/m/Y', strtotime($pesanan['tanggal_acara'])); ?></td>
+                                        <td class="px-4 py-4 text-center font-medium"><?php echo date('d/m/Y', strtotime($pesanan['tanggal_acara'])); ?></td>
                                         <td class="px-5 py-4 font-bold text-pink-600">Rp <?php echo number_format($pesanan['total_pesan'], 0, ',', '.'); ?></td>
                                         <td class="px-4 py-4 text-center"><span class="<?php echo $badge_skema_class; ?>"><?php echo $tipe_pembayaran; ?></span></td>
                                         <td class="px-4 py-4 text-center"><?php echo $ui_status_bayar; ?></td>
                                         <td class="px-5 py-4 text-center">
                                             <?php if ($clickable): ?>
-                                                <button onclick="confirmNextStatus(<?php echo $pesanan['pesanan_id']; ?>, '<?php echo $next_status; ?>', '<?php echo $confirm_msg; ?>')" class='text-xs font-bold border rounded px-3 py-1.5 w-full shadow-sm transition <?php echo $btn_class; ?>'>
+                                                <button onclick="confirmNextStatus(<?php echo $pesanan['pesanan_id']; ?>, '<?php echo $next_status; ?>', '<?php echo $confirm_msg; ?>')" class='text-[11px] font-bold border rounded-lg px-3 py-1.5 w-full shadow-sm transition max-w-[160px] inline-block <?php echo $btn_class; ?>'>
                                                     <?php echo $btn_text; ?>
                                                 </button>
                                             <?php else: ?>
-                                                <span class='text-xs font-bold border rounded px-3 py-1.5 w-full inline-block <?php echo $btn_class; ?>'><?php echo $btn_text; ?></span>
+                                                <span class='text-[11px] font-bold border rounded-lg px-3 py-1.5 w-full max-w-[160px] inline-block <?php echo $btn_class; ?>'><?php echo $btn_text; ?></span>
                                             <?php endif; ?>
                                         </td>
-                                        <td class="px-4 py-4 text-center space-y-1">
-                                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded text-xs transition font-medium w-full block" 
-                                                    onclick="showDetailModal(<?php echo htmlspecialchars(json_encode($pesanan)); ?>, <?php echo htmlspecialchars(json_encode($details)); ?>)">
-                                                <i class="fas fa-eye"></i> Detail
-                                            </button>
-
-                                            <?php if ($payment_status === 'Menunggu Konfirmasi'): ?>
-                                                <button onclick="konfirmasiLunas(<?php echo $pesanan['pesanan_id']; ?>)" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-xs transition font-bold w-full block shadow animate-bounce">
-                                                    <i class="fas fa-check"></i> ACC Lunas
+                                        <td class="px-4 py-4 text-center">
+                                            <div class="flex flex-col gap-1.5 max-w-[110px] mx-auto">
+                                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-2.5 py-1.5 rounded-md font-medium transition shadow-sm" 
+                                                        onclick="showDetailModal(<?php echo htmlspecialchars(json_encode($pesanan)); ?>, <?php echo htmlspecialchars(json_encode($details)); ?>)">
+                                                    <i class="fas fa-eye mr-1"></i> Detail
                                                 </button>
-                                            <?php endif; ?>
+
+                                                <?php if ($payment_status === 'Menunggu Konfirmasi'): ?>
+                                                    <button onclick="konfirmasiLunas(<?php echo $pesanan['pesanan_id']; ?>)" class="bg-green-600 hover:bg-green-700 text-white px-2.5 py-1.5 rounded-md font-bold transition shadow-md animate-bounce">
+                                                        <i class="fas fa-check mr-1"></i> ACC
+                                                    </button>
+                                                <?php endif; ?>
+                                            </div>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <tr><td colspan="8" class="px-6 py-8 text-center text-gray-500">Tidak ada data pesanan.</td></tr>
+                                    <tr><td colspan="8" class="px-6 py-12 text-center text-gray-400 italic">Tidak ada data pesanan ditemukan.</td></tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
@@ -299,39 +310,47 @@ while ($row = mysqli_fetch_assoc($result)) {
         </main>
     </div>
 
-    <div id="detailModal" class="modal">
-        <div class="modal-content p-6">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-200">
-                <h3 class="text-xl font-bold text-gray-800" id="modalTitle">Detail Pesanan</h3>
-                <button onclick="closeDetailModal()" class="text-gray-500 hover:text-gray-700 text-2xl"><i class="fas fa-times"></i></button>
+    <!-- Modal Detail Responsif -->
+    <div id="detailModal" class="modal px-4">
+        <div class="modal-content p-5 md:p-6">
+            <div class="flex justify-between items-center mb-5 pb-3 border-b border-gray-200">
+                <h3 class="text-lg md:text-xl font-bold text-gray-800" id="modalTitle">Detail Pesanan</h3>
+                <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 text-2xl transition"><i class="fas fa-times"></i></button>
             </div>
-            <div class="grid grid-cols-2 gap-6 mb-6">
-                <div>
-                    <h4 class="font-bold text-gray-700 mb-2">Informasi Pelanggan</h4>
-                    <div class="space-y-1 text-sm text-gray-600">
-                        <p>Nama: <span class="font-medium text-gray-900" id="modalNama"></span></p>
-                        <p>No. HP: <span class="font-medium text-gray-900" id="modalNoHp"></span></p>
-                        <p>Alamat: <span class="font-medium text-gray-900 block text-xs" id="modalAlamat"></span></p>
-                        <p>Catatan: <span class="font-bold text-amber-600 block text-xs" id="modalCatatan"></span></p>
+            <!-- Grid Modal: 1 kolom di HP, 2 kolom di tablet/PC -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-100">
+                    <h4 class="font-bold text-xs uppercase text-gray-500 mb-2 tracking-wider"><i class="fas fa-user mr-1.5 text-pink-500"></i>Informasi Pelanggan</h4>
+                    <div class="space-y-1.5 text-xs text-gray-600">
+                        <p>Nama: <span class="font-semibold text-gray-900" id="modalNama"></span></p>
+                        <p>No. HP: <span class="font-semibold text-gray-900" id="modalNoHp"></span></p>
+                        <p>Alamat: <span class="font-medium text-gray-800 block mt-0.5" id="modalAlamat"></span></p>
+                        <p class="pt-1 border-t border-dashed border-gray-200 mt-2">Catatan: <span class="font-bold text-amber-600 block" id="modalCatatan"></span></p>
                     </div>
                 </div>
-                <div>
-                    <h4 class="font-bold text-gray-700 mb-2">Rincian Finansial</h4>
-                    <div class="space-y-1 text-sm text-gray-600">
-                        <p>Total Kontrak: <span class="font-bold text-pink-600" id="modalTotal"></span></p>
-                        <p>Uang DP: <span class="font-medium text-orange-600" id="modalDP"></span></p>
-                        <p>Sisa Tagihan: <span class="font-bold text-red-600" id="modalSisa"></span></p>
+                <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-100">
+                    <h4 class="font-bold text-xs uppercase text-gray-500 mb-2 tracking-wider"><i class="fas fa-wallet mr-1.5 text-pink-500"></i>Rincian Finansial</h4>
+                    <div class="space-y-1.5 text-xs text-gray-600">
+                        <p>Total Kontrak: <span class="font-bold text-pink-600 text-sm" id="modalTotal"></span></p>
+                        <p>Uang DP: <span class="font-semibold text-orange-600" id="modalDP"></span></p>
+                        <div class="pt-1.5 border-t border-gray-200 mt-2 flex justify-between items-center">
+                            <span class="font-medium">Sisa Tagihan:</span>
+                            <span class="font-bold text-red-600 text-sm" id="modalSisa"></span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <h4 class="font-bold text-gray-700 mb-2 border-t pt-4">Menu Katering Ditargetkan</h4>
-            <div id="itemsContainer" class="space-y-3 mb-6"></div>
-            <div class="flex justify-end gap-2 bg-gray-50 p-4 -mx-6 -mb-6 rounded-b-lg">
-                <button onclick="closeDetailModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg text-sm transition">Tutup</button>
+            
+            <h4 class="font-bold text-xs uppercase text-gray-500 mb-2 tracking-wider border-t pt-4"><i class="fas fa-utensils mr-1.5 text-pink-500"></i>Menu Katering Ditargetkan</h4>
+            <div id="itemsContainer" class="space-y-2.5 max-h-[180px] overflow-y-auto pr-1"></div>
+            
+            <div class="flex justify-end gap-2 bg-gray-50 p-4 -mx-5 md:-mx-6 -mb-5 md:-mb-6 mt-6 rounded-b-xl border-t border-gray-100">
+                <button onclick="closeDetailModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg text-xs font-semibold transition uppercase tracking-wider">Tutup</button>
             </div>
         </div>
     </div>
 
+    <!-- Script Alur Interaksi Form Jquery/Vanilla -->
     <script>
         function confirmNextStatus(pesananId, nextStatus, pesanKonfirmasi) {
             if (confirm(pesanKonfirmasi)) {
@@ -364,7 +383,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             document.getElementById('modalNama').textContent = pesanan.nama_lengkap || 'N/A';
             document.getElementById('modalNoHp').textContent = pesanan.no_handphone || '-';
             document.getElementById('modalAlamat').textContent = pesanan.alamat || '-';
-            
             document.getElementById('modalCatatan').textContent = pesanan.catatan || 'Tidak ada catatan';
             
             let total = parseInt(pesanan.total_pesan) || 0;
@@ -380,11 +398,11 @@ while ($row = mysqli_fetch_assoc($result)) {
             details.forEach(item => {
                 const img = item.gambar ? '../img/' + item.gambar : 'https://via.placeholder.com/200x150';
                 itemsHTML += `
-                    <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
-                        <img src="${img}" class="w-12 h-12 object-cover rounded">
-                        <div class="flex-1">
-                            <p class="font-bold text-gray-800 text-sm">${item.nama_menu}</p>
-                            <p class="text-xs text-gray-500">${item.jumlah_menu} porsi x Rp ${parseInt(item.harga_satuan).toLocaleString('id-ID')}</p>
+                    <div class="flex items-center gap-3 bg-gray-50 p-2.5 rounded-lg border border-gray-200">
+                        <img src="${img}" class="w-10 h-10 object-cover rounded shadow-sm">
+                        <div class="flex-1 min-w-0">
+                            <p class="font-bold text-gray-800 text-xs truncate">${item.nama_menu}</p>
+                            <p class="text-[11px] text-gray-500">${item.jumlah_menu} porsi x Rp ${parseInt(item.harga_satuan).toLocaleString('id-ID')}</p>
                         </div>
                     </div>`;
             });

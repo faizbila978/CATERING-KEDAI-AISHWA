@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_email'])) {
     exit();
 }
 
-include "koneksi.php";
+include "../koneksi.php";
 
 // Logika Pencarian Sederhana
 $keyword = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
@@ -206,7 +206,7 @@ $keyword = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['sear
                         <div class="col-md-6 col-lg-3">
                             <div class="card menu-card h-100 shadow-sm">
                                 <div class="position-relative">
-                                    <img src="img/<?php echo $item['gambar']; ?>" 
+                                    <img src="../img/<?php echo $item['gambar']; ?>" 
                                          class="card-img-top" 
                                          style="height: 220px;" 
                                          alt="<?php echo $item['nama_menu']; ?>">

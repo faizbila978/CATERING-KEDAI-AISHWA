@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'koneksi.php';
+include '../koneksi.php';
 
 // Pastikan user sudah login
 // Pastikan user sudah login
@@ -77,7 +77,7 @@ $result = mysqli_query($conn, $query);
 
                 <div class="product-body">
                     <?php $gambar = !empty($row['gambar_menu']) ? $row['gambar_menu'] : 'default.png'; ?>
-                    <img src="img/<?php echo htmlspecialchars($gambar); ?>" alt="Menu" class="product-img">
+                    <img src="../img/<?php echo htmlspecialchars($gambar); ?>" alt="Menu" class="product-img">
                     <div class="product-info">
                         <div class="product-title">
                             <?php echo htmlspecialchars($row['nama_menu'] ?? 'Menu Tidak Diketahui'); ?> 
