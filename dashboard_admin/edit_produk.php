@@ -6,24 +6,46 @@ $data = mysqli_query($conn, "SELECT * FROM menu WHERE menu_id='$id'");
 $d = mysqli_fetch_assoc($data);
 ?>
 
-<!-- PENTING: Tambahkan enctype agar form bisa mengirim file -->
-<form action="proses_edit.php" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="<?= $d['menu_id'] ?>">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Menu</title>
+    <link rel="stylesheet" href="edit_produk.css">
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Edit Menu Kuliner</h2>
     
-    <label>Nama Menu:</label><br>
-    <input type="text" name="nama" value="<?= $d['nama_menu'] ?>"><br><br>
+    <form action="proses_edit.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?= $d['menu_id'] ?>">
+        
+        <div class="form-group">
+            <label>Nama Menu:</label>
+            <input type="text" name="nama" value="<?= $d['nama_menu'] ?>">
+        </div>
 
-    <label>Harga:</label><br>
-    <input type="number" name="harga" value="<?= $d['harga_satuan'] ?>"><br><br>
+        <div class="form-group">
+            <label>Harga:</label>
+            <input type="number" name="harga" value="<?= $d['harga_satuan'] ?>">
+        </div>
 
-    <label>Deskripsi:</label><br>
-    <textarea name="deskripsi"><?= $d['deskripsi'] ?></textarea><br><br>
+        <div class="form-group">
+            <label>Deskripsi:</label>
+            <textarea name="deskripsi"><?= $d['deskripsi'] ?></textarea>
+        </div>
 
-    <label>Gambar Saat Ini:</label><br>
-    <!-- Menampilkan gambar lama -->
-    <img src="uploads/<?= $d['gambar'] ?>" width="100"><br>
-    <input type="file" name="gambar"><br>
-    <small style="color: red;">*Kosongkan jika tidak ingin mengubah gambar</small><br><br>
+        <div class="form-group">
+            <label>Gambar Saat Ini:</label>
+            <img src="uploads/<?= $d['gambar'] ?>" width="100" class="current-img">
+            <input type="file" name="gambar">
+            <span class="note">*Kosongkan jika tidak ingin mengubah gambar</span>
+        </div>
 
-    <button type="submit">Update</button>
-</form>
+        <button type="submit">Update Menu</button>
+    </form>
+</div>
+
+</body>
+</html>
