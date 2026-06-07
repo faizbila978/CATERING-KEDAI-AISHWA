@@ -187,12 +187,11 @@ $nama_bulan = [
             </header>
 
             <div class="flex-1 p-6 overflow-y-auto">
-                <!-- FORM FILTER -->
                 <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200 mb-6">
                     <form method="GET" action="manajemen_pesanan.php" class="flex flex-wrap items-end gap-4">
                         <div class="flex-1 min-w-[280px]">
                             <label class="block text-xs font-bold text-gray-500 mb-1">CARI ID PESANAN</label>
-                            <input type="text" name="search_id" value="<?php echo isset($_GET['search_id']) ? htmlspecialchars($_GET['search_id']) : ''; ?>" placeholder="Contoh: 068" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-pink-500">
+                            <input type="text" name="search_id" value="<?php echo isset($_GET['search_id']) ? htmlspecialchars($_GET['search_id']) : ''; ?>" placeholder="Masukkan nomor ID / #ORD-001..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-pink-500">
                         </div>
                         
                         <div class="w-36">
@@ -236,7 +235,6 @@ $nama_bulan = [
                     </form>
                 </div>
 
-                <!-- TABEL DATA -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
                     <div class="overflow-x-auto">
                         <table class="w-full table-auto min-w-[1200px]">
@@ -308,7 +306,7 @@ $nama_bulan = [
                                             }
                                         }
 
-                                        // ================= LOGIKA FIX BARU: SIKLUS STATUS PESANAN (Menunggu Pembayaran -> Pending -> Proses -> Kirim -> Selesai) =================
+                                        // ================= LOGIKA BARU: SIKLUS STATUS PESANAN DENGAN AUTO-CHECK =================
                                         $next_status = ''; $btn_text = ''; $btn_class = ''; $confirm_msg = ''; $clickable = true;
 
                                         if ($status_db === 'DIBATALKAN') {
@@ -316,23 +314,23 @@ $nama_bulan = [
                                         } elseif ($status_db === 'SELESAI') {
                                             $btn_text = 'Selesai'; $btn_class = 'bg-green-100 text-green-700 border-green-300 cursor-not-allowed'; $clickable = false;
                                         } else {
-                                            // JIKA BELUM ADA KONFIRMASI PEMBAYARAN APAPUN (Menampilkan "Menunggu Pembayaran" dan dikunci pasif)
-                                            if ($status_db === '' || $status_db === 'MENUNGGU VERIFIKASI' || $status_db === 'MENUNGGU BAYAR') {
+                                            if (($payment_status === 'SELESAI' || $status_dp === 'LUNAS' || $status_dp === 'DP DIKONFIRMASI') && 
+                                                ($status_db === '' || $status_db === 'MENUNGGU VERIFIKASI' || $status_db === 'MENUNGGU BAYAR' || $status_db === 'PENDING')) {
+                                                
+                                                $btn_text = 'Pending'; 
+                                                $btn_class = 'bg-blue-500 text-white border-blue-600 hover:bg-blue-600';
+                                                $next_status = 'Diproses'; 
+                                                $confirm_msg = 'Ubah status pesanan menjadi Diproses?';
+                                            } 
+                                            elseif ($status_db === '' || $status_db === 'MENUNGGU VERIFIKASI' || $status_db === 'MENUNGGU BAYAR') {
                                                 $btn_text = 'Menunggu Pembayaran'; 
                                                 $btn_class = 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed font-medium text-[11px]'; 
                                                 $clickable = false;
                                             } 
-                                            // JIKA ADMIN SUDAH KLIK TOMBOL BAYAR -> Status Pesanan berubah jadi PENDING (Tombol Aktif Berwarna Biru)
-                                            elseif ($status_db === 'PENDING') {
-                                                $btn_text = 'Pending'; $btn_class = 'bg-blue-500 text-white border-blue-600 hover:bg-blue-600';
-                                                $next_status = 'Diproses'; $confirm_msg = 'Ubah status pesanan menjadi Diproses?';
-                                            }
-                                            // SIKLUS KLIK BERIKUTNYA: DIPROSES -> DIKIRIM
                                             elseif ($status_db === 'DIPROSES') {
                                                 $btn_text = 'Proses'; $btn_class = 'bg-purple-500 text-white border-purple-600 hover:bg-purple-600';
                                                 $next_status = 'Dikirim'; $confirm_msg = 'Ubah status pesanan menjadi Dikirim?';
                                             } 
-                                            // SIKLUS KLIK BERIKUTNYA: DIKIRIM -> SELESAI
                                             elseif ($status_db === 'DIKIRIM') {
                                                 $btn_text = 'Kirim'; $btn_class = 'bg-amber-500 text-white border-amber-600 hover:bg-amber-600';
                                                 $next_status = 'Selesai'; $confirm_msg = 'Selesaikan pesanan ini? Status Selesai bersifat permanen.';
@@ -353,7 +351,6 @@ $nama_bulan = [
                                         
                                         <td class="px-4 py-4 whitespace-nowrap text-center"><span class="<?php echo $badge_class; ?>"><?php echo $tipe_pembayaran; ?></span></td>
                                         
-                                        <!-- KOLOM STATUS BAYAR -->
                                         <td class="px-4 py-4 whitespace-nowrap text-center">
                                             <?php if ($bisa_konfirmasi_sekarang): ?>
                                                 <button onclick="confirmAction(<?php echo $pesanan['pesanan_id']; ?>, '<?php echo $action_type; ?>', 'Konfirmasi pembayaran untuk pesanan #ORD-<?php echo str_pad($pesanan['pesanan_id'], 3, '0', STR_PAD_LEFT); ?>?')" class="status-badge <?php echo $payment_badge_class; ?> border text-xs shadow-sm" type="button">
@@ -364,7 +361,6 @@ $nama_bulan = [
                                             <?php endif; ?>
                                         </td>
                                         
-                                        <!-- KOLOM STATUS PESANAN -->
                                         <td class="px-5 py-4 whitespace-nowrap text-center">
                                             <?php if ($clickable): ?>
                                                 <button onclick="confirmAction(<?php echo $pesanan['pesanan_id']; ?>, 'update_status_next', '<?php echo $confirm_msg; ?>', '<?php echo $next_status; ?>')" class="text-xs font-bold border rounded-lg px-2 py-1.5 w-full max-w-[140px] shadow-sm transition block text-center mx-auto uppercase <?php echo $btn_class; ?>"><?php echo $btn_text; ?></button>
@@ -373,17 +369,19 @@ $nama_bulan = [
                                             <?php endif; ?>
                                         </td>
                                         
-                                        <!-- KOLOM DETAIL -->
                                         <td class="px-4 py-4 whitespace-nowrap text-center">
                                             <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded text-sm transition font-medium shadow-sm" onclick='showDetailModal(<?php echo json_encode($pesanan); ?>, <?php echo json_encode($details); ?>)'><i class="fas fa-eye"></i> Detail</button>
                                         </td>
                                         
-                                        <!-- KOLOM BATAL -->
                                         <td class="px-4 py-4 whitespace-nowrap text-center">
-                                            <?php if ($status_db !== 'DIBATALKAN' && $status_db !== 'SELESAI'): ?>
-                                                <button class="bg-red-500 hover:bg-red-600 text-white w-9 h-9 rounded flex items-center justify-center transition shadow-sm mx-auto" title="Batalkan Pesanan" onclick="confirmAction(<?php echo $pesanan['pesanan_id']; ?>, 'update_status_next', 'Apakah Anda yakin ingin membatalkan pesanan ini?', 'Dibatalkan')"><i class="fas fa-trash-alt"></i></button>
+                                            <?php if ($status_db === 'DIBATALKAN' || $status_db === 'SELESAI' || $payment_status === 'SELESAI' || $status_dp === 'LUNAS' || $status_dp === 'DP DIKONFIRMASI'): ?>
+                                                <button class="bg-gray-200 text-gray-400 w-9 h-9 rounded flex items-center justify-center cursor-not-allowed mx-auto" disabled title="Pesanan yang sudah dibayar tidak dapat dibatalkan">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             <?php else: ?>
-                                                <button class="bg-gray-200 text-gray-400 w-9 h-9 rounded flex items-center justify-center cursor-not-allowed mx-auto" disabled><i class="fas fa-trash-alt"></i></button>
+                                                <button class="bg-red-500 hover:bg-red-600 text-white w-9 h-9 rounded flex items-center justify-center transition shadow-sm mx-auto" title="Batalkan Pesanan" onclick="confirmAction(<?php echo $pesanan['pesanan_id']; ?>, 'update_status_next', 'Apakah Anda yakin ingin membatalkan pesanan ini?', 'Dibatalkan')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -401,7 +399,6 @@ $nama_bulan = [
         </main>
     </div>
 
-    <!-- MODAL DETAIL (Dibiarkan tetap sama) -->
     <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
             <div class="bg-gradient-to-r from-pink-500 to-pink-600 p-4 text-white flex justify-between items-center">
@@ -442,7 +439,6 @@ $nama_bulan = [
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
         function confirmAction(pesananId, actionType, pesanKonfirmasi, nextStatus = '') {
             if (confirm(pesanKonfirmasi)) {
