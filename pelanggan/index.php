@@ -109,10 +109,12 @@ $menu_link = isset($_SESSION['user_email']) ? 'menu.php' : 'login.php';
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link mx-3 fw-semibold" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link mx-2 fw-semibold" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link mx-2 fw-semibold" href="#testimoni">Testimoni</a></li>
+                    <li class="nav-item"><a class="nav-link mx-2 fw-semibold" href="#kontak">Kontak</a></li>
                     
                     <?php if(isset($_SESSION['user_email'])): ?>
-                        <li class="nav-item"><a class="nav-link mx-3 fw-semibold" href="riwayat_pesanan.php">riwayat pesanan</a></li>
+                        <li class="nav-item"><a class="nav-link mx-2 fw-semibold" href="riwayat_pesanan.php">Riwayat Pesanan</a></li>
                         
                         <li class="nav-item ms-lg-3 d-flex align-items-center gap-3 mt-3 mt-lg-0">
                             <div class="d-none d-lg-block text-end lh-1">
@@ -127,7 +129,7 @@ $menu_link = isset($_SESSION['user_email']) ? 'menu.php' : 'login.php';
                             </a>
                         </li>
                     <?php else: ?>
-                        <li class="nav-item"><a class="nav-link mx-3 fw-semibold" href="login.php">riwayatpesanan</a></li>
+                        <li class="nav-item"><a class="nav-link mx-2 fw-semibold" href="login.php">Riwayat Pesanan</a></li>
                         <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
                             <a href="login.php" class="btn btn-pink rounded-pill px-4 shadow-sm">Login / Order</a>
                         </li>
@@ -153,7 +155,6 @@ $menu_link = isset($_SESSION['user_email']) ? 'menu.php' : 'login.php';
                     
                     <div class="d-flex gap-3 align-items-center">
                         <a href="<?php echo $menu_link; ?>" class="btn btn-pink shadow-lg px-4 py-3 fw-bold rounded-pill">Eksplor Pilihan Menu</a>
-                        <a href="riwayat_pesanan.php" class="btn btn-outline-dark shadow-sm px-4 py-3 fw-bold rounded-pill">riwayat pesanan</a>
                     </div>
                 </div>
 
@@ -342,11 +343,6 @@ $menu_link = isset($_SESSION['user_email']) ? 'menu.php' : 'login.php';
                                         <div class="mb-3">
                                             <label class="form-label fw-600">Deskripsi Masalah / Komplain</label>
                                             <textarea name="deskripsi" class="form-control custom-input" rows="4" placeholder="Mohon jelaskan secara detail kendala atau kekurangan pesanan yang Anda terima..." required></textarea>
-                                        </div>
-                                        <div class="mb-4">
-                                            <label class="form-label fw-600">Foto Bukti Hidangan</label>
-                                            <input type="file" name="foto_produk" class="form-control custom-input" accept="image/*" required>
-                                            <div class="form-text">Wajib unggah foto kondisi produk sebagai bukti (Format: JPG/PNG).</div>
                                         </div>
                                         <div class="d-grid">
                                             <button type="submit" class="btn btn-dark py-3 fw-bold shadow-sm">Kirim Komplain Masukan</button>

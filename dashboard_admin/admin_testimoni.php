@@ -17,16 +17,6 @@ if (isset($_GET['hapus_id'])) {
     $id_hapus = (int)$_GET['hapus_id'];
 
     // 1. Ambil nama file foto testimoni sebelum datanya dihapus
-    $query_foto = mysqli_query($conn, "SELECT foto FROM testimoni WHERE id = $id_hapus");
-    if (mysqli_num_rows($query_foto) > 0) {
-        $data_foto = mysqli_fetch_assoc($query_foto);
-        $nama_foto = $data_foto['foto'];
-
-        // 2. Jika ada fotonya, hapus file fotonya dari folder img/
-        if (!empty($nama_foto) && file_exists("../img/" . $nama_foto)) {
-            unlink("../img/" . $nama_foto);
-        }
-    }
 
     // 3. Hapus data testimoni dari database berdasarkan ID unik
     $query_delete = "DELETE FROM testimoni WHERE id = $id_hapus";
@@ -111,7 +101,6 @@ $result = mysqli_query($conn, $query);
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="border-b border-gray-200 text-sm font-bold text-gray-600 bg-gray-50/70">
-                                        <th class="p-4 pl-6" width="12%">Foto Kuliner</th>
                                         <th class="p-4" width="18%">Produk Kuliner</th>
                                         <th class="p-4" width="15%">Rating</th>
                                         <th class="p-4" width="35%">Isi Ulasan/Deskripsi</th>
@@ -122,18 +111,6 @@ $result = mysqli_query($conn, $query);
                                 <body class="divide-y divide-gray-100 text-sm text-gray-700">
                                     <?php while ($row = mysqli_fetch_assoc($result)): ?>
                                         <tr class="hover:bg-orange-50/20 transition-colors">
-                                            <td class="p-4 pl-6">
-                                                <?php if(!empty($row['foto'])): ?>
-                                                    <a href="../img/<?php echo htmlspecialchars($row['foto']); ?>" target="_blank" class="block w-14 h-14 group relative overflow-hidden rounded-xl border border-gray-200 shadow-sm">
-                                                        <img src="../img/<?php echo htmlspecialchars($row['foto']); ?>" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
-                                                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs transition">
-                                                            <i class="fa-solid fa-magnifying-glass"></i>
-                                                        </div>
-                                                    </a>
-                                                <?php else: ?>
-                                                    <span class="text-gray-400 italic text-xs">Tanpa Foto</span>
-                                                <?php endif; ?>
-                                            </td>
                                             <td class="p-4 font-bold text-gray-900">
                                                 <?php echo htmlspecialchars($row['nama_produk']); ?>
                                             </td>
